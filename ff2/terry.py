@@ -50,7 +50,7 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
-    def fire(self, pos):
+    def powerwave(self, pos):
         z = "Right"
         if pos == 0:
             z = "Right"
@@ -66,7 +66,7 @@ class TERRY:
 
         time.sleep(0.1)
 
-    def superpunch(self, pos):
+    def burnknuckle(self, pos):
         z = "Left"
         if pos == 0:
             z = "Left"
@@ -81,7 +81,7 @@ class TERRY:
 
         time.sleep(0.1)
 
-    def superkick(self, pos):
+    def risingtackle(self, pos):
         z = "Left"
         if pos == 0:
             z = "Left"
@@ -96,6 +96,26 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' keyup Up')
         os.system('xdotool key --window ' + self.winid + ' keyup D')
         time.sleep(0.2)
+
+    def crackshoot(self, pos):
+        z = "Left"
+        if pos == 0:
+            z = "Left"
+        else:
+            z = "Right"
+
+        for i in range(0,6):
+            os.system('xdotool key --window ' + self.winid + ' keydown Down')
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keydown Up')
+        os.system('xdotool key --window ' + self.winid + ' keydown F')
+        for i in range(0,6):
+            os.system('xdotool key --window ' + self.winid + ' keyup Down')
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keyup Up')
+        os.system('xdotool key --window ' + self.winid + ' keyup F')
+
+        time.sleep(0.1)
 
     def defendup(self, pos):
         key = "Left"
