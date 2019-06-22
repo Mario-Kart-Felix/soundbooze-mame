@@ -38,6 +38,8 @@ with mss.mss() as sct:
 
     while [ 1 ]:
 
+        last_time = time.time()
+ 
         frame = numpy.array(sct.grab(scene))
         frames.append(frame)
 
@@ -79,7 +81,8 @@ with mss.mss() as sct:
                     sp2 = 0
                 if sp1 > 0:
                     print -1.0
-                    cv2.imwrite('log/' + str(i) + '.png', frames[i - 10])
+                    fps = int((1 / (time.time() - last_time))/2) - 4
+                    cv2.imwrite('log/' + str(i) + '.png', frames[i - fps])
                 elif sp2 > 0:
                     print 1.0
                 else:
@@ -88,4 +91,6 @@ with mss.mss() as sct:
             prevBloodP1 = curp1
             prevBloodP2 = curp2
 
-        i += 1
+            i += 1
+
+        print("fps: {}".format(1 / (time.time() - last_time)))
