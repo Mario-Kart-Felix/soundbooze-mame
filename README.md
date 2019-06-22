@@ -1,6 +1,6 @@
 # soundbooze-mame
 
-Hybrid Training
+Distributed-Hybrid Training
 
 ### Street Fighter 2 (sf2)
 
