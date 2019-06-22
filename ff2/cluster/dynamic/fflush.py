@@ -1,11 +1,8 @@
-import random
 import numpy
 import cv2
 import time
 import mss
 import os
-
-from skimage.measure import compare_ssim
 
 INSERT = [1059132, 1055681]
 SELECT = [831168, 764772]
@@ -23,12 +20,6 @@ def reward_penalty(img, prevBlood):
     else:
         return 0, 0
 
-def similar(img_a, img_b):
-    img_a = cv2.cvtColor(cv2.resize(img_a, (200,100)), cv2.COLOR_BGR2GRAY)
-    img_b = cv2.cvtColor(cv2.resize(img_b, (200,100)), cv2.COLOR_BGR2GRAY)
-    sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
-    return sim
-
 with mss.mss() as sct:
 
     border = 24
@@ -40,7 +31,6 @@ with mss.mss() as sct:
 
     startGame = False
 
-    PENALTY = []
     frames = []
     i = 0
 
@@ -48,8 +38,6 @@ with mss.mss() as sct:
 
     while [ 1 ]:
 
-        last_time = time.time()
-            
         frame = numpy.array(sct.grab(scene))
         frames.append(frame)
 
@@ -62,16 +50,6 @@ with mss.mss() as sct:
         sumb1 = numpy.sum(b1)
         sumb2 = numpy.sum(b2)
 
-        if startGame:
-
-            print '[PENALTY]', len(PENALTY)
-
-            if len(PENALTY) > 0:
-                for p in PENALTY:
-                    s = similar(frame, p)
-                    if s > 0.6:
-                        print s
-                
         if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
             sp1, curp1 = reward_penalty(b1, prevBloodP1)
@@ -86,26 +64,12 @@ with mss.mss() as sct:
                 print 'P1 [KO]'
                 startGame = False
                 frames = []
-
-                if len(PENALTY) > 0:
-                    print '[Dump]'
-                    for p in PENALTY:
-                        cv2.imwrite('log/' + str(time.time()) + '.png', p)
-                PENALTY = []
-
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0]:
                 print 'P2 [KO]'
                 startGame = False
                 frames = []
-
-                if len(PENALTY) > 0:
-                    print '[Dump]'
-                    for p in PENALTY:
-                        cv2.imwrite('log/' + str(time.time()) + '.png', p)
-                PENALTY = []
-
                 time.sleep(1)
 
             elif (sp1 != 0 and sp2 != 0) and startGame:
@@ -114,21 +78,14 @@ with mss.mss() as sct:
                 if numpy.isnan(sp2):
                     sp2 = 0
                 if sp1 > 0:
-                    #print -1.0
-                    fps = int(1 / (time.time() - last_time))
-                    try:
-                        PENALTY.append(frames[i - 6])
-                        PENALTY.append(frames[i - fps])
-                    except:
-                        pass
-                #elif sp2 > 0:
-                    #print 1.0
-                #else:
-                    #print 0.0
+                    print -1.0
+                    cv2.imwrite('log/' + str(i) + '.png', frames[i - 10])
+                elif sp2 > 0:
+                    print 1.0
+                else:
+                    print 0.0
 
             prevBloodP1 = curp1
             prevBloodP2 = curp2
 
-            i += 1
-
-            #print("fps: {}".format(1 / (time.time() - last_time)))
+        i += 1
