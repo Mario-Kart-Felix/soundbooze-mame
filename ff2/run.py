@@ -41,9 +41,6 @@ def act(r, ev, ns):
         ns.value = True
         ev.set()
 
-        #todo [nglakoni]: auto seq.order(max) [dipikir]
-        #berulang-ulang evolution-fulness -> win(mul.io)->(dump)
-        #clustering-on-the-go / various.meth
         if r == 0:
             terry.shift(0)
             terry.shift(1)
@@ -127,6 +124,10 @@ with mss.mss() as sct:
             img = cv2.resize(gray, (200,100))
             img = numpy.array(img).ravel()
 
+            # todo - [nglakoni]: auto seq.order(policy-max) [dipikir]
+            # berulang-ulang evolution-fulness -> win(mul.io)->(dump)
+            # clustering-on-the-go / various.meth
+
             t = time.time()
             r = k.predict([img])[0]
             print '[Cluster]', '[' + str(r) + ']',
@@ -142,8 +143,12 @@ with mss.mss() as sct:
                     s, t = similar(frame, p)
                     if s > 0.0201: #dynamic threshold
                         print s, t
-                        terry.shift(0)
-                        terry.shift(1)
+                        r = numpy.random.uniform()
+                        if r <= 0.5:
+                            terry.punch()
+                        elif r > 0.5:
+                            terry.fire(0)
+                            terry.fire(1)
 
         if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
