@@ -134,7 +134,7 @@ with mss.mss() as sct:
             pabs = numpy.absolute(p1-p2)
             if pabs < 0.18:
                 h = numpy.argmax(S)
-                print '[↭]', h, pabs
+                #print '[↭]', h, pabs
                 r = numpy.random.uniform(0,1)
                 a = multiprocessing.Process(target=act, args=(r,h,ev,ns)) 
                 a.start() 
@@ -177,7 +177,73 @@ with mss.mss() as sct:
 
         '''
 
-        cv2.imshow("FF2 W", white)
+        #sf2 blood
+        '''
+        hsv = cv2.cvtColor(frame_h, cv2.COLOR_BGR2HSV)
+        lower_yellow = numpy.array([0,255,255])
+        upper_yellow = numpy.array([0,255,255])
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+        res = cv2.bitwise_and(frame_h,frame_h, mask= mask)
+        print numpy.sum(mask), numpy.sum(res)
+        '''
+
+        #ff2 - yellow blood
+        '''
+        hsv = cv2.cvtColor(frame_h, cv2.COLOR_BGR2HSV)
+        lower_yellow = numpy.array([15,255,255])
+        upper_yellow = numpy.array([30,255,255])
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+        res = cv2.bitwise_and(frame_h,frame_h, mask= mask)
+        '''
+
+        #blue
+        '''
+        hsv = cv2.cvtColor(frame_b, cv2.COLOR_BGR2HSV)
+        lower_blue = numpy.array([120,100,100])
+        upper_blue = numpy.array([130,255,255])
+        mask = cv2.inRange(hsv, lower_blue, upper_blue)
+        res = cv2.bitwise_and(frame_b,frame_b, mask= mask)
+        '''
+
+        #multi
+        hsv = cv2.cvtColor(frame_b, cv2.COLOR_BGR2HSV)
+        # yellow
+        #mask1 = cv2.inRange(hsv, (15,255,255),(30,255,255))
+        # blue
+        mask1 = cv2.inRange(hsv, (110,50,50),(130,255,255))
+        ## mask of yellow (20,100,100) ~ (40, 255, 255)
+        #mask2 = cv2.inRange(hsv, (15,0,0), (36, 255, 255))
+        # red
+        mask2 = cv2.inRange(hsv, (0,200,200),(0,255,255))
+        mask = cv2.bitwise_or(mask1, mask2)
+        res = cv2.bitwise_and(frame_b,frame_b, mask=mask)
+
+        # Every color except white
+        #low = numpy.array([0, 42, 0])
+        #high = numpy.array([179, 255, 255])
+        #mask = cv2.inRange(hsv, low, high)
+        #res = cv2.bitwise_and(frame_b, frame_b, mask=mask)
+
+        '''
+        lower_red = numpy.array([0,200,200])
+        upper_red = numpy.array([0,255,255])
+        #lower_red = numpy.array([161, 155, 84])
+        #upper_red = numpy.array([179, 255, 255])
+        mask = cv2.inRange(hsv, lower_red, upper_red)
+        res = cv2.bitwise_or(frame_b,frame_b, mask= mask)
+
+        R = numpy.hsplit(res, 2)
+        lr = [numpy.sum(R[0])/1000000.0, numpy.sum(R[1])/1000000.0]
+        if lr[0] > lr[1]:
+            print 'L'
+        else:
+            print 'R'
+        '''        
+
+        cv2.imshow('mask',mask)
+        cv2.imshow('res',res)
+
+        #cv2.imshow("FF2 W", white)
         #cv2.imshow("FF2 R", red)
         #cv2.imshow("FF2 G", green)
         #cv2.imshow("FF2 B", blue)
@@ -191,4 +257,4 @@ with mss.mss() as sct:
         prevframe_h = frame_h
         prevframe_b = frame_b
 
-        print("fps: {}".format(1 / (time.time() - last_time)))
+        #print("fps: {}".format(1 / (time.time() - last_time)))
