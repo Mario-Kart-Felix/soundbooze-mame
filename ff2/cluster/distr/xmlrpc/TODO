@@ -1,0 +1,23 @@
+
+distributed:
+  xml-client
+    -- rnd move
+    -- logger
+    -- async [dyn-thresh][checkPKL]
+
+  xml-server
+    -- cluster
+    -- reduce +/- 0.41
+    -- hashlib
+    #dynamic-threshold++ sample++
+
+ scene-change hist-clust
+ cacti-metrics
+
+err, 
+
+  - sf2 - sample [p,r] (500-750)
+  - special move
+  - ko timeout /tmpl-match
+  - similar-state:
+    - timing
