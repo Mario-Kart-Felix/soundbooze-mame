@@ -4,7 +4,7 @@ Distributed-Hybrid Training
 
 ### Street Fighter 2 (sf2)
 
-- Level: 4
+- Level: 7
 
 ### Fatal Fury 2 (ff2)
 
