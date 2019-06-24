@@ -2,7 +2,7 @@
 
 ## World 920513
 
-![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-vision/master/sf2/sync/pretrained/920513.png "920513")
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2/sync/pretrained/920513.png "920513")
 
 ## Player 1
 
@@ -10,7 +10,7 @@
 
 ## Dataset
 
-- Noise but Thrilling
+- Noisy but Thrilling
 - 100 x 50 (grayscale)
 - Sample as much as possible
 
