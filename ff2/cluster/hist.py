@@ -27,6 +27,7 @@ with mss.mss() as sct:
     while [1]:
         frame = numpy.array(sct.grab(full))
         #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        #frame = cv2.cvtColor(frame, cv2.COLOR_RGBA2RGB)
         numPixels = numpy.prod(frame.shape[:2])
         (b, g, r, a) = cv2.split(frame)
         histogramR = cv2.calcHist([r], [0], None, [bins], [0, 255]) / numPixels
