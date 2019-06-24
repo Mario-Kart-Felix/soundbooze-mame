@@ -57,7 +57,7 @@ with mss.mss() as sct:
         pink = frame_b.copy()
 
         # body
-        # on-thy-fly (per-round) :auto min(noise), r,g,b,w,gray
+        # on-thy-fly [histo] (per-round) :auto min(noise), r,g,b,w,gray
         # for (r,g,b,/) min(sum(sample))
         red[:,:,0] = 0
         red[:,:,1] = 0
