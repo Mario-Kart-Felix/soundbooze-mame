@@ -2,7 +2,6 @@
 
 ### MAME State
 
-
 | Key     | State           |
 | ------- |:---------------:|
 | b       | Blanka          |
