@@ -1,5 +1,9 @@
 # Street Fighter II: Champion Edition (sf2ce)
 
+### sf2ce 
+
+- ~/.mame/sta/
+
 ### MAME State
 
 | Key     | State           |
