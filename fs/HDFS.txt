@@ -44,3 +44,7 @@ chown -R hadoop.hadoop /opt/hadoop-3.1.2/
 mkdir /hdfs/name
 mkdir /hdfs/name/data
 chown -R hadoop.hadoop /hdfs/
+
+# test
+
+hadoop fs -test -e hdfs://uduk
