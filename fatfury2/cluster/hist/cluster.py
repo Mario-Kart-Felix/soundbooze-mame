@@ -24,5 +24,8 @@ for i in H:
     p = k.predict([[0, i]])[0]
     Z.append(p)
 
+plt.subplot(211)
 plt.plot(Z)
+plt.subplot(212)
+plt.bar(I, Z)
 plt.show()
