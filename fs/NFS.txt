@@ -1,0 +1,16 @@
+## Server
+
+apt-get install nfs-kernel-server nfs-common
+
+mkdir /srv/nfs & chmod 755 /srv/nfs
+
+# cat /etc/exports
+/srv              *(rw,sync,no_subtree_check,root_squash)
+
+# service nfs-kernel-server restart
+
+## Client 
+
+apt-get install nfs-common
+
+$ mount server-ip-host:/srv/ /srv
