@@ -48,3 +48,4 @@ chown -R hadoop.hadoop /hdfs/
 # test
 
 hadoop fs -test -e hdfs://uduk
+jps
