@@ -1,4 +1,6 @@
 
+ramfs -> hdfs/nfs
+
 distributed:
   xml-client
     -- rnd move
