@@ -12,4 +12,5 @@ Distributed-Hybrid Training
 
 ### Resume State
 
-- [fatfury2, sf2ce]
+- fatfury2
+- sf2ce
