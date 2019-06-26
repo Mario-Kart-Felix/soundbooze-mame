@@ -1,0 +1,46 @@
+# USER
+
+#user: hadoop pass: hadoop1234
+
+# hadoop .profile
+
+export JAVA_HOME=/opt/jdk1.8.0_211
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH=$PATH:/opt/hadoop-3.1.2/bin:/opt/hadoop-3.1.2/sbin
+
+# etc/hadoop/hadoop-env.sh
+export JAVA_HOME=/opt/jdk1.8.0_211
+
+# SSH keygen
+
+ssh-keygen -t rsa 
+
+# remote
+~/.ssh/id_rsa.pub ---> ~/.ssh/authorized_keys
+
+# self
+cat id_rsa.pub >> authorized_keys
+
+# Service
+
+hadoop namenode -format
+start-all.sh
+
+# ROOT
+
+# java
+
+update-alternatives --config java
+
+# vi /etc/hosts
+
+10.0.0.1 
+10.0.0.2 
+10.0.0.3 
+
+chown -R root.root /opt/jdk1.8.0_211/
+chown -R hadoop.hadoop /opt/hadoop-3.1.2/
+
+mkdir /hdfs/name
+mkdir /hdfs/name/data
+chown -R hadoop.hadoop /hdfs/
