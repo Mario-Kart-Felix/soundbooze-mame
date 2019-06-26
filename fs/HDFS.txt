@@ -47,5 +47,5 @@ chown -R hadoop.hadoop /hdfs/
 
 # test
 
-hadoop fs -test -e hdfs://uduk
+hadoop fs -test -e hdfs://uduk:9000
 jps
