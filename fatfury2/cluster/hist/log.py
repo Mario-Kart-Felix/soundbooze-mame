@@ -4,7 +4,7 @@ import mss
 import time
 import numpy
 
-def histogram(frame):
+def histogramsum(frame):
     numPixels = numpy.prod(frame.shape[:2])
     (b, g, r, a) = cv2.split(frame)
     histogramR = cv2.calcHist([r], [0], None, [16], [0, 255]) / numPixels
@@ -24,7 +24,7 @@ with mss.mss() as sct:
     while [1]:
 
         frame = numpy.array(sct.grab(full))
-        H.append(histogram(frame))
+        H.append(histogramsum(frame))
 
         if i != 0 and i % 7500 == 0:
             print '[Saved]'
