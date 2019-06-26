@@ -10,9 +10,9 @@ plt.title('H')
 plt.plot(H)
 
 resulta = seasonal_decompose(H, model='additive', freq=1)
-result.plot()
+resulta.plot()
 
 resultm = seasonal_decompose(H, model='multiplicative', freq=1)
-result.plot()
+resultm.plot()
 
 plt.show()
