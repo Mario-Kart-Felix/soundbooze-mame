@@ -9,7 +9,7 @@ def diffI(img1, img2):
 
     for i in range(h):
         for j in range(w):
-            s = numpy.absolute(img1[i,j] - img2[i,j])
+            s = numpy.sqrt(numpy.absolute(img1[i,j] - img2[i,j]))
             if s != 0:
                 m.append(s)
 
