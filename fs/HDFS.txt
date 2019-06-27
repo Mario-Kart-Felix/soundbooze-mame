@@ -50,3 +50,5 @@ chown -R hadoop.hadoop /hdfs/
 hadoop fs -test -e hdfs://uduk:9000
 hdfs dfs -ls hdfs://uduk:9000/
 jps
+
+http://uduk:8088
