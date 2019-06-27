@@ -2,7 +2,7 @@
 
 ## World 920513
 
-![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2/sync/pretrained/920513.png "920513")
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/sync/pretrained/920513.png "920513")
 
 ## Player 1
 
