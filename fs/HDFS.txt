@@ -45,6 +45,11 @@ mkdir /hdfs/name
 mkdir /hdfs/name/data
 chown -R hadoop.hadoop /hdfs/
 
+# share dir
+
+hdfs dfs -mkdir share hdfs://uduk:9000/
+hdfs dfs -chmod 777 hdfs://uduk:9000/share
+
 # test
 
 hadoop fs -test -e hdfs://uduk:9000
