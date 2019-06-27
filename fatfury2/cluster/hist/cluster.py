@@ -27,5 +27,5 @@ for i in H:
 plt.subplot(211)
 plt.plot(Z)
 plt.subplot(212)
-plt.bar(I, Z)
+plt.bar(range(len(Z)), Z)
 plt.show()
