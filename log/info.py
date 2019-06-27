@@ -32,19 +32,9 @@ class Info:
 
     def screen(self):
         with mss.mss() as sct:
-
-            filename = sct.shot(output=str(time.time()) + '.png')
-            gray = cv2.imread(filename, 0)
-            h, w = gray.shape
-            single = (w, h)
-            os.unlink(filename)
-
-            time.sleep(0.05)
-
             filename = sct.shot(mon=-1, output=str(time.time()) + '.png')
             gray = cv2.imread(filename, 0)
             h, w = gray.shape
-            full = (w, h)
+            size = (w, h)
             os.unlink(filename)
-
-            return str(single) + ' ' + str(full)
+            return str(size)

@@ -38,6 +38,10 @@ def init(d):
 
     return fp, fullpath
 
+def mksubdir(fd):
+    if not os.path.exists(fd):
+        os.mkdir(fd)
+
 class RingBuffer:
 
     def __init__(self):
@@ -58,14 +62,14 @@ def similar(img_a, img_b):
     img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
     img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
     h, w = img_a.shape
-    img_a = cv2.resize(img_a, (w/8, h/8))
-    img_b = cv2.resize(img_b, (w/8, h/8))
+    img_a = cv2.resize(img_a, (w/16, h/16))
+    img_b = cv2.resize(img_b, (w/16, h/16))
     sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
     return sim
 
 def flushtoramdisk(m, fullpath, img):
-    cv2.imwrite(fullpath + str(m-1) + '-' + str(time.time()) + '.png', img)
-
+    h, w, d = img.shape
+    cv2.imwrite(fullpath + str(m-1) + '/' + str(time.time()) + '.png', cv2.resize(img, (w/4, h/4)))
 
 fp, fullpath = init(sys.argv[1]) 
 
@@ -84,6 +88,7 @@ with mss.mss() as sct:
 
     for m in M:
         print 'Monitor #'+str(m-1), M[m]
+        mksubdir(fullpath + str(m-1))
         prevframes.append(numpy.array(sct.grab(M[m])))
 
     while [ 1 ]: 
