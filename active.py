@@ -5,8 +5,9 @@ from skimage.measure import compare_ssim
 
 class RingBuffer:
 
-    def __init__(self, size):
-        self.data = [None for i in xrange(size)]
+    def __init__(self):
+        self.size = 16
+        self.data = [None for i in xrange(self.size)]
 
     def append(self, x):
         self.data.pop(0)
@@ -14,6 +15,9 @@ class RingBuffer:
 
     def get(self):
         return self.data
+
+    def size(self):
+        return self.size
 
 def similar(img_a, img_b):
     img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
@@ -26,7 +30,7 @@ def similar(img_a, img_b):
 
 with mss.mss() as sct:
 
-    rb = RingBuffer(16)
+    rb = RingBuffer()
 
     M = {}
     for num, monitor in enumerate(sct.monitors[1:], 1):
@@ -35,7 +39,7 @@ with mss.mss() as sct:
     prevframes = []
     frames = []
     for m in M:
-        print 'Monitor #'+str(m), M[m]
+        print 'Monitor #'+str(m-1), M[m]
         prevframes.append(numpy.array(sct.grab(M[m])))
 
     while [ 1 ]: 
@@ -48,7 +52,9 @@ with mss.mss() as sct:
 
         Z = rb.get()
         try:
-            print '[Active]', numpy.argmin(Z) % len(M)
+            idx = numpy.argmin(Z) % len(M)
+            level = float(numpy.sum(Z) / rb.size)
+            print '[Active]', '['+str(idx)+']', level
         except:
             pass
 
@@ -57,7 +63,6 @@ with mss.mss() as sct:
 
         for m in M:
             prevframes.append(numpy.array(sct.grab(M[m])))
-
 
     # swig: simd-vector omp
     '''
