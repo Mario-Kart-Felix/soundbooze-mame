@@ -6,13 +6,14 @@ import numpy
 import signal
 from skimage.measure import compare_ssim
 
-TOTALSAMPLE =  300/3
+TOTALSAMPLE =  300
 SPLIT       =  4
 BOX         =  50*2*4
 SLIDE       =  7/7
 
-S           = None  # screen index
-ROI         = [0,0] # dominant ROI
+S           = None                      # screen index
+ROI         = [0,0]                     # dominant ROI
+ZSUM        = [n-n for n in range(16)]  # min(ROI)
 
 class RingBuffer:
 
@@ -152,8 +153,6 @@ with mss.mss() as reg:
     m = (S + 1)
     rb = RingBuffer(32)
 
-    ZSUM = [n-n for n in range(16)]
-
     Vprev = numpy.vsplit(numpy.array(reg.grab(M[m])), SPLIT)
     Hprev = []
     for v in Vprev:
@@ -194,7 +193,7 @@ with mss.mss() as reg:
             w /= SPLIT
             am = numpy.argmin(ZSUM)
             row = int(am/SPLIT) * h 
-            col = int(am % SPLIT) * w
+            col = int(am%SPLIT) * w
             ROI = [row, col]
             print numpy.array(ZSUM).reshape(4,4)
             print 'Index', am, 'Row', row, 'Col', col, ROI
@@ -217,13 +216,18 @@ with mss.mss() as nav:
 
     while [ 1 ]: 
 
+        last_time = time.time()
+
         img = numpy.array(nav.grab(M[m]))
 
         c2 = roi(img, ROI[0], ROI[1], 270, 480)
-        #print similar(1, c1, c2)
+        print similar(2, c1, c2),
         c1 = c2
 
         cv2.imshow("crop", c2)
+
         if cv2.waitKey(25) & 0xFF == ord("q"):
             cv2.destroyAllWindows()
             break
+
+        print("fps: {}".format(1 / (time.time() - last_time)))
