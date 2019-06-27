@@ -1,5 +1,6 @@
 import mss
 import cv2
+import time
 import numpy
 from skimage.measure import compare_ssim
 
@@ -31,6 +32,8 @@ def similar(img_a, img_b):
 with mss.mss() as sct:
 
     rb = RingBuffer()
+    active = 0
+    zcr = 0
 
     M = {}
     for num, monitor in enumerate(sct.monitors[1:], 1):
@@ -51,10 +54,14 @@ with mss.mss() as sct:
             rb.append(similar(p, f))
 
         Z = rb.get()
+        ts = time.time()
         try:
             idx = numpy.argmin(Z) % len(M)
             level = float(numpy.sum(Z) / rb.size)
-            print '[Active]', '['+str(idx)+']', level
+            if active != idx:
+                active = idx
+                zcr += 1
+            print ts, '-', '[Active]', '['+str(idx)+']', level, zcr
         except:
             pass
 
