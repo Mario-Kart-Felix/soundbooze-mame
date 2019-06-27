@@ -48,10 +48,3 @@ class Info:
             os.unlink(filename)
 
             return single, full
-
-i = Info()
-
-print 'INFO', i.info()
-print 'CONSTANT', i.constant()
-print 'UNIQ', i.uniq()
-print 'SCREEN', i.screen()
