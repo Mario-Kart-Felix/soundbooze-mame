@@ -1,3 +1,6 @@
+import os
+import cv2
+import mss
 import time
 import socket
 import hashlib 
@@ -27,8 +30,28 @@ class Info:
     def uniq(self):
         return self._hash(str(self.h)+str(i)+str(self.t)+str(self.c))
 
+    def screen(self):
+        with mss.mss() as sct:
+
+            filename = sct.shot(output=str(time.time()) + '.png')
+            gray = cv2.imread(filename, 0)
+            h, w = gray.shape
+            single = (w, h)
+            os.unlink(filename)
+
+            time.sleep(0.05)
+
+            filename = sct.shot(mon=-1, output=str(time.time()) + '.png')
+            gray = cv2.imread(filename, 0)
+            h, w = gray.shape
+            full = (w, h)
+            os.unlink(filename)
+
+            return single, full
+
 i = Info()
 
 print 'INFO', i.info()
 print 'CONSTANT', i.constant()
 print 'UNIQ', i.uniq()
+print 'SCREEN', i.screen()
