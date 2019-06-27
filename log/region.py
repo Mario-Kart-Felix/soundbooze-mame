@@ -6,13 +6,13 @@ import numpy
 import signal
 from skimage.measure import compare_ssim
 
-TOTALSAMPLE =  30
+TOTALSAMPLE =  300
 SPLIT       =  4
-BOX         =  50
+BOX         =  50*2
 SLIDE       =  7/7
 
-S           = []    # dominant screent iindex
-ROI         = [0,0] # dominant ROI [SPLIT x SPLIT] ret:screen(x,y)
+S           = None  # screen index
+ROI         = [0,0] # dominant ROI
 
 class RingBuffer:
 
@@ -30,26 +30,29 @@ class RingBuffer:
     def size(self):
         return self.size
 
-def similar(img_a, img_b):
-    img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
-    img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
-    h, w = img_a.shape
-    img_a = cv2.resize(img_a, (w/16, h/16))
-    img_b = cv2.resize(img_b, (w/16, h/16))
-    sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
-    return sim
+def similar(t, img_a, img_b):
+    if t == 0:
+        img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
+        img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
+        h, w = img_a.shape
+        img_a = cv2.resize(img_a, (w/16, h/16))
+        img_b = cv2.resize(img_b, (w/16, h/16))
+        sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
+        return sim
 
-def simslide(img_a, img_b):
-    img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
-    img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
-    sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
-    return sim
+    elif t == 1:
+        img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
+        img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
+        sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
+        return sim
+
+def argmin2d(M):
+    Z = M.ravel()
+    return numpy.argmin(Z)
 
 def argmax2d(M):
     i = numpy.argmax(M)
     return numpy.unravel_index(i, numpy.array(M).shape)
-
-# dominant Screen
 
 with mss.mss() as sample:
 
@@ -82,7 +85,7 @@ with mss.mss() as sample:
         if i < TOTALSAMPLE:
 
             for p, f in zip(prevframes, frames):
-                rb.append(similar(p, f))
+                rb.append(similar(0, p, f))
 
             Z = rb.get()
             ts = time.time()
@@ -98,16 +101,26 @@ with mss.mss() as sample:
             except:
                 pass
 
-        elif len(S) <= 0:
+        elif S is None:
             NA = numpy.array(A)
             idx = NA[:,0]
             level = NA[:,1]
             zcr = NA[:,2]
             z = zcr[numpy.argmax(zcr)]
 
+            XX = []
+            YY = []
+
             u, c = numpy.unique(idx, return_counts=True)
             for x, y in zip(u, c):
-                S.append(y)
+                print x, y
+                XX.append(x)
+                YY.append(y)
+
+            if len(YY) == 1:
+                S = XX[0]
+            elif len(YY) >= 2:
+                S = int(numpy.argmax(YY))
 
             '''
             for i in u:
@@ -115,7 +128,7 @@ with mss.mss() as sample:
                 print i, numpy.sum(level[I])
             '''
 
-        elif len(S) > 0:
+        elif S is not None:
             break
 
         prevframes = []
@@ -129,12 +142,20 @@ with mss.mss() as sample:
 
         i += 1
 
-# dominant ROI
-
 with mss.mss() as reg:
 
-    m = numpy.argmax(S) + 1
+    m = (S + 1)
     rb = RingBuffer(64)
+
+    ZSUM = numpy.zeros([SPLIT, SPLIT])
+
+    Vprev = numpy.vsplit(numpy.array(reg.grab(M[m])), SPLIT)
+
+    Hprev = []
+    for v in Vprev:
+        H = numpy.hsplit(v, SPLIT)
+        for h in H:
+            Hprev.append(h)
 
     while [ 1 ]: 
 
@@ -142,64 +163,64 @@ with mss.mss() as reg:
 
         V = numpy.vsplit(img, SPLIT)
 
-        HH = []
         HSUM = []
 
         for v in V:
             H = numpy.hsplit(v, SPLIT)
-            for h in H:
-                HH.append(h)
-                HSUM.append(numpy.sum(h)/1000000.0)
+            for hprev, h in zip(Hprev, H):
+                s = similar(1, hprev, h)
+                HSUM.append(s)
 
         NSUM = numpy.array(HSUM)
         NSUM = NSUM.reshape(SPLIT, SPLIT)
-        rb.append(argmax2d(NSUM))
+        ZSUM = ZSUM + NSUM
+
+        rb.append(argmin2d(NSUM))
 
         R = numpy.array(rb.get())
         n = numpy.where(R == None)
 
+        Hprev = []
+        for v in Vprev:
+            H = numpy.hsplit(v, SPLIT)
+            for h in H:
+                Hprev.append(h)
+
         # RingBuffer Full
         if len(n[0]) == 0: 
-            R = numpy.array(rb.get())
             h, w, _ = img.shape
             h /= SPLIT 
             w /= SPLIT
-            am = argmax2d(HSUM)[0]
-            row = int(am/SPLIT)
-            col = am % SPLIT
-            ROI = [row*h, col*w]
+            am = argmin2d(ZSUM)
+            row = int(am/SPLIT) * h 
+            col = int(am % SPLIT) * w
+            ROI = [row, col]
+            print ZSUM
+            print 'Index', am, 'Row', row, 'Col', col, ROI
             break
 
 #                 ^
 # bound-finder <- | ->
 #                 +
 
-from PIL import Image
-from PIL import ImageFilter
-
-def crop(img, l, t, width, height):
-    im_pil = Image.fromarray(img)
-    im_crop = im_pil.crop((l, t, l+width, t+height))
-    z = numpy.asarray(im_crop)
-    return z
+def roi(img, y, x, h, w):
+    return img[y:y+h, x:x+w]
 
 with mss.mss() as nav:
 
-    m = numpy.argmax(S) + 1
+    m = (S + 1)
 
-    c1 = crop(img, ROI[0], ROI[1], BOX, BOX)
+    c1 = roi(img, ROI[0], ROI[1], BOX, BOX)
 
     while [ 1 ]: 
 
         img = numpy.array(nav.grab(M[m]))
 
-        c2 = crop(img, ROI[0], ROI[1], BOX, BOX)
-        print simslide(c1, c2)
+        c2 = roi(img, ROI[0], ROI[1], BOX, BOX)
+        #print similar(1, c1, c2)
         c1 = c2
 
-        '''
-        cv2.imshow("crop", c)
+        cv2.imshow("crop", c2)
         if cv2.waitKey(25) & 0xFF == ord("q"):
             cv2.destroyAllWindows()
             break
-        '''
