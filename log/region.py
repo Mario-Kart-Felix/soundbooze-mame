@@ -6,7 +6,7 @@ import numpy
 import signal
 from skimage.measure import compare_ssim
 
-TOTALSAMPLE =  300
+TOTALSAMPLE =  300/3
 SPLIT       =  4
 BOX         =  50*2*4
 SLIDE       =  7/7
@@ -43,6 +43,15 @@ def similar(t, img_a, img_b):
     elif t == 1:
         img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
         img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
+        sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
+        return sim
+
+    elif t == 2:
+        img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
+        img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
+        h, w = img_a.shape
+        img_a = cv2.resize(img_a, (w/2, h/2))
+        img_b = cv2.resize(img_b, (w/2, h/2))
         sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
         return sim
 
@@ -145,12 +154,11 @@ with mss.mss() as sample:
 with mss.mss() as reg:
 
     m = (S + 1)
-    rb = RingBuffer(64)
+    rb = RingBuffer(32)
 
     ZSUM = numpy.zeros([SPLIT, SPLIT])
 
     Vprev = numpy.vsplit(numpy.array(reg.grab(M[m])), SPLIT)
-
     Hprev = []
     for v in Vprev:
         H = numpy.hsplit(v, SPLIT)
@@ -164,11 +172,10 @@ with mss.mss() as reg:
         V = numpy.vsplit(img, SPLIT)
 
         HSUM = []
-
         for v in V:
             H = numpy.hsplit(v, SPLIT)
             for hprev, h in zip(Hprev, H):
-                s = similar(1, hprev, h)
+                s = similar(2, hprev, h)
                 HSUM.append(s)
 
         NSUM = numpy.array(HSUM)
