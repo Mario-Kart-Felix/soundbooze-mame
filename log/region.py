@@ -55,10 +55,6 @@ def similar(t, img_a, img_b):
         sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
         return sim
 
-def argmin2d(M):
-    Z = M.ravel()
-    return numpy.argmin(Z)
-
 def argmax2d(M):
     i = numpy.argmax(M)
     return numpy.unravel_index(i, numpy.array(M).shape)
@@ -156,7 +152,7 @@ with mss.mss() as reg:
     m = (S + 1)
     rb = RingBuffer(32)
 
-    ZSUM = numpy.zeros([SPLIT, SPLIT])
+    ZSUM = [n-n for n in range(16)]
 
     Vprev = numpy.vsplit(numpy.array(reg.grab(M[m])), SPLIT)
     Hprev = []
@@ -178,11 +174,9 @@ with mss.mss() as reg:
                 s = similar(2, hprev, h)
                 HSUM.append(s)
 
-        NSUM = numpy.array(HSUM)
-        NSUM = NSUM.reshape(SPLIT, SPLIT)
-        ZSUM = ZSUM + NSUM
+        ZSUM = numpy.add(ZSUM, HSUM)
 
-        rb.append(argmin2d(NSUM))
+        rb.append(0)
 
         R = numpy.array(rb.get())
         n = numpy.where(R == None)
@@ -198,19 +192,19 @@ with mss.mss() as reg:
             h, w, _ = img.shape
             h /= SPLIT 
             w /= SPLIT
-            am = argmin2d(ZSUM)
+            am = numpy.argmin(ZSUM)
             row = int(am/SPLIT) * h 
             col = int(am % SPLIT) * w
             ROI = [row, col]
-            print ZSUM
+            print numpy.array(ZSUM).reshape(4,4)
             print 'Index', am, 'Row', row, 'Col', col, ROI
             break
 
+#
 #                 ^
 # bound-finder <- | ->
 #                 +
 #
-# index(Box)
 
 def roi(img, y, x, h, w):
     return img[y:y+h, x:x+w]
@@ -219,13 +213,13 @@ with mss.mss() as nav:
 
     m = (S + 1)
 
-    c1 = roi(img, ROI[0], ROI[1], BOX, BOX)
+    c1 = roi(img, ROI[0], ROI[1], 270, 480)
 
     while [ 1 ]: 
 
         img = numpy.array(nav.grab(M[m]))
 
-        c2 = roi(img, ROI[0], ROI[1], BOX, BOX)
+        c2 = roi(img, ROI[0], ROI[1], 270, 480)
         #print similar(1, c1, c2)
         c1 = c2
 
