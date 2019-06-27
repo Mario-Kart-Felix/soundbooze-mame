@@ -170,7 +170,9 @@ with mss.mss() as reg:
             ROI = [row*h, col*w]
             break
 
-# nearest box finder
+#                 ^
+# bound-finder <- | ->
+#                 +
 
 from PIL import Image
 from PIL import ImageFilter
