@@ -1,7 +1,10 @@
+import os
+import sys
 import mss
 import cv2
 import time
 import numpy
+import hashlib 
 from skimage.measure import compare_ssim
 
 class RingBuffer:
@@ -29,7 +32,22 @@ def similar(img_a, img_b):
     sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
     return sim
 
+def init(d):
+    directory = d 
+    session = hashlib.md5(directory).hexdigest()
+    fullpath = directory + '/' + session + '/'
+
+    if not os.path.exists(fullpath):
+        os.mkdir(fullpath)
+
+    return fullpath
+
+def flushtoramdisk(m, fullpath, img):
+    cv2.imwrite(fullpath + str(m-1) + '-' + str(time.time()) + '.png', img)
+
 with mss.mss() as sct:
+
+    fullpath = init(sys.argv[1]) 
 
     rb = RingBuffer()
     active = 0
@@ -41,6 +59,7 @@ with mss.mss() as sct:
 
     prevframes = []
     frames = []
+
     for m in M:
         print 'Monitor #'+str(m-1), M[m]
         prevframes.append(numpy.array(sct.grab(M[m])))
@@ -48,7 +67,9 @@ with mss.mss() as sct:
     while [ 1 ]: 
 
         for m in M:
-            frames.append(numpy.array(sct.grab(M[m])))
+            img = numpy.array(sct.grab(M[m]))
+            flushtoramdisk(m, fullpath, img)
+            frames.append(img)
 
         for p, f in zip(prevframes, frames):
             rb.append(similar(p, f))
@@ -70,12 +91,3 @@ with mss.mss() as sct:
 
         for m in M:
             prevframes.append(numpy.array(sct.grab(M[m])))
-
-    # swig: simd-vector omp
-    '''
-    TODO:
-    slide-window-> (min-stride)
-        brute-force
-        max(sim-change)
-        grab-rect()
-    '''
