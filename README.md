@@ -2,15 +2,21 @@
 
 Distributed-Hybrid Training
 
-### log/
-
-- Logger
-
 ### cfg/
 
 - Mame Config
 
-### Resume State
+### fs/
+
+- File system configuration
+
+### log/
+
+- Logger
+
+### state/ 
+
+- Mame Resume State
 
 #### Street Fighter 2 (sf2ce)
 
