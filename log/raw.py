@@ -5,12 +5,38 @@ import cv2
 import time
 import numpy
 import signal
-import hashlib 
 from skimage.measure import compare_ssim
 
-def sigexit(signal, fp):
+from info import *
+
+def sigexit(signal, frame):
+    global fp
     fp.close()
     sys.exit(0)
+
+def init(d):
+
+    i = Info()
+
+    directory = d 
+    session = i.uniq()
+    fullpath = directory + '/' + session + '/'
+
+    if not os.path.exists(fullpath):
+        os.mkdir(fullpath)
+
+    fi = open(fullpath + 'info.txt', "w+")
+    fi.write("INFO: %s\r\n" % i.info())
+    fi.write("CONSTANT: %s\r\n" % i.constant())
+    fi.write("UNIQ: %s\r\n" % i.uniq())
+    fi.write("SCREEN: %s\r\n" % i.screen())
+    fi.close()
+
+    fp = open(fullpath + 'active.csv', "a+")
+    fp.write('ts,'+'idx,'+'level,'+'zcr'+'\n')
+    signal.signal(signal.SIGINT, sigexit)
+
+    return fp, fullpath
 
 class RingBuffer:
 
@@ -32,42 +58,18 @@ def similar(img_a, img_b):
     img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
     img_b = cv2.cvtColor(img_b, cv2.COLOR_BGR2GRAY)
     h, w = img_a.shape
-    img_a = cv2.resize(img_a, (w/2, h/2))
-    img_b = cv2.resize(img_b, (w/2, h/2))
+    img_a = cv2.resize(img_a, (w/8, h/8))
+    img_b = cv2.resize(img_b, (w/8, h/8))
     sim, _ = compare_ssim(numpy.array(img_a), numpy.array(img_b), full=True)
     return sim
-
-def init(d):
-    directory = d 
-    session = hashlib.md5(directory).hexdigest()
-    fullpath = directory + '/' + session + '/'
-
-    if not os.path.exists(fullpath):
-        os.mkdir(fullpath)
-
-    return fullpath
-
-def info(fullpath):
-
-    i = Info()
-    fi = open(fullpath + 'info.txt', "w+")
-    fi.write("INFO: %s\r\n" % i.info())
-    fi.write("CONSTANT: %s\r\n" % i.constant())
-    fi.write("UNIQ: %s\r\n" % i.uniq())
-    fi.write("SCREEN: %s\r\n" % i.screen())
-    fi.close()
-
-    fp = open(fullpath + 'active.csv', "a+")
-    signal.signal(signal.SIGINT, sigexit(fp))
-    return fp
 
 def flushtoramdisk(m, fullpath, img):
     cv2.imwrite(fullpath + str(m-1) + '-' + str(time.time()) + '.png', img)
 
-with mss.mss() as sct:
 
-    fullpath = init(sys.argv[1]) 
-    fp = info(fullpath)
+fp, fullpath = init(sys.argv[1]) 
+
+with mss.mss() as sct:
 
     rb = RingBuffer()
     active = 0
@@ -105,10 +107,7 @@ with mss.mss() as sct:
                 active = idx
                 zcr += 1
             #print ts, '-', '[Active]', '['+str(idx)+']', level, zcr
-            fp.write("%s, " % ts)
-            fp.write("%d, " % idx)
-            fp.write("%f, " % level)
-            fp.write("%d\r\n " % zcr)
+            fp.write(str(ts) + ',' + str(idx) + ',' + str(level) + ',' + str(zcr) + '\n')
         except:
             pass
 
