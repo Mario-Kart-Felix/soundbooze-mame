@@ -8,7 +8,7 @@ from skimage.measure import compare_ssim
 
 TOTALSAMPLE =  300
 SPLIT       =  4
-BOX         =  50*2
+BOX         =  50*2*4
 SLIDE       =  7/7
 
 S           = None  # screen index
@@ -202,6 +202,8 @@ with mss.mss() as reg:
 #                 ^
 # bound-finder <- | ->
 #                 +
+#
+# index(Box)
 
 def roi(img, y, x, h, w):
     return img[y:y+h, x:x+w]
