@@ -48,10 +48,10 @@ with mss.mss() as sct:
             gf = numpy.array(bf).ravel()
             rf = numpy.array(bf).ravel()
 
-            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(bp-bf))
-            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(gp-gf))
-            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(rp-rf))
-            Z[m-1] /= 10000000.0
+            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(bp-bf)/255)
+            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(gp-gf)/255)
+            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(rp-rf)/255)
+            Z[m-1] /= 255.0
 
         prevframes = []
         frames = []
@@ -65,6 +65,9 @@ with mss.mss() as sct:
             for z in Z:
                 I.append(numpy.sum(z))
             u = numpy.argmax(I)
+
+            for z in Z[u]:
+                print z
 
             for i, z in zip(range(len(Z[u])), Z[u]):
                 if z:
