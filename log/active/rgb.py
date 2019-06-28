@@ -66,9 +66,6 @@ with mss.mss() as sct:
                 I.append(numpy.sum(z))
             u = numpy.argmax(I)
 
-            for z in Z[u]:
-                print z
-
             for i, z in zip(range(len(Z[u])), Z[u]):
                 if z:
                     X.append(int(i%w))
