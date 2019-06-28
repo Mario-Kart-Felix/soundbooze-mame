@@ -38,7 +38,7 @@ with mss.mss() as sct:
             p = numpy.array(p).ravel()
             f = numpy.array(f).ravel()
 
-            Z[m-1] = numpy.add(Z[m-1], p-f)
+            Z[m-1] = numpy.add(Z[m-1], numpy.absolute(p-f))
             Z[m-1] /= 10000000.0
 
         prevframes = []
