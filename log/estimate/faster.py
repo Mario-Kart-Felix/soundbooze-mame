@@ -59,8 +59,10 @@ with mss.mss() as sct:
                     X.append(int(i%w))
                     Y.append(int(i/h))
                     #print int(i/h), int(i%w), z
-            l, t = X[numpy.argmin(X)], Y[numpy.argmin(Y)]
-            print '[Monitor]', u, l, t, 800, 600
+            l1, t1 = X[numpy.argmin(X)], Y[numpy.argmin(Y)]
+            l2, t2 = X[numpy.argmax(X)], Y[numpy.argmax(Y)]
+
+            print '[Monitor]', u, l, t, l2-l1, t2-t1
             break
 
         #print("fps: {}".format(1 / (time.time() - last_time)))
