@@ -52,7 +52,8 @@ with mss.mss() as sct:
 
             y = (numpy.power(SPLIT, 2) * 100) + 111
             for z in Z:
-                plt.subplot(y)
+                ax = plt.subplot(y)
+                ax.set_color_cycle(['red', 'green', 'blue'])
                 plt.plot(z)
                 y += 1
 
