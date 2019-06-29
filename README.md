@@ -29,3 +29,7 @@ Distributed-Hybrid Training for MAME Fightcade
 #### Fatal Fury 2 (fatfury2)
 
 - Level: 8
+
+## License
+
+UDUK™ Free as an AIR License
