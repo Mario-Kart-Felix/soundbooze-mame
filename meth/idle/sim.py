@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from skimage.measure import compare_ssim
 
 SPLIT        =    2
-TOTAL_SAMPLE =  500
+TOTAL_SAMPLE = 7500
 
 def similar(img_a, img_b):
     img_a = cv2.cvtColor(img_a, cv2.COLOR_BGR2GRAY)
