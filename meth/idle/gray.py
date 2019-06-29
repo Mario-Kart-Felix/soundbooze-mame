@@ -46,8 +46,8 @@ with mss.mss() as sct:
         for v in V:
             H = numpy.hsplit(v, SPLIT)
             for h in H:
-                s, k, v, h, m = hsum(h)
-                Z[x].append([s, k, v, h, m])
+                s, k, v, hs, m = hsum(h)
+                Z[x].append([numpy.sum(h)/100000000.0, s, k, v, hs, m])
                 x += 1
 
             if x != 0 and x % numpy.power(SPLIT, 2) == 0:
