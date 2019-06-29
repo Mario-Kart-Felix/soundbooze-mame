@@ -17,12 +17,18 @@ Find area of interest given a valid window geometry
 
 Find Height of Interest given samples returned by [2]
 
-### 4. Round of Interest
+### 4. Idle of Interest
+
+- idle/
+
+Watch Idle session
+
+### 5. Round of Interest
 
 - round/
 
 Estimate valid round-episode
 
-### 5. Reward Penalty Finder
+### 6. Reward Penalty Finder
 
 [...]
