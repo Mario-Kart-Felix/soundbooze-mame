@@ -1,6 +1,6 @@
 # soundbooze-mame
 
-Distributed-Hybrid Training
+Distributed-Hybrid Training for MAME Fightcade
 
 ### cfg/
 
