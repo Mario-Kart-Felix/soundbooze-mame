@@ -8,7 +8,7 @@ import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 
 SPLIT        =    2
-TOTAL_SAMPLE = 7500
+TOTAL_SAMPLE = 500
 
 with mss.mss() as sct:
 
@@ -53,7 +53,7 @@ with mss.mss() as sct:
             y = (numpy.power(SPLIT, 2) * 100) + 111
             for z in Z:
                 ax = plt.subplot(y)
-                ax.set_color_cycle(['red', 'green', 'blue'])
+                ax.set_prop_cycle(color=['red', 'green', 'blue'])
                 plt.plot(z)
                 y += 1
 
