@@ -8,7 +8,7 @@ import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 
 SPLIT        =    2
-TOTAL_SAMPLE =  500
+TOTAL_SAMPLE = 7500
 
 with mss.mss() as sct:
 
