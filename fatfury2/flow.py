@@ -106,9 +106,11 @@ with mss.mss() as sct:
         #cv2.imshow('mask',mask)
         #cv2.imshow('res',res)
 
-        #flow - pointcluster, r,g,b,a dependent
+        # flow - pointcluster, r,g,b,a dependent
         # ready(act) ,box-ringbuffer y(max)
         # extreme, sucessfull hit
+        # W est A [forward-once]
+
         vis = red.copy()
         gray = cv2.cvtColor(vis, cv2.COLOR_BGR2GRAY)
         flow = cv2.calcOpticalFlowFarneback(prevgray,gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
