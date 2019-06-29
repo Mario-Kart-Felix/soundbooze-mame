@@ -10,7 +10,6 @@ with mss.mss() as sct:
 
     full = {"top": 124, "left": 100, "width": 800, "height": 600}
 
-    h, w = 0, 0
     prevframe = numpy.array(sct.grab(full))
     h, w, _ = prevframe.shape
     Z = numpy.zeros(h*w)
@@ -37,22 +36,12 @@ with mss.mss() as sct:
 
             print '[Dump]', time.time()
 
+            Z *= 1000000000000 * 255
             Z = numpy.array(Z).reshape(h,w)
+            cv2.imwrite('grad-' + str(time.time()) + '.png', Z)
 
-            def full_frame(width=None, height=None):
-                import matplotlib as mpl
-                mpl.rcParams['savefig.pad_inches'] = 0
-                figsize = None if width is None else (width, height)
-                fig = plt.figure(figsize=figsize)
-                ax = plt.axes([0,0,1,1], frameon=False)
-                ax.get_xaxis().set_visible(False)
-                ax.get_yaxis().set_visible(False)
-                plt.autoscale(tight=True)
-
-            import matplotlib.pyplot as plt
-            full_frame()
-            plt.imshow(Z)
-            plt.savefig(str(time.time()) + '.png')
+            Z[Z > 0] = 255
+            cv2.imwrite('white-' + str(time.time()) + '.png', Z)
 
             Z = numpy.zeros(h*w)
 
