@@ -7,8 +7,8 @@ from scipy.stats import skew, kurtosis
 import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 
-SPLIT        =     2
-TOTAL_SAMPLE = 75000
+SPLIT        =    2
+TOTAL_SAMPLE = 7500
 
 def hsum(gray):
     numPixels = numpy.prod(gray.shape[:2])
