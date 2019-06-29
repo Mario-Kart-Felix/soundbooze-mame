@@ -14,6 +14,17 @@ with mss.mss() as sct:
     h, w, _ = prevframe.shape
     Z = numpy.zeros(h*w)
 
+    fullpath = str(time.time()) + '/'
+    grad = fullpath + 'grad' + '/'
+    white = fullpath + 'white' + '/'
+
+    if not os.path.exists(fullpath):
+        os.mkdir(fullpath)
+    if not os.path.exists(grad):
+        os.mkdir(grad)
+    if not os.path.exists(white):
+        os.mkdir(white)
+
     i = 0
 
     while [ 1 ]: 
@@ -38,14 +49,12 @@ with mss.mss() as sct:
 
             Z *= 1000000000000 * 255
             Z = numpy.array(Z).reshape(h,w)
-            cv2.imwrite('grad-' + str(time.time()) + '.png', Z)
+            cv2.imwrite(grad + str(time.time()) + '.png', Z)
 
             Z[Z > 0] = 255
-            cv2.imwrite('white-' + str(time.time()) + '.png', Z)
+            cv2.imwrite(white + str(time.time()) + '.png', Z)
 
             Z = numpy.zeros(h*w)
-
-            #break
 
         #print("fps: {}".format(1 / (time.time() - last_time)))
 
