@@ -29,6 +29,12 @@ Watch Idle session
 
 Estimate valid round-episode
 
-### 6. Reward Penalty Finder
+### 6. Feature of Interest
+
+- foi/
+
+Estimate valid feature
+
+### 7. Reward Penalty Finder
 
 [...]
