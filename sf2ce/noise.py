@@ -27,8 +27,8 @@ class Image:
         self.c = 0
 
     def dump(self, x, i):
-        cv2.imwrite(self.i + str(c) + '.png', numpy.reshape(x, (50,100)))
-        cv2.imwrite(self.x + str(c) + '.png', numpy.reshape(i, (50,100)))
+        cv2.imwrite(self.x + str(self.c) + '.png', numpy.reshape(x, (50,100)))
+        cv2.imwrite(self.i + str(self.c) + '.png', numpy.reshape(i, (50,100)))
         self.c += 1
 
     def hash(self, img):
@@ -50,13 +50,13 @@ class Image:
                 if s < ms:
                     ms = s
                     img = i
+                    #self.dump(x, i)
 
         return ms, time.time() - t, self.hash(img)
 
 def risk(r, ev, ns, h):
 
     global prevra, ra
-    global HR, HA
 
     p1 = (ra[0]-prevra[0]) * -1 if (ra[0]-prevra[0]) else 0
     p2 = ra[1]-prevra[1]
@@ -70,7 +70,7 @@ def risk(r, ev, ns, h):
     if p2 > 0:
         HR[h] = r
         print HR
-    '''            
+    '''
 
     def _run(r):
         ns.value = True
@@ -116,7 +116,6 @@ def risk(r, ev, ns, h):
 def advantage(a, ev, ns, h):
 
     global prevra, ra
-    global HR, HA
 
     p1 = (ra[2]-prevra[2]) * -1 if (ra[2]-prevra[2]) else 0
     p2 = ra[3]-prevra[3]
@@ -176,13 +175,12 @@ def advantage(a, ev, ns, h):
 def inference(x):
 
     global prevra, ra
-    global HR, HA
 
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
         rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
-        print HR
         '''
+        print HR
         if ip in HR:
             print HR[ip]
         '''
@@ -190,22 +188,22 @@ def inference(x):
     if len(REWARD) > 0:
         msr, t, ir = image.minsubtract(REWARD, x) 
         rr = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
-        print HA
         '''
+        print HA
         if ir in HA:
             print HA[ir]
         '''
 
     if msp < msr:
         ra[0], ra[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
-        #print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, ra[0], ra[1]))
+        print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, ra[0], ra[1]))
         r = multiprocessing.Process(target=risk, args=(rp, ev, ns, ip))
         r.start()
         #r.join()
 
     elif msp > msr: 
         ra[2], ra[3] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
-        #print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, ra[2], ra[3]))
+        print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, ra[2], ra[3]))
         a = multiprocessing.Process(target=advantage, args=(rr, ev, ns, ir))
         a.start()
         #a.join()
