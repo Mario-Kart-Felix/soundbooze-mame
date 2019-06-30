@@ -2,18 +2,15 @@ import mss
 import cv2
 import time
 import numpy
-import random
 import hashlib 
+import multiprocessing
 
 from ryu import *
 from rb import *
 from archive import *
 
-ROUND  = 2744512
-START  = 4089536
-INSERT = 1358640
-SELECT = 2623509
-KO     = 745816 * 4
+BLOOD  = [2744512, 4089536, 745816 * 4]
+RESUME = [1358640, 2623509]
 
 class Image:
 
@@ -35,8 +32,8 @@ class Image:
     def minsubtract(self, A, x): 
 
         def _graysub(img_a, img_b):
-            diff = numpy.sum((img_a - img_b))/100000000.0
-            return diff
+            s = numpy.sum((img_a - img_b))/100000000.0
+            return s 
 
         ms = numpy.iinfo('i').max
         t = time.time()
@@ -50,73 +47,109 @@ class Image:
 
         return ms, time.time() - t, self.hash(img)
 
-def reward_penalty(img, prevBlood):
-    b = img[:, :, 0]
-    g = img[:, :, 1]
-    ssum = numpy.sum(b.ravel()) + numpy.sum(g.ravel())
-    current = ((float(ssum)))
-    sub = numpy.sqrt(prevBlood - current)/1000.0
-    if current != prevBlood:
-        return sub, current
-    else:
-        return 0, 0
+def risk(r, ev, ns):
+
+    def _run(r):
+        ns.value = True
+        ev.set()
+
+        '''
+        if r == 0:
+        elif r == 1:
+        elif r == 2:
+        elif r == 3:
+        '''
+
+        ns.value = False
+        ev.set()
+
+    z = False
+
+    try:
+        z = ns.value
+        if not z:
+            _run(r)
+
+    except Exception, err:
+        _run(r)
+        pass
+
+    ev.wait()
+
+def advantage(a, ev, ns):
+
+    def _run(a):
+        ns.value = True
+        ev.set()
+
+        '''
+        if a == 0:
+        elif a == 1:
+        elif a == 2:
+        elif a == 3:
+        '''
+
+        ns.value = False
+        ev.set()
+
+    z = False
+
+    try:
+        z = ns.value
+        if not z:
+            _run(a)
+
+    except Exception, err:
+        _run(a)
+        pass
+
+    ev.wait()
+
+def inference(x):
+
+    if len(PENALTY) > 0:
+        msp, t, ip = image.minsubtract(PENALTY, x) 
+        rp = numpy.random.choice(4, 1, p=[0.2, 0.3, 0.1, 0.4])
+        HP[ip] = rp
+
+    if len(REWARD) > 0:
+        msr, t, ir = image.minsubtract(REWARD, x) 
+        rr = numpy.random.choice(4, 1, p=[0.2, 0.3, 0.1, 0.4])
+        HR[ir] = rr 
+
+    if msp < msr:
+        print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)))  
+        z = ['R', ip, rp, 0.4089536-sumb2/10000000.0]
+        ZEQ.append(z)
+        r = multiprocessing.Process(target=risk, args=(rp,ev,ns)) 
+        r.start()
+
+    elif msp > msr: 
+        print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)))  
+        z = ['A', ir, rr, 0.4089536-sumb2/10000000.0]
+        ZEQ.append(z)
+        a = multiprocessing.Process(target=advantage, args=(rr,ev,ns)) 
+        a.start() 
 
 with mss.mss() as sct:
-
-    def _inference():
-
-        if len(PENALTY) > 0:
-            msp, t, ip = image.minsubtract(PENALTY, x) 
-            rp = random.randint(0,7)
-            HP[ip] = rp
-
-        if len(REWARD) > 0:
-            msr, t, ir = image.minsubtract(REWARD, x) 
-            rr = random.randint(0,8)
-            HR[ir] = rr 
-
-        if msp < msr:
-            print '[P]',
-            print ("%.5f"% (msp)),
-            print ("%.5f"% (t)),
-            print ip, rp,
-            print ("%.5f"% (0.4089536-sumb1/10000000.0)),
-            print ("%.5f"% (0.4089536-sumb2/10000000.0))
-            z = ['P', ip, rp, 0.4089536-sumb2/10000000.0]
-            ZEQ.append(z)
-
-        elif msp > msr: 
-            print '[R]',
-            print ("%.5f"% (msr)),
-            print ("%.5f"% (t)),
-            print ir, rr,
-            print ("%.5f"% (0.4089536-sumb1/10000000.0)),
-            print ("%.5f"% (0.4089536-sumb2/10000000.0))
-            z = ['R', ir, rr, 0.4089536-sumb2/10000000.0]
-            ZEQ.append(z)
 
     border = 24
     blood = {"top": 100+border, "left": 100, "width": 800, "height":600}
     scene = {"top": 240+border, "left": 100, "width": 800, "height":480}
 
-    prevBloodP1 = 0
-    prevBloodP2 = 0
-
     startGame = False
 
     ryu = RYU()
+    mgr = multiprocessing.Manager()
+    ns = mgr.Namespace()
+    ev = multiprocessing.Event()
+
     korb = RingBuffer(4)
     archive = Archive()
     image = Image('/tmp/')
 
-    PENALTY = []
-    REWARD = []
-
-    rewards, TotalPenalty, TotalReward = 0, 0, 0
-
-    HP = {}
-    HR = {}
-    ZEQ = []
+    PENALTY, REWARD = [], []
+    HP, HR, ZEQ = {}, {}, []
 
     while [ 1 ]:
 
@@ -127,20 +160,14 @@ with mss.mss() as sct:
         b2 = p2[60:78, 68+366:364+366]
         ko = p1[60:80, 378:424]
 
-        sp1, curp1 = reward_penalty(b1, prevBloodP1)
-        sp2, curp2 = reward_penalty(b2, prevBloodP2)
-
-        sumb1 = numpy.sum(b1)
-        sumb2 = numpy.sum(b2)
-        kosum = numpy.sum(ko)
+        sumb1, sumb2, kosum = numpy.sum(b1), numpy.sum(b2), numpy.sum(ko)
         korb.append(kosum)
 
-        if sumb1 >= ROUND and sumb1 <= START:
+        if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
             if startGame:
-
                 x = cv2.resize(numpy.array(sct.grab(scene))[:,:,0],(100,50)).ravel()
-                _inference()
+                inference(x)
                 
             z = korb.get()
             zsum = 0
@@ -149,66 +176,27 @@ with mss.mss() as sct:
             except:
                 pass
 
-            if sumb1 == START and sumb2 == START and not startGame:
+            if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
                 startGame = True
-                TotalPenalty, TotalReward = archive.load(numpy.array(sct.grab(scene))[:,:,0])
+                tp, tr = archive.load(numpy.array(sct.grab(scene))[:,:,0])
                 PENALTY, REWARD = archive.P, archive.R
-                print '[PENALTY]:', len(PENALTY), '('+str(TotalPenalty)+')'
-                print '[REWARD]:', len(REWARD),   '('+str(TotalReward)+')'
-                rewards = 0
+                print '[PENALTY]:', len(PENALTY), '('+str(tp)+')'
+                print '[REWARD]:', len(REWARD),   '('+str(tr)+')'
                 time.sleep(1)
 
-            elif sumb1 == ROUND and zsum == KO:
+            elif sumb1 == BLOOD[0] and zsum == BLOOD[2]:
                 print 'P1 [KO]'
                 startGame = False
-                '''
-                print '[-]-----------'
-                print len(ZEQ)
-                print numpy.array(ZEQ).ravel()
-                print ZEQ
-                print '[-]-----------'
-                ZEQ = []
-                '''
-
                 time.sleep(1)
 
-            elif sumb2 == ROUND and zsum == KO:
+            elif sumb2 == BLOOD[0] and zsum == BLOOD[2]:
                 print 'P2 [KO]'
                 startGame = False
-                '''
-                print '[-]-----------'
-                print len(ZEQ)
-                print numpy.array(ZEQ).ravel()
-                print ZEQ
-                print '[-]-----------'
-                ZEQ = []
-
-                print ''
-                print HP
-                print HR
-                print ''
-                '''
-
                 time.sleep(1)
 
-            elif (sp1 != 0 and sp2 != 0):
-                if numpy.isnan(sp1):
-                    sp1 = 0
-                if numpy.isnan(sp2):
-                    sp2 = 0
-                if sp1 > 0:
-                    rewards += -1.0
-                elif sp2 > 0:
-                    rewards += 1.0
-                else:
-                    rewards += 0
-
-            prevBloodP1 = curp1
-            prevBloodP2 = curp2
-
-        elif sumb1 == INSERT:  
+        elif sumb1 == RESUME[0]:
             ryu.insertcoin()
         
-        elif sumb1 == SELECT:
-            ryu.select() 
+        elif sumb1 == RESUME[1]:
+            ryu.select()
