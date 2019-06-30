@@ -1,47 +1,47 @@
 
-### 1. Gray Area
+### G. Gray Area
 
 - gray.py
 
 Find area of interest given valid multi-screen and fullscreen monitor
 
-### 2. Area of Interest 
+### A. Area of Interest 
 
 - area.py
 
 Find area of interest given a valid window geometry
 
-### 3. Predict Height of Interest
+### H. Predict Height of Interest
 
 - heightest.py
 
 Find Height of Interest given samples returned by [2]
 
-### 4. Idle of Interest
+### I. Idle of Interest
 
 - idle/
 
 Watch Idle session
 
-### 5. Round of Interest
+### R. Round of Interest
 
 - round/
 
 Estimate valid round-episode
 
-### 6. Feature of Interest
+### F. Feature of Interest
 
 - foi/
 
 Estimate valid feature
 
-### 7. Evolution and Randomness
+### E. Evolution and Randomness
 
 - evo/
 
 Preserving Randomness
 
-### 8. Noise Reduction
+### N. Noise Reduction
 
 - noise/
 
