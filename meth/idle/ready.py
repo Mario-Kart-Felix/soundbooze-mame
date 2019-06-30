@@ -151,6 +151,10 @@ with mss.mss() as sct:
             plt.imshow(numpy.array(found))
             plt.show()
 
+            os.mkdir('/tmp/' + directory)
+            for p in peaks:
+                os.system('cp ' + directory + str(p) + '.png '  '/tmp/' + directory)
+
             os.system('rm -rf ' + directory)
 
             R, G, B= [], [], []
