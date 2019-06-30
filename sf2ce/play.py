@@ -13,6 +13,9 @@ BLOOD  = [2744512, 4089536, 745816 * 4]
 BONUS  = [3470538, 3066848, 3389388]
 RESUME = [1358640, 2623509]
 
+prevra = [0, 0, 0, 0] # prevrp1, prevrp2, prevap1, prevap2
+ra     = [0, 0, 0, 0] # rp1, rp2, ap1, ap2                
+
 class Image:
 
     def __init__(self, directory):
@@ -48,14 +51,28 @@ class Image:
 
         return ms, time.time() - t, self.hash(img)
 
-def risk(r, ev, ns):
+def risk(r, ev, ns, h):
+
+    global prevra, ra
+
+    p1 = (ra[0]-prevra[0]) * -1 if (ra[0]-prevra[0]) else 0
+    p2 = ra[1]-prevra[1]
+
+    print("[R] %.5f %.5f [%d] %s" %(p1, p2, r, h))
+
+    '''
+    if p1 > 0:
+        print '[P1] R'
+    elif p2 > 0:
+        print '[P2] R'
+    '''
 
     def _run(r):
         ns.value = True
         ev.set()
 
         if r == 0:
-            time.sleep(0.2)
+            time.sleep(0.3)
         elif r == 1:
             ryu.left()
         elif r == 2:
@@ -91,15 +108,28 @@ def risk(r, ev, ns):
 
     ev.wait()
 
-def advantage(a, ev, ns):
+def advantage(a, ev, ns, h):
+
+    global prevra, ra
+
+    p1 = (ra[2]-prevra[2]) * -1 if (ra[2]-prevra[2]) else 0
+    p2 = ra[3]-prevra[3]
+
+    print("[A] %.5f %.5f [%d] %s" %(p1, p2, a, h))
+
+    '''
+    if p1 > 0: 
+        print '[P1] A'
+    elif p2 > 0:
+        print '[P2] A'
+    '''
 
     def _run(a):
         ns.value = True
         ev.set()
 
         if a == 0:
-            time.sleep(0.2)
-            pass
+            time.sleep(0.3)
         elif a == 1:
             ryu.punch()
         elif a == 2:
@@ -137,6 +167,8 @@ def advantage(a, ev, ns):
 
 def inference(x):
 
+    global prevra, ra
+
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
         rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
@@ -148,18 +180,25 @@ def inference(x):
         HR[ir] = rr 
 
     if msp < msr:
-        print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)))  
+        ra[0], ra[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
+        #print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, ra[0], ra[1]))
         z = ['R', ip, rp, 0.4089536-sumb2/10000000.0]
         ZEQ.append(z)
-        r = multiprocessing.Process(target=risk, args=(rp,ev,ns)) 
+        r = multiprocessing.Process(target=risk, args=(rp, ev, ns, ip))
         r.start()
 
     elif msp > msr: 
-        print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)))  
+        ra[2], ra[3] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
+        #print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, ra[2], ra[3]))
         z = ['A', ir, rr, 0.4089536-sumb2/10000000.0]
         ZEQ.append(z)
-        a = multiprocessing.Process(target=advantage, args=(rr,ev,ns)) 
-        a.start() 
+        a = multiprocessing.Process(target=advantage, args=(rr, ev, ns, ir))
+        a.start()
+
+    prevra[0] = ra[0] 
+    prevra[1] = ra[1] 
+    prevra[2] = ra[2] 
+    prevra[3] = ra[3] 
 
 with mss.mss() as sct:
 
