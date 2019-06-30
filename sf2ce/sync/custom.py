@@ -1,7 +1,8 @@
-import numpy
+import mss
 import cv2
 import time
-import mss
+import numpy
+import random
 import hashlib 
 
 from ryu import *
@@ -16,8 +17,8 @@ KO     = 745816 * 4
 
 class Image:
 
-    def __init__(self, size):
-        self.directory = '/tmp/tmp/'
+    def __init__(self, directory):
+        self.directory = directory
         self.i = self.directory + '/i/'
         self.x = self.directory + '/x/'
         self.c = 0
@@ -31,7 +32,7 @@ class Image:
         result = hashlib.md5(str(img.ravel()).encode()) 
         return result.hexdigest()
 
-    def maxsimilarity(self, A, x): 
+    def minsubtract(self, A, x): 
 
         def _graysub(img_a, img_b):
             diff = numpy.sum((img_a - img_b))/100000000.0
@@ -62,6 +63,38 @@ def reward_penalty(img, prevBlood):
 
 with mss.mss() as sct:
 
+    def _inference():
+
+        if len(PENALTY) > 0:
+            msp, t, ip = image.minsubtract(PENALTY, x) 
+            rp = random.randint(0,7)
+            HP[ip] = rp
+
+        if len(REWARD) > 0:
+            msr, t, ir = image.minsubtract(REWARD, x) 
+            rr = random.randint(0,8)
+            HR[ir] = rr 
+
+        if msp < msr:
+            print '[P]',
+            print ("%.5f"% (msp)),
+            print ("%.5f"% (t)),
+            print ip, rp,
+            print ("%.5f"% (0.4089536-sumb1/10000000.0)),
+            print ("%.5f"% (0.4089536-sumb2/10000000.0))
+            z = ['P', ip, rp, 0.4089536-sumb2/10000000.0]
+            ZEQ.append(z)
+
+        elif msp > msr: 
+            print '[R]',
+            print ("%.5f"% (msr)),
+            print ("%.5f"% (t)),
+            print ir, rr,
+            print ("%.5f"% (0.4089536-sumb1/10000000.0)),
+            print ("%.5f"% (0.4089536-sumb2/10000000.0))
+            z = ['R', ir, rr, 0.4089536-sumb2/10000000.0]
+            ZEQ.append(z)
+
     border = 24
     blood = {"top": 100+border, "left": 100, "width": 800, "height":600}
     scene = {"top": 240+border, "left": 100, "width": 800, "height":480}
@@ -74,16 +107,15 @@ with mss.mss() as sct:
     ryu = RYU()
     korb = RingBuffer(4)
     archive = Archive()
-    image = Image()
+    image = Image('/tmp/')
 
-    rewards = 0
     PENALTY = []
     REWARD = []
-    TotalPenalty, TotalReward = 0, 0
+
+    rewards, TotalPenalty, TotalReward = 0, 0, 0
 
     HP = {}
     HR = {}
-
     ZEQ = []
 
     while [ 1 ]:
@@ -108,27 +140,8 @@ with mss.mss() as sct:
             if startGame:
 
                 x = cv2.resize(numpy.array(sct.grab(scene))[:,:,0],(100,50)).ravel()
-
-                if len(PENALTY) > 0:
-                    msp, t, ip = image.maxsimilarity(PENALTY, x) 
-                    rp = random.randint(0,7)
-                    HP[ip] = rp
-
-                if len(REWARD) > 0:
-                    msr, t, ir = image.maxsimilarity(REWARD, x) 
-                    rr = random.randint(0,8)
-                    HR[ir] = rr 
-
-                if msp > msr:
-                    print '[P]', msp, t, ip, rp, 0.4089536-sumb1/10000000.0, 0.4089536-sumb2/10000000.0
-                    z = ['P', ip, rp, 0.4089536-sumb2/10000000.0]
-                    ZEQ.append(z)
-
-                elif msp < msr: 
-                    print '[R]', msr, t, ir, rr, 0.4089536-sumb1/10000000.0, 0.4089536-sumb2/10000000.0
-                    z = ['R', ir, rr, 0.4089536-sumb2/10000000.0]
-                    ZEQ.append(z)
-
+                _inference()
+                
             z = korb.get()
             zsum = 0
             try:
@@ -149,18 +162,21 @@ with mss.mss() as sct:
             elif sumb1 == ROUND and zsum == KO:
                 print 'P1 [KO]'
                 startGame = False
+                '''
                 print '[-]-----------'
                 print len(ZEQ)
                 print numpy.array(ZEQ).ravel()
                 print ZEQ
                 print '[-]-----------'
                 ZEQ = []
+                '''
 
                 time.sleep(1)
 
             elif sumb2 == ROUND and zsum == KO:
                 print 'P2 [KO]'
                 startGame = False
+                '''
                 print '[-]-----------'
                 print len(ZEQ)
                 print numpy.array(ZEQ).ravel()
@@ -172,6 +188,7 @@ with mss.mss() as sct:
                 print HP
                 print HR
                 print ''
+                '''
 
                 time.sleep(1)
 
