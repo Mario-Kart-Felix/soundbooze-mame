@@ -10,6 +10,7 @@ from rb import *
 from archive import *
 
 BLOOD  = [2744512, 4089536, 745816 * 4]
+BONUS  = [3470538, 3066848, 3389388]
 RESUME = [1358640, 2623509]
 
 class Image:
@@ -213,6 +214,9 @@ with mss.mss() as sct:
                 print '[PENALTY]:', len(PENALTY), '('+str(tp)+')'
                 print '[REWARD]:', len(REWARD),   '('+str(tr)+')'
                 time.sleep(1)
+
+            elif sumb1 == BONUS[0] or sumb1 == BONUS[1] or sumb1 == BONUS[2] and not startGame:
+                print '[Bonus]'
 
             elif sumb1 == BLOOD[0] and zsum == BLOOD[2]:
                 print 'P1 [KO]'
