@@ -41,6 +41,12 @@ Estimate valid feature
 
 Preserving Randomness
 
-### 8. Reward Penalty Finder
+### 8. Noise Reduction
+
+- noise/
+
+Noise reduction and estimation
+
+### 9. Reward Penalty Finder
 
 [...]
