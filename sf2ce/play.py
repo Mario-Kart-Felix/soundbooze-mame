@@ -53,12 +53,26 @@ def risk(r, ev, ns):
         ns.value = True
         ev.set()
 
-        '''
         if r == 0:
+            time.sleep(0.2)
         elif r == 1:
+            ryu.left()
         elif r == 2:
+            ryu.right()
         elif r == 3:
-        '''
+            ryu.defendup(0)
+        elif r == 4:
+            ryu.defendup(1)
+        elif r == 5:
+            ryu.defenddown(0)
+        elif r == 6:
+            ryu.defenddown(1)
+        elif r == 7:
+            ryu.jumpleft()
+        elif r == 8:
+            ryu.jumpright()
+        elif r == 9:
+            ryu.jumpup()
 
         ns.value = False
         ev.set()
@@ -82,12 +96,27 @@ def advantage(a, ev, ns):
         ns.value = True
         ev.set()
 
-        '''
         if a == 0:
+            time.sleep(0.2)
+            pass
         elif a == 1:
+            ryu.punch()
         elif a == 2:
+            ryu.kick()
         elif a == 3:
-        '''
+            ryu.downkick()
+        elif a == 4:
+            ryu.fire(0)
+        elif a == 5:
+            ryu.fire(1)
+        elif a == 6:
+            ryu.superpunch(0)
+        elif a == 7:
+            ryu.superpunch(1)
+        elif a == 8:
+            ryu.superkick(0)
+        elif a == 9:
+            ryu.superkick(1)
 
         ns.value = False
         ev.set()
@@ -109,12 +138,12 @@ def inference(x):
 
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
-        rp = numpy.random.choice(4, 1, p=[0.2, 0.3, 0.1, 0.4])
+        rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
         HP[ip] = rp
 
     if len(REWARD) > 0:
         msr, t, ir = image.minsubtract(REWARD, x) 
-        rr = numpy.random.choice(4, 1, p=[0.2, 0.3, 0.1, 0.4])
+        rr = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
         HR[ir] = rr 
 
     if msp < msr:
