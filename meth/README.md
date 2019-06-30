@@ -35,6 +35,12 @@ Estimate valid round-episode
 
 Estimate valid feature
 
-### 7. Reward Penalty Finder
+### 7. Evolution and Randomness
+
+- evo/
+
+Preserving Randomness
+
+### 8. Reward Penalty Finder
 
 [...]
