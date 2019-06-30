@@ -49,6 +49,6 @@ with mss.mss() as sct:
             pabs = numpy.absolute(p1-p2)
             if pabs < 0.18:
                 h = numpy.argmax(S)
-                print '[↭]', h, pabs
+                print '[↭]', time.time(), h, pabs
 
         #print("fps: {}".format(1 / (time.time() - last_time)))
