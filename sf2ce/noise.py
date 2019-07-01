@@ -68,7 +68,7 @@ def risk(r, ev, ns, h):
 
     #print("[R] %.5f %.5f [%d] %s" %(p1, p2, r, h))
 
-    if p2 == 0:
+    if p1 == 0 or p2 == 0: #p2 == 0:
         HZR[h] = r
     if p1 < 0:
         HR[h] = -1
@@ -146,7 +146,7 @@ def advantage(a, ev, ns, h):
 
     #print("[A] %.5f %.5f [%d] %s" %(p1, p2, a, h))
 
-    if p2 == 0:
+    if p1 == 0 or p2 == 0: #p2 == 0:
         HZA[h] = a
     if p1 < 0:
         HA[h] = -1
