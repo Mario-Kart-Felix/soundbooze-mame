@@ -300,8 +300,8 @@ with mss.mss() as sct:
             elif sumb2 == BLOOD[0] and zsum == BLOOD[2]:
                 print 'P2 [KO]'
                 startGame = False
-                pickle.dump(HR, open('pretrained/' + archive.enemy + 'HR-' + str(time.time()) + '.pkl', 'wb'))
-                pickle.dump(HA, open('pretrained/' + archive.enemy + 'HA-' + str(time.time()) + '.pkl', 'wb'))
+                pickle.dump(HR, open('pretrained/' + archive.enemy + '/' + 'HR-' + str(time.time()) + '.pkl', 'wb'))
+                pickle.dump(HA, open('pretrained/' + archive.enemy + '/' + 'HA-' + str(time.time()) + '.pkl', 'wb'))
                 time.sleep(1)
 
         elif sumb1 == RESUME[0]:
