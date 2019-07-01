@@ -16,7 +16,8 @@ RESUME = [1358640, 2623509]
 prevra = [0, 0, 0, 0] # prevrp1, prevrp2, prevap1, prevap2
 ra     = [0, 0, 0, 0] # rp1, rp2, ap1, ap2                
 
-HR, HA = {}, {}
+hr, ha = multiprocessing.Manager(), multiprocessing.Manager()
+HR, HA = hr.dict(), ha.dict()
 
 class Image:
 
@@ -57,25 +58,19 @@ class Image:
 def risk(r, ev, ns, h):
 
     global prevra, ra
+    global HR, HA
 
     p1 = (ra[0]-prevra[0]) * -1 if (ra[0]-prevra[0]) else 0
     p2 = ra[1]-prevra[1]
 
     #print("[R] %.5f %.5f [%d] %s" %(p1, p2, r, h))
 
-    '''
     if p1 < 0:
         HR[h] = -1
-        print HR
     if p2 > 0:
         HR[h] = r
-        print HR
-    '''
 
-    def _run(r):
-        ns.value = True
-        ev.set()
-
+    def _act(r):
         if r == 0:
             pass
         elif r == 1:
@@ -97,6 +92,17 @@ def risk(r, ev, ns, h):
         elif r == 9:
             ryu.jumpup()
 
+    def _run(h, r):
+        ns.value = True
+        ev.set()
+
+        if h in HR:
+            z = HR[h]
+            if z != -1:
+                _act(z)
+            else:
+                _act(r)
+        
         ns.value = False
         ev.set()
 
@@ -105,10 +111,10 @@ def risk(r, ev, ns, h):
     try:
         z = ns.value
         if not z:
-            _run(r)
+            _run(h, r)
 
     except Exception, err:
-        _run(r)
+        _run(h, r)
         pass
 
     ev.wait()
@@ -116,25 +122,19 @@ def risk(r, ev, ns, h):
 def advantage(a, ev, ns, h):
 
     global prevra, ra
+    global HR, HA
 
     p1 = (ra[2]-prevra[2]) * -1 if (ra[2]-prevra[2]) else 0
     p2 = ra[3]-prevra[3]
 
     #print("[A] %.5f %.5f [%d] %s" %(p1, p2, a, h))
 
-    '''
     if p1 < 0:
         HA[h] = -1
-        print HA
     if p2 > 0:
         HA[h] = a
-        print HA
-    '''
 
-    def _run(a):
-        ns.value = True
-        ev.set()
-
+    def _act(a):
         if a == 0:
             pass
         elif a == 1:
@@ -156,6 +156,17 @@ def advantage(a, ev, ns, h):
         elif a == 9:
             ryu.superkick(1)
 
+    def _run(h, a):
+        ns.value = True
+        ev.set()
+
+        if h in HA:
+            z = HA[h]
+            if z != -1:
+                _act(z)
+            else:
+                _act(a)
+
         ns.value = False
         ev.set()
 
@@ -164,10 +175,10 @@ def advantage(a, ev, ns, h):
     try:
         z = ns.value
         if not z:
-            _run(a)
+            _run(h, a)
 
     except Exception, err:
-        _run(a)
+        _run(h, a)
         pass
 
     ev.wait()
@@ -179,20 +190,10 @@ def inference(x):
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
         rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
-        '''
-        print HR
-        if ip in HR:
-            print HR[ip]
-        '''
 
     if len(REWARD) > 0:
         msr, t, ir = image.minsubtract(REWARD, x) 
         rr = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
-        '''
-        print HA
-        if ir in HA:
-            print HA[ir]
-        '''
 
     if msp < msr:
         ra[0], ra[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
