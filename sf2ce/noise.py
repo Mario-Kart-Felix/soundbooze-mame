@@ -18,7 +18,9 @@ prevra = [0, 0, 0, 0] # prevrp1, prevrp2, prevap1, prevap2
 ra     = [0, 0, 0, 0] # rp1, rp2, ap1, ap2                
 
 hr, ha = multiprocessing.Manager(), multiprocessing.Manager()
+hzr, hza = multiprocessing.Manager(), multiprocessing.Manager()
 HR, HA = hr.dict(), ha.dict()
+HZR, HZA = hzr.dict(), hza.dict()
 
 class Image:
 
@@ -59,17 +61,19 @@ class Image:
 def risk(r, ev, ns, h):
 
     global prevra, ra
-    global HR, HA
+    global HR, HZR
 
     p1 = (ra[0]-prevra[0]) * -1 if (ra[0]-prevra[0]) else 0
     p2 = ra[1]-prevra[1]
 
     #print("[R] %.5f %.5f [%d] %s" %(p1, p2, r, h))
 
+    if p2 == 0:
+        HZR[h] = r
     if p1 < 0:
         HR[h] = -1
     if p2 > 0:
-        HR[h] = r
+        HR[h] = HZR[h]
 
     def _act(r):
         if r == 0:
@@ -135,17 +139,19 @@ def risk(r, ev, ns, h):
 def advantage(a, ev, ns, h):
 
     global prevra, ra
-    global HR, HA
+    global HA, HZA
 
     p1 = (ra[2]-prevra[2]) * -1 if (ra[2]-prevra[2]) else 0
     p2 = ra[3]-prevra[3]
 
     #print("[A] %.5f %.5f [%d] %s" %(p1, p2, a, h))
 
+    if p2 == 0:
+        HZA[h] = a
     if p1 < 0:
         HA[h] = -1
     if p2 > 0:
-        HA[h] = a
+        HA[h] = HZA[h] 
 
     def _act(a):
         if a == 0:
@@ -215,7 +221,7 @@ def inference(x):
         for r in HR.values():
             if r != -1:
                 lenhr += 1.0
-        print("[R] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msp, t, ip, rp, lenhr/float(len(PENALTY)), ra[0], ra[1]))
+        #print("[R] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msp, t, ip, rp, lenhr/float(len(PENALTY)), ra[0], ra[1]))
         r = multiprocessing.Process(target=risk, args=(rp, ev, ns, ip))
         r.start()
         #r.join()
@@ -226,7 +232,7 @@ def inference(x):
         for a in HA.values(): 
             if a != -1:
                 lenha += 1.0
-        print("[A] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msr, t, ir, rr, lenha/float(len(REWARD)), ra[2], ra[3]))
+        #print("[A] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msr, t, ir, rr, lenha/float(len(REWARD)), ra[2], ra[3]))
         a = multiprocessing.Process(target=advantage, args=(rr, ev, ns, ir))
         a.start()
         #a.join()
