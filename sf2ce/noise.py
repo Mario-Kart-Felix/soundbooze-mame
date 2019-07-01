@@ -221,7 +221,7 @@ def inference(x):
         for r in HR.values():
             if r != -1:
                 lenhr += 1.0
-        print("[R] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msp, t, ip, rp, lenhr/float(len(PENALTY)), ra[0], ra[1]))
+        print("[R] %.5f (%.5f) %s [%d] (%.4f) [%.5f, %.5f]" %(msp, t, ip, rp, lenhr/float(len(PENALTY)), ra[0], ra[1]))
         r = multiprocessing.Process(target=risk, args=(rp, ev, ns, ip))
         r.start()
         #r.join()
@@ -232,7 +232,7 @@ def inference(x):
         for a in HA.values(): 
             if a != -1:
                 lenha += 1.0
-        print("[A] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msr, t, ir, rr, lenha/float(len(REWARD)), ra[2], ra[3]))
+        print("[A] %.5f (%.5f) %s [%d] (%.4f) [%.5f, %.5f]" %(msr, t, ir, rr, lenha/float(len(REWARD)), ra[2], ra[3]))
         a = multiprocessing.Process(target=advantage, args=(rr, ev, ns, ir))
         a.start()
         #a.join()
