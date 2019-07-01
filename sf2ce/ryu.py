@@ -23,7 +23,7 @@ class RYU:
             key = "Right"
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-        time.sleep(0.6)
+        time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
     def defenddown(self, pos):
@@ -35,7 +35,7 @@ class RYU:
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
         os.system('xdotool key --window ' + self.winid + ' keydown Down')
-        time.sleep(0.6)
+        time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
         os.system('xdotool key --window ' + self.winid + ' keyup Down')
 
@@ -51,25 +51,25 @@ class RYU:
 
     def left(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
-        time.sleep(0.9)
+        time.sleep(0.7)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
 
     def right(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
-        time.sleep(0.9)
+        time.sleep(0.7)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
 
     def jumpright(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
         os.system('xdotool key --window ' + self.winid + ' keydown Up')
-        time.sleep(0.5)
+        time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
         os.system('xdotool key --window ' + self.winid + ' keyup Up')
 
     def jumpleft(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
         os.system('xdotool key --window ' + self.winid + ' keydown Up')
-        time.sleep(0.5)
+        time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
         os.system('xdotool key --window ' + self.winid + ' keyup Up')
 
