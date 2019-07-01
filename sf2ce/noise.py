@@ -2,6 +2,7 @@ import mss
 import cv2
 import time
 import numpy
+import pickle
 import hashlib 
 import multiprocessing
 
@@ -72,25 +73,37 @@ def risk(r, ev, ns, h):
 
     def _act(r):
         if r == 0:
-            pass
+            for i in range(2):
+                ryu.superpunch(i)
         elif r == 1:
             ryu.left()
+            ryu.punch()
         elif r == 2:
             ryu.right()
+            ryu.kick()
         elif r == 3:
             ryu.defendup(0)
+            ryu.kick()
         elif r == 4:
             ryu.defendup(1)
+            ryu.punch()
         elif r == 5:
             ryu.defenddown(0)
+            ryu.downkick()
         elif r == 6:
             ryu.defenddown(1)
+            ryu.downkick()
         elif r == 7:
             ryu.jumpleft()
+            for i in range(2):
+                ryu.fire(i)
         elif r == 8:
             ryu.jumpright()
+            for i in range(2):
+                ryu.superkick(i)
         elif r == 9:
             ryu.jumpup()
+            ryu.kick()
 
     def _run(h, r):
         ns.value = True
@@ -186,6 +199,7 @@ def advantage(a, ev, ns, h):
 def inference(x):
 
     global prevra, ra
+    global HR, HA
 
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
@@ -197,14 +211,22 @@ def inference(x):
 
     if msp < msr:
         ra[0], ra[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
-        print("[R] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msp, t, ip, rp, ra[0], ra[1]))
+        lenhr = 0.0
+        for r in HR.values():
+            if r != -1:
+                lenhr += 1.0
+        print("[R] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msp, t, ip, rp, lenhr/float(len(PENALTY)), ra[0], ra[1]))
         r = multiprocessing.Process(target=risk, args=(rp, ev, ns, ip))
         r.start()
         #r.join()
 
     elif msp > msr: 
         ra[2], ra[3] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
-        print("[A] %.5f (%.5f) %s [%d] [%.5f, %.5f]" %(msr, t, ir, rr, ra[2], ra[3]))
+        lenha = 0.0
+        for a in HA.values(): 
+            if a != -1:
+                lenha += 1.0
+        print("[A] %.5f (%.5f) %s [%d] (%.2f) [%.5f, %.5f]" %(msr, t, ir, rr, lenha/float(len(REWARD)), ra[2], ra[3]))
         a = multiprocessing.Process(target=advantage, args=(rr, ev, ns, ir))
         a.start()
         #a.join()
@@ -278,6 +300,8 @@ with mss.mss() as sct:
             elif sumb2 == BLOOD[0] and zsum == BLOOD[2]:
                 print 'P2 [KO]'
                 startGame = False
+                pickle.dump(HR, open('pretrained/' + archive.enemy + 'HR-' + str(time.time()) + '.pkl', 'wb'))
+                pickle.dump(HA, open('pretrained/' + archive.enemy + 'HA-' + str(time.time()) + '.pkl', 'wb'))
                 time.sleep(1)
 
         elif sumb1 == RESUME[0]:
