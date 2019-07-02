@@ -218,7 +218,7 @@ def inference(x):
     global HR, HA
 
     if len(PENALTY) > 0:
-        msp, t, ip = image.minsimilar(PENALTY, x) 
+        msp, t, ip = image.minsubtract(PENALTY, x) 
         rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
 
     if len(REWARD) > 0:
