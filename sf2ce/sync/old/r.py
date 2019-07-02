@@ -150,10 +150,10 @@ with mss.mss() as sct:
                         _, Z = HMMP.sample(1)
                         r = Z[0]
                         if r == 0:
-                            ryu.jumpright()
+                            ryu.jumpright(0.6)
                             ryu.kick()
                         elif r == 1:
-                            ryu.jumpleft()
+                            ryu.jumpleft(0.6)
                             ryu.kick()
                         print '[P]', msp, t
 
