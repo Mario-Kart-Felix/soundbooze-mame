@@ -25,6 +25,7 @@ BGR = []
 for b, g, r in zip(B, G, R):
     BGR.append([b, g, r])
     #BGR.append([g, r])
+    #BGR.append([0, r])
 
 cluster = int(sys.argv[2])
 k = create_train_kmeans(BGR, cluster)
