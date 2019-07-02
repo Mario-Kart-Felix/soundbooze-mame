@@ -183,10 +183,10 @@ with mss.mss() as sct:
                 elif action == 1:
                     ryu.right()
                 elif action == 2:
-                    ryu.jumpleft()
+                    ryu.jumpleft(0.6)
                     ryu.kick()
                 elif action == 3:
-                    ryu.jumpright()
+                    ryu.jumpright(0.6)
                     ryu.kick()
                 elif action == 4:
                     ryu.jumpup()
