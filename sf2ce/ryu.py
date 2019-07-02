@@ -135,4 +135,4 @@ class RYU:
     def select(self):
         time.sleep(1)
         os.system('xdotool key --window ' + self.winid + ' key A')
-        time.sleep(2)
+        time.sleep(1)
