@@ -98,13 +98,11 @@ def risk(r, ev, ns, h):
             ryu.defenddown(1)
             ryu.downkick()
         elif r == 7:
-            ryu.jumpleft()
-            for i in range(2):
-                ryu.fire(i)
+            ryu.jumpleft(0.3)
+            ryu.kick()
         elif r == 8:
-            ryu.jumpright()
-            for i in range(2):
-                ryu.superkick(i)
+            ryu.jumpright(0.6)
+            ryu.kick()
         elif r == 9:
             ryu.jumpup()
             ryu.kick()
