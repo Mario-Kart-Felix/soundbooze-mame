@@ -28,16 +28,21 @@ class Image:
         result = hashlib.md5(str(img.ravel()).encode()) 
         return result.hexdigest()
 
-    def minsimilar(self, A, x):
+    def minsubtract(self, A, x): 
+        def _graysub(img_a, img_b):
+            s = numpy.sum((img_a - img_b))/100000000.0
+            return s 
+
         ms = numpy.iinfo('i').max
         t = time.time()
         img = None
         for a in A:
             for i in a:
-                s, _ = compare_ssim(numpy.array(x), numpy.array(i), full=True)
+                s = _graysub(x, i)
                 if s < ms:
                     ms = s
                     img = i
+                    #self.dump(x, i)
 
         return ms, time.time() - t, self.hash(img)
 
@@ -147,11 +152,11 @@ def inference(x):
     global HR, HA
 
     if len(PENALTY) > 0:
-        msp, t, ip = image.minsimilar(PENALTY, x) 
+        msp, t, ip = image.minsubtract(PENALTY, x) 
         rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
 
     if len(REWARD) > 0:
-        msr, t, ir = image.minsimilar(REWARD, x) 
+        msr, t, ir = image.minsubtract(REWARD, x) 
         rr = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
 
     if msp < msr:
