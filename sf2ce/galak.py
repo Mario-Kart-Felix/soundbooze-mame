@@ -19,6 +19,9 @@ ra     = [0, 0, 0, 0]
 HR, HA = {}, {}
 HZR, HZA = {}, {}
 
+pr = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+pa = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+
 class Image:
 
     def __init__(self):
@@ -50,6 +53,7 @@ def risk(r, h):
 
     global prevra, ra
     global HR, HZR
+    global pr
 
     p1 = (ra[0]-prevra[0]) * -1 if (ra[0]-prevra[0]) else 0
     p2 = ra[1]-prevra[1]
@@ -58,6 +62,8 @@ def risk(r, h):
         HZR[h] = r
     if p1 < 0:
         HR[h] = -1
+        pr[(r+1)%len(pr)] += pr[r]
+        pr[r] = 0.0
     if p2 > 0:
         try:
             HR[h] = HZR[h]
@@ -108,6 +114,7 @@ def advantage(a, h):
 
     global prevra, ra
     global HA, HZA
+    global pa
 
     p1 = (ra[2]-prevra[2]) * -1 if (ra[2]-prevra[2]) else 0
     p2 = ra[3]-prevra[3]
@@ -116,6 +123,8 @@ def advantage(a, h):
         HZA[h] = a
     if p1 < 0:
         HA[h] = -1
+        pa[(a+1)%len(pa)] += pa[a]
+        pa[a] = 0.0
     if p2 > 0:
         try:
             HA[h] = HZA[h] 
@@ -150,14 +159,15 @@ def inference(x):
 
     global prevra, ra
     global HR, HA
+    global pr, pa
 
     if len(PENALTY) > 0:
         msp, t, ip = image.minsubtract(PENALTY, x) 
-        rp = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
+        rp = numpy.random.choice(10, 1, p=pr)[0]
 
     if len(REWARD) > 0:
         msr, t, ir = image.minsubtract(REWARD, x) 
-        rr = numpy.random.choice(10, 1, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
+        rr = numpy.random.choice(10, 1, p=pa)[0]
 
     if msp < msr:
         ra[0], ra[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
