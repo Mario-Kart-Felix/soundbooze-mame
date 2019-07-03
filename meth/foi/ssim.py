@@ -29,6 +29,7 @@ def ssim(X, Y):
 
     cov_norm = NP / (NP - 1)
 
+    # pre simd
     ux = uniform_filter(X, win_size)
     uy = uniform_filter(Y, win_size)
     uxx = uniform_filter(X * X, win_size)
