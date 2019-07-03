@@ -73,8 +73,8 @@ def act(r, h, ev, ns):
 with mss.mss() as sct:
 
     header = {"top": 124, "left": 100, "width": 800, "height": 104}
-    body = {"top": 284, "left": 100, "width": 800, "height": 300+24}
-    full = {"top": 124, "left": 100, "width": 800, "height": 600+24}
+    body = {"top": 284, "left": 100, "width": 800, "height": 400}
+    full = {"top": 124, "left": 100, "width": 800, "height": 600}
 
     #prevzcount = 0
     prevframe_h = numpy.array(sct.grab(header))
