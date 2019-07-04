@@ -70,6 +70,9 @@ def risk(r, h):
         except:
             pass
 
+    if h in HR:
+        r = HR[h]
+
     if r == 0:
         ryu.kick()
         for i in range(2):
@@ -130,6 +133,9 @@ def advantage(a, h):
             HA[h] = HZA[h] 
         except:
             pass
+
+    if a in HA:
+        a = HA[h]
 
     if a == 0:
         pass
