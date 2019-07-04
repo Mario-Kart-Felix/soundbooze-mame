@@ -21,21 +21,21 @@ class SIFT:
     def __init__(self, log):
         self.sift   = cv2.xfeatures2d.SIFT_create()
         self.period = 10000
-        self.O      = {}
+        self.S      = {}
         self.div    = 4
         self.log    = log
         if self.log:
             self.__dir__()
 
     def reset(self):
-        self.O      = {}
+        self.S      = {}
         self.__dir__()
 
     def compute(self, frame):
         kp, d = self.sift.detectAndCompute(frame, None)
         sumd = numpy.sum(d)
         if sumd is not None:
-            self.O[sumd] = sumd
+            self.S[sumd] = sumd
             self._show_(sumd)
             if self.log:
                 self._log_(sumd, frame, self.div)
@@ -43,8 +43,8 @@ class SIFT:
 
     def _show_(self, sumd):
         Z = []
-        for o in self.O:
-            Z.append(o)
+        for s in self.S:
+            Z.append(s)
         Z = numpy.array(Z)
 
         if    sumd      < numpy.percentile(Z, 20):
@@ -68,8 +68,8 @@ class SIFT:
         h, w, _ = frame.shape
         cv2.imwrite(self.framedirectory + str(sumd) + '.png', cv2.resize(frame, (w/s,h/s)))
 
-        if len(self.O) != 0 and len(self.O) % self.period == 0:
-            self.dump(O)
+        if len(self.S) != 0 and len(self.S) % self.period == 0:
+            self.dump()
 
     def match(self, Z, sumd):
         for z in Z:
@@ -80,7 +80,7 @@ class SIFT:
         return pickle.load(open(filename, 'rb'))
 
     def dump(self):
-        pickle.dump(self.O, open(self.rootdirectory + str(time.time()) + '-sift.pkl', 'wb'))
+        pickle.dump(self.S, open(self.rootdirectory + str(time.time()) + '-sift.pkl', 'wb'))
 
 def display(frame):
     cv2.imshow("Frame", frame)
