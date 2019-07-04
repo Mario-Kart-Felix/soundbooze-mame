@@ -100,7 +100,7 @@ class Q:
 
     def act(self, s, p):
         try:
-            return numpy.argmax(self.Q[s,:] + numpy.random.choice(len(p), 1, p=p)[0])
+            return numpy.argmax(self.Q[s,:]) + numpy.random.choice(len(p), 1, p=p)[0]
         except:
             return numpy.random.choice(len(p), 1, p=p)[0]
 
