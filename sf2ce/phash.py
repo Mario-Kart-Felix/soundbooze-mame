@@ -64,6 +64,9 @@ def act(r, h, hash):
     except:
         pass
 
+    if h in hash.Z:
+        r = hash.Z[h][0]
+
     if r == 0:
       ryu.punch()
     elif r == 1:
