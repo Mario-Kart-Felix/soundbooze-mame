@@ -76,7 +76,10 @@ class HASH:
             W = numpy.vstack((W, q.Q[prev]))
             i += 1
 
+        self.i = i-1
+
         q.Q = numpy.copy(W)
+        print q.Q, q.Q.shape, len(self.Z), q.l
 
     def dump(self):
         pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
@@ -176,6 +179,7 @@ def preact(light, blue, ryu, hash, sumb1, sumb2, q):
         q.stack(hash.Z, hash.p)
         r = q.act(hash.Z[hb][2], hash.p)
         q.update(hash.Z[hl][2], r, hash.Z[hb][2], hit)
+        print 'Q',
     except:
         pass
     
@@ -184,7 +188,7 @@ def preact(light, blue, ryu, hash, sumb1, sumb2, q):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d) (%d) - [%s][%s] %s (%s)" %(len(q.Q), len(hash.Z), hl, hb, hash.Z[hb], hash.action[r]))
+    print("[%d] Z [%d] %d - [%s][%s] %s (%s)" %(len(q.Q), len(hash.Z), hash.i, hl, hb, hash.Z[hb], hash.action[r]))
 
 with mss.mss() as sct:
 
@@ -236,13 +240,15 @@ with mss.mss() as sct:
 
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
-                hash.flush(q)
+                if startGame:
+                    hash.flush(q)
                 startGame = False
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
-                hash.flush(q)
+                if startGame:
+                    hash.flush(q)
                 startGame = False
                 time.sleep(1)
 
