@@ -29,6 +29,7 @@ class HASH:
     def __init__(self):
         self.root = str(time.time()) + '/'
         self.Z = {}
+        self.action = ['punch', 'kick', 'downkick', 'kick|right|kick', 'kick|jumpup|kick', 'jumpleft|kick', 'jumpright|ryu.kick', 'fire(0)', 'fire(1)', 'superpunch(0)', 'superpunch(1)', 'superkick(0)', 'superkick(1)', 'defendup(0)', 'defendup(1)', 'defenddown(0)', 'defenddown(1)'] 
         self.p = [1.0-(0.058*16), 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058]
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
@@ -54,18 +55,9 @@ class HASH:
 def act(r, h, hash):
 
     hit = hash.Z[h][1]
-    try:
-        if hit[0] == -1:
-            hash.p[(r+1)%len(hash.p)] += hash.p[r]
-            hash.p[r] = 0.0
-
-        if hit[1] == 1:
-                hash.Z[h] = hash.Z[h]
-    except:
-        pass
-
-    if h in hash.Z:
-        r = hash.Z[h][0]
+    if hit[0] == -1:
+        hash.p[(r+1)%len(hash.p)] += hash.p[r]
+        hash.p[r] = 0.0
 
     if r == 0:
       ryu.punch()
@@ -116,7 +108,9 @@ def preact(blue, ryu, hash, sumb1, sumb2):
 
     h = hash.compute(blue)
     r = hash.next()
-    
+    if h in hash.Z:
+        r = hash.Z[h][0]
+
     hash.currenthit[0], hash.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
 
     hit = [0, 0]
@@ -130,7 +124,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d) - [%s] %s" %(len(hash.Z), h, hash.Z[h]))
+    print("(%d) - [%s] %s (%s)" %(len(hash.Z), h, hash.Z[h], hash.action[r]))
 
 with mss.mss() as sct:
 
