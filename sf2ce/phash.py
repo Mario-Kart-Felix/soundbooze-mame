@@ -115,14 +115,14 @@ def act(r, h, hash):
 def preact(blue, ryu, hash, sumb1, sumb2):
 
     h = hash.compute(blue)
-
+    r = hash.next()
+    
     hash.currenthit[0], hash.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
 
     hit = [0, 0]
     hit[0], hit[1] = hash.currenthit[0] - hash.prevhit[0], hash.currenthit[1] - hash.prevhit[1]
     hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
 
-    r = hash.next()
     hash.append(h, r, hit)
 
     act(r, h, hash)
