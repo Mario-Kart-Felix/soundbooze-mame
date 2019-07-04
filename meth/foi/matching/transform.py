@@ -1,4 +1,4 @@
-class Transform():
+class Transform:
 
     def __init__(self):
         self.r = None
