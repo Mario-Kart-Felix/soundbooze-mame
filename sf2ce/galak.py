@@ -196,7 +196,7 @@ with mss.mss() as sct:
 
     border = 24
     blood = {"top": 100+border, "left": 100, "width": 800, "height":600}
-    scene = {"top": 240+border, "left": 100, "width": 800, "height":480}
+    scene = {"top": 240+border, "left": 100, "width": 800, "height":400}
 
     startGame = False
 
