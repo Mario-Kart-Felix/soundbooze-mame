@@ -69,7 +69,7 @@ class ORB:
         cv2.imwrite(self.framedirectory + str(sumd) + '.png', cv2.resize(frame, (w/s,h/s)))
 
         if len(self.O) != 0 and len(self.O) % self.period == 0:
-            self.dump(O)
+            self.dump()
 
     def match(self, Z, sumd):
         for z in Z:

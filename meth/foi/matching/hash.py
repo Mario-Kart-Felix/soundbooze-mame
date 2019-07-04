@@ -56,7 +56,7 @@ class HASH:
         if len(self.A) != 0 and len(self.A) % self.period == 0:
             self.dump(self.A)
         if len(self.P) != 0 and len(self.P) % self.period == 0:
-            self.dump(self.P)
+            self.dump()
 
     def match(self, Z, sumd):
         for z in Z:
