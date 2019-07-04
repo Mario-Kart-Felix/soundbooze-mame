@@ -7,45 +7,9 @@ import time
 import numpy
 import pickle
 
-class Transform():
+from transform import *
 
-    def __init__(self):
-        self.r = None
-        self.g = None
-        self.b = None
-        self.gray = None
-
-    def transform(self, frame, rgb):
-        self.r = frame.copy()
-        self.g = frame.copy()
-        self.b = frame.copy()
-        self.gray = frame.copy()
-
-        if rgb == 'r':
-            self.r[:,:,0] = 0
-            self.r[:,:,1] = 0
-            self.r[self.r < 250] = 0
-            return self.r
-
-        elif rgb == 'g':
-            self.g[:,:,0] = 0
-            self.g[:,:,2] = 0
-            self.g[self.g < 250] = 0
-            return self.g
-
-        elif rgb == 'b':
-            self.b[:,:,1] = 0
-            self.b[:,:,2] = 0
-            self.b[self.b < 250] = 0
-            return self.b
-
-        elif rgb == 'gray':
-            self.gray[self.gray != 255] = 0
-            g = cv2.cvtColor(self.gray, cv2.COLOR_BGR2GRAY)
-            g[g > 127]
-            return g
-
-class ORB:
+class SIFT:
 
     def __dir__(self):
         self.rootdirectory = str(time.time()) + '/' 
@@ -55,7 +19,7 @@ class ORB:
             os.mkdir(self.framedirectory)
 
     def __init__(self, log):
-        self.orb    = cv2.ORB_create()
+        self.sift   = cv2.SIFT()
         self.period = 10000
         self.O      = {}
         self.div    = 4
@@ -68,7 +32,7 @@ class ORB:
         self.__dir__()
 
     def compute(self, frame):
-        kp, d = self.orb.detectAndCompute(frame, None)
+        kp, d = self.sift.detectAndCompute(frame, None)
         sumd = numpy.sum(d)
         if sumd is not None:
             self.O[sumd] = sumd
@@ -116,7 +80,7 @@ class ORB:
         return pickle.load(open(filename, 'rb'))
 
     def dump(self):
-        pickle.dump(self.O, open(self.rootdirectory + str(time.time()) + '-orbs.pkl', 'wb'))
+        pickle.dump(self.O, open(self.rootdirectory + str(time.time()) + '-sift.pkl', 'wb'))
 
 def display(frame):
     cv2.imshow("Frame", frame)
@@ -133,22 +97,15 @@ with mss.mss() as sct:
     body   = {"top": 284, "left": 100, "width": 800, "height": 400}
 
     transform = Transform()
-    orb = ORB(False)
+    sift = SIFT(False)
 
     while [ 1 ]:
 
         t = time.time()
 
-        #frame_h = numpy.array(sct.grab(header))
         frame_b = numpy.array(sct.grab(body))
-
-        #gray_h = transform_gray(frame_h)
         frame_t = transform.transform(frame_b, 'g')
-
-        #kp_h = feature_orb(orb, gray_h)
-        kp_b, d = orb.compute(frame_t)
-
-        #k_h = cv2.drawKeypoints(gray_h, kp_h, None)
+        kp_b, d = sift.compute(frame_t)
         k_b = cv2.drawKeypoints(frame_t, kp_b, None, color=(200,200,200), flags=0)
 
         '''
