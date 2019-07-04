@@ -19,7 +19,7 @@ class SIFT:
             os.mkdir(self.framedirectory)
 
     def __init__(self, log):
-        self.sift   = cv2.SIFT()
+        self.sift   = cv2.xfeatures2d.SIFT_create()
         self.period = 10000
         self.O      = {}
         self.div    = 4
