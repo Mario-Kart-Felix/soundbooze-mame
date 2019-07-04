@@ -84,7 +84,7 @@ with mss.mss() as sct:
     body   = {"top": 284, "left": 100, "width": 800, "height": 400}
 
     transform = Transform()
-    hash = HASH(True)
+    hash = HASH(False)
 
     while [ 1 ]:
 
