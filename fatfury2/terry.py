@@ -29,12 +29,12 @@ class TERRY:
 
     def left(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
-        time.sleep(0.7)
+        time.sleep(0.5)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
 
     def right(self):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
-        time.sleep(0.7)
+        time.sleep(0.5)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
 
     def shift(self, pos):
