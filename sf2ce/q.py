@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import mss
 import cv2
@@ -62,9 +63,6 @@ class HASH:
             self.Z[h] = [r, hit, self.i]
             self.i += 1
 
-    def dump(self):
-        pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
-
 class Q:
 
     def __init__(self, Z, p):
@@ -91,52 +89,9 @@ class Q:
         except:
             pass
 
-    def save(self):
-        root = '/tmp/'
-        numpy.save(root + 'bison.q', self.Q)
-
-def act(r):
-
-    if r == 0:
-      ryu.punch()
-    elif r == 1:
-      ryu.kick()
-    elif r == 2:
-      ryu.downkick()
-    elif r == 3:
-      ryu.kick()
-      ryu.right()
-      ryu.kick()
-    elif r == 4:
-      ryu.kick()
-      ryu.jumpup()
-      ryu.kick()
-    elif r == 5:
-      ryu.jumpleft(0.6)
-      ryu.kick()
-    elif r == 6:
-      ryu.jumpright(0.6)
-      ryu.kick()
-    elif r == 7:
-      ryu.fire(0)
-    elif r == 8:
-      ryu.fire(1)
-    elif r == 9:
-      ryu.superpunch(0)
-    elif r == 10:
-      ryu.superpunch(1)
-    elif r == 11:
-      ryu.superkick(0)
-    elif r == 12:
-      ryu.superkick(1)
-    elif r == 13:
-      ryu.defendup(0)
-    elif r == 14:
-      ryu.defendup(1)
-    elif r == 15:
-      ryu.defenddown(0)
-    elif r == 16:
-      ryu.defenddown(1)
+    def save(self, root, hash):
+        numpy.save(root + 'Q-' + str(time.time()), self.Q)
+        pickle.dump(hash.Z, open(root + 'Z-' + str(time.time()) + '.pkl', 'wb'))
 
 def preact(light, blue, ryu, hash, sumb1, sumb2, q):
 
@@ -162,12 +117,12 @@ def preact(light, blue, ryu, hash, sumb1, sumb2, q):
     except:
         pass
 
-    act(r)
+    ryu.act(r)
 
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("Q[%d] Z[%d] - [%s] %s (%s)" %(len(q.Q), len(hash.Z), hcurr, hash.Z[hcurr], hash.action[r]))
+    print("Q[%d] - [%s] %s (%s)" %(len(q.Q), hcurr, hash.Z[hcurr], hash.action[r]))
 
 with mss.mss() as sct:
 
@@ -220,14 +175,14 @@ with mss.mss() as sct:
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
                 if startGame:
-                    q.save()
+                    q.save(sys.argv[1], hash)
                 startGame = False
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
                 if startGame:
-                    q.save()
+                    q.save(sys.argv[1], hash)
                 startGame = False
                 time.sleep(1)
 
