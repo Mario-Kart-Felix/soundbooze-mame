@@ -13,6 +13,8 @@
     2. rl [prev/next, reward=sumb, A]
     3. 0-sad-sum-memcached, reverse-until-max
 
+    state-trans diff [ts()] -> reward-received-impact
+
     batch-correction, on-thy-fly...
     sample:
 
