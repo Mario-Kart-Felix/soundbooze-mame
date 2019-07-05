@@ -10,8 +10,8 @@ from PIL import Image
 
 from ryu import *
 
-BLOOD  = [2744512, 4089536, 745816 * 4]
-RESUME = [1358640, 2623509]
+BLOOD  = [2744512, 4089536, 745816 * 8]
+RESUME = [1358640, 2617406, 2264400]
 
 class RINGBUFFER:
 
@@ -48,6 +48,10 @@ class HASH:
         self.currenthit = [0, 0]
         self.i = 0
 
+    def set(self, Z):
+        self.i = len(Z)
+        self.Z = Z
+
     def next(self):
         return numpy.random.choice(len(self.p), 1, p=self.p)[0]
 
@@ -71,15 +75,19 @@ class Q:
         self.lr = .85
         self.y  = .99
 
+    def set(self, Q):
+        self.Q = Q
+
     def stack(self, Z, p):
         l = len(Z)
-        for i in range(self.l, l):
-            self.Q = numpy.vstack((self.Q, numpy.zeros(len(p))))
-        self.l = l
+        if l - self.l < 2:
+            for i in range(self.l, l):
+                self.Q = numpy.vstack((self.Q, numpy.zeros(len(p))))
+            self.l = l
 
     def act(self, current, p):
         try:
-            return numpy.argmax(self.Q[current,:]) + numpy.random.choice(len(p), 1, p=p)[0]
+            return numpy.argmax(self.Q[current,:]) + numpy.random.choice(len(p), 1, p=p)[0] #fixed-if-(Q[full])
         except:
             return numpy.random.choice(len(p), 1, p=p)[0]
 
@@ -90,8 +98,8 @@ class Q:
             pass
 
     def save(self, root, hash):
-        numpy.save(root + 'Q-' + str(time.time()), self.Q)
-        pickle.dump(hash.Z, open(root + 'Z-' + str(time.time()) + '.pkl', 'wb'))
+        numpy.save(root + 'Q', self.Q)
+        pickle.dump(hash.Z, open(root + 'Z' + '.pkl', 'wb'))
 
 def preact(light, blue, ryu, hash, sumb1, sumb2, q):
 
@@ -122,7 +130,40 @@ def preact(light, blue, ryu, hash, sumb1, sumb2, q):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("Q[%d] - [%s] %s (%s)" %(len(q.Q), hcurr, hash.Z[hcurr], hash.action[r]))
+    print("Q[%d] Z[%d] - [%s] %s (%s)" %(len(q.Q), len(hash.Z), hcurr, hash.Z[hcurr], hash.action[r]))
+
+def show():
+
+    import matplotlib.pyplot as plt
+
+    Q = numpy.load(sys.argv[2])
+    Z = pickle.load(open(sys.argv[3], 'rb'))
+
+    print 'Q:', len(Q), 'Z:', len(Z)
+
+    P, R     = [], []
+    Pts, Rts = [], []
+
+    for k, v in Z.items():
+        p = v[1][0]
+        r = v[1][1]
+        if p == -1:
+            P.append(p)
+        if r == 1:
+            R.append(r)
+
+        Pts.append(p)
+        Rts.append(r)
+
+    plt.subplot(211)
+    plt.title('[Penalty: ' + str(len(P)) + ']')
+    plt.bar(range(len(Pts)), Pts)
+
+    plt.subplot(212)
+    plt.title('[Reward: ' + str(len(R)) + ']')
+    plt.bar(range(len(Rts)), Rts)
+
+    plt.show()
 
 with mss.mss() as sct:
 
@@ -135,10 +176,22 @@ with mss.mss() as sct:
     ryu       = RYU()
     transform = TRANSFORM()
     hash      = HASH()
-    rb        = RINGBUFFER(4)
+    rb        = RINGBUFFER(8)
     q         = Q(hash.Z, hash.p)
 
     light = transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100)))
+
+    if len(sys.argv) == 4: 
+        if sys.argv[1]  == 'resume':
+            Q = numpy.load(sys.argv[2])
+            Z = pickle.load(open(sys.argv[3], 'rb'))
+            print 'Q:', len(Q), 'Z:', len(Z)
+            q.set(Q)
+            hash.set(Z)
+
+        elif sys.argv[1] == 'show':
+            show()
+            sys.exit(0)
 
     while [ 1 ]:
 
@@ -189,5 +242,5 @@ with mss.mss() as sct:
         elif sumb1 == RESUME[0]:
             ryu.insertcoin()
         
-        elif sumb1 == RESUME[1]:
+        elif sumb1 == RESUME[1] or sumb1 == RESUME[2]:
             ryu.select()
