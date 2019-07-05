@@ -62,25 +62,6 @@ class HASH:
             self.Z[h] = [r, hit, self.i]
             self.i += 1
 
-    def flush(self, q):
-        for k, v in self.Z.items():
-            if numpy.sum(v[1]) == 0:
-                del self.Z[k]
-
-        W = numpy.zeros([0, len(self.p)])
-
-        i = 0
-        for z in self.Z:
-            prev = self.Z[z][2] 
-            self.Z[z][2] = i
-            W = numpy.vstack((W, q.Q[prev]))
-            i += 1
-
-        self.i = i-1
-
-        q.Q = numpy.copy(W)
-        print q.Q, q.Q.shape, len(self.Z), q.l
-
     def dump(self):
         pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
 
@@ -94,13 +75,13 @@ class Q:
 
     def stack(self, Z, p):
         l = len(Z)
-        for i in range(l - self.l):
+        for i in range(self.l, l):
             self.Q = numpy.vstack((self.Q, numpy.zeros(len(p))))
         self.l = l
 
-    def act(self, s, p):
+    def act(self, current, p):
         try:
-            return numpy.argmax(self.Q[s,:]) + numpy.random.choice(len(p), 1, p=p)[0]
+            return numpy.argmax(self.Q[current,:]) + numpy.random.choice(len(p), 1, p=p)[0]
         except:
             return numpy.random.choice(len(p), 1, p=p)[0]
 
@@ -110,12 +91,11 @@ class Q:
         except:
             pass
 
-def act(r, h, hash):
+    def save(self):
+        root = '/tmp/'
+        numpy.save(root + 'bison.q', self.Q)
 
-    hit = hash.Z[h][1]
-    if hit[0] == -1:
-        hash.p[(r+1)%len(hash.p)] += hash.p[r]
-        hash.p[r] = 0.0
+def act(r):
 
     if r == 0:
       ryu.punch()
@@ -160,12 +140,12 @@ def act(r, h, hash):
 
 def preact(light, blue, ryu, hash, sumb1, sumb2, q):
 
-    hl = hash.compute(light)
-    hb = hash.compute(blue)
+    hprev = hash.compute(light)
+    hcurr = hash.compute(blue)
 
     r = hash.next()
-    if hb in hash.Z:
-        r = hash.Z[hb][0]
+    if hcurr in hash.Z:
+        r = hash.Z[hcurr][0]
     
     hash.currenthit[0], hash.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
 
@@ -173,22 +153,21 @@ def preact(light, blue, ryu, hash, sumb1, sumb2, q):
     hit[0], hit[1] = hash.currenthit[0] - hash.prevhit[0], hash.currenthit[1] - hash.prevhit[1]
     hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
 
-    hash.append(hb, r, hit)
+    hash.append(hcurr, r, hit)
 
+    q.stack(hash.Z, hash.p)
+    r = q.act(hash.Z[hcurr][2], hash.p)
     try:
-        q.stack(hash.Z, hash.p)
-        r = q.act(hash.Z[hb][2], hash.p)
-        q.update(hash.Z[hl][2], r, hash.Z[hb][2], hit)
-        print 'Q',
+        q.update(hash.Z[hprev][2], r, hash.Z[hcurr][2], hit)
     except:
         pass
-    
-    act(r, hb, hash)
+
+    act(r)
 
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("[%d] Z [%d] %d - [%s][%s] %s (%s)" %(len(q.Q), len(hash.Z), hash.i, hl, hb, hash.Z[hb], hash.action[r]))
+    print("Q[%d] Z[%d] - [%s] %s (%s)" %(len(q.Q), len(hash.Z), hcurr, hash.Z[hcurr], hash.action[r]))
 
 with mss.mss() as sct:
 
@@ -241,14 +220,14 @@ with mss.mss() as sct:
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
                 if startGame:
-                    hash.flush(q)
+                    q.save()
                 startGame = False
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
                 if startGame:
-                    hash.flush(q)
+                    q.save()
                 startGame = False
                 time.sleep(1)
 
