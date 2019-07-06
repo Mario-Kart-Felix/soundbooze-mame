@@ -1,34 +1,40 @@
+import sys
 import numpy
 import pickle
 import matplotlib.pyplot as plt
 
 def show():
 
-    Q = numpy.load(sys.argv[1])
-    Z = pickle.load(open(sys.argv[2], 'rb'))
+    HQ = pickle.load(open(sys.argv[1], 'rb'))
 
-    print '[Q]:', len(Q), '[Z]:', len(Z)
+    print '[HQ]:', len(HQ)
 
-    P, R     = [], []
-    Pts, Rts = [], []
+    Q         = [] 
+    HP, HR    = [], []
+    Pts, Rts  = [], []
 
-    for k, v in Z.items():
+    for k, v in HQ.items():
+        Q.append(v[0])
         p = v[1][0]
         r = v[1][1]
         if p == -1:
-            P.append(p)
+            HP.append(p)
         if r == 1:
-            R.append(r)
+            HR.append(r)
 
         Pts.append(p)
         Rts.append(r)
 
+    Q = numpy.array(Q)
+    plt.imshow(Q)
+    plt.show()
+
     plt.subplot(211)
-    plt.title('[Penalty: ' + str(len(P)) + ']')
+    plt.title('[Penalty: ' + str(len(HP)) + ']')
     plt.bar(range(len(Pts)), Pts)
 
     plt.subplot(212)
-    plt.title('[Reward: ' + str(len(R)) + ']')
+    plt.title('[Reward: ' + str(len(HR)) + ']')
     plt.bar(range(len(Rts)), Rts)
 
     plt.show()
