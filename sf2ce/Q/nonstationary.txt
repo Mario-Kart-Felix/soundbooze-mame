@@ -1,4 +1,4 @@
-Table
+TABLE
 =====
 
 Q   = self.HQ[h][0]
@@ -40,6 +40,7 @@ with mss.mss() as sct:
                     ts[0] = ts[1]
 
 
-que
+QUE
 ===
-act, wait/que, recv[reward/penalty/0] - blocking(timeout)
+
+act, wait/que, recv[reward/penalty/0] - learn()- blocking(timeout)
