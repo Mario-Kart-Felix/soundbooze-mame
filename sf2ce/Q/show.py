@@ -2,6 +2,7 @@ import sys
 import numpy
 import pickle
 import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()
 
 def show():
 
@@ -26,7 +27,7 @@ def show():
         Rts.append(r)
 
     Q = numpy.array(Q)
-    plt.imshow(Q)
+    sns.heatmap(Q)
     plt.show()
 
     plt.subplot(211)
