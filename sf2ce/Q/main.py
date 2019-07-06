@@ -100,8 +100,6 @@ class Resume (threading.Thread):
             elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2]:
                 ryu.select()
 
-            time.sleep(1)
-
 if __name__ == '__main__':
 
     config    = CONFIG()
