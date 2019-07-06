@@ -36,7 +36,7 @@ class Play (threading.Thread):
 
                     if config.play:
                         red = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),(200,100)))
-                        process.process(red)
+                        process.process(pink, red, ryu, sumb1, sumb2)
                         pink = red
 
                     if sumb1 == config.BLOOD[1] and sumb2 == config.BLOOD[1] and not config.play:
@@ -66,7 +66,7 @@ class Resume (threading.Thread):
 
             while [ 1 ]:
 
-                sumb1, sumb2, _ = config.sum(sct)
+                sumb1, _, _ = config.sum(sct)
 
                 if sumb1 == config.RESUME[0]:
                     ryu.insertcoin()
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     config    = CONFIG()
     transform = TRANSFORM()
     ryu       = RYU()
-    process   = PROCESS()
+    process   = PROCESS(sys.argv[1])
 
     play = Play()
     resume = Resume()
