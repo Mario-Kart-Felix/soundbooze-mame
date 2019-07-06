@@ -59,6 +59,12 @@ class Play (threading.Thread):
                         config.play = False
                         time.sleep(1)
 
+                elif config.sumb1 == config.RESUME[0]:
+                    ryu.insertcoin()
+            
+                elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2]:
+                    ryu.select()
+
 class Que (threading.Thread):
 
     def run(self):
@@ -88,18 +94,6 @@ class Que (threading.Thread):
 
                         process.hitupdate()
 
-class Resume (threading.Thread):
-
-    def run(self):
-
-        while [ 1 ]:
-
-            if config.sumb1 == config.RESUME[0]:
-                ryu.insertcoin()
-            
-            elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2]:
-                ryu.select()
-
 if __name__ == '__main__':
 
     config    = CONFIG()
@@ -112,12 +106,9 @@ if __name__ == '__main__':
 
     play = Play()
     que = Que()
-    resume = Resume()
 
     play.start()
     que.start()
-    resume.start()
 
     play.join()
     que.join()
-    resume.join()
