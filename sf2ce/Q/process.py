@@ -62,13 +62,9 @@ class PROCESS:
 
     def act(self, curr):
         try:
-            return numpy.argmax(self.HQ[curr][0] + self.HQ[curr][2]) #+ numpy.random.choice(len(self.p), 1, p=self.p)[0] #
+            return numpy.argmax(self.HQ[curr][0] + self.HQ[curr][2])
         except:
-            z = 1 - numpy.sum(self.p)
-            if z != 0:
-                return numpy.random.randint(0,16)
-            else:
-                return numpy.random.choice(len(self.p), 1, p=self.p)[0]
+            return numpy.random.choice(len(self.p), 1, p=self.p)[0]
 
     def hit(self, h, hit):
         try:
