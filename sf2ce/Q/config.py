@@ -1,4 +1,5 @@
 import numpy
+from ring import *
 
 class CONFIG:
 
