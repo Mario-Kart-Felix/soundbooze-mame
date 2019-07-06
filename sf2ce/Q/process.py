@@ -25,7 +25,8 @@ class PROCESS:
             self.HQ[h] = [self.p, [0,0], numpy.zeros(len(self.p))]
 
     def _hash(self, frame):
-        return self._chop(imagehash.phash(frame))
+        #return self._chop(imagehash.phash(frame))
+        return imagehash.phash(frame)
 
     def _chop(self, h):
         hchop = ''
