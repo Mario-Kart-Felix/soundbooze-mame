@@ -8,8 +8,10 @@ class CONFIG:
         self.RESUME = [1358640, 2617406, 2264400]
         self.blood  = {"top": 100+24, "left": 100, "width": 800, "height":600}
         self.scene  = {"top": 240+24, "left": 100, "width": 800, "height":400}
+        self.sumb1  = 0
+        self.sumb2  = 0
         self.play   = False
-        self.rb     = RINGBUFFER(8)
+        self.rb     = RINGBUFFER(4)
 
     def sum(self, sct):
         h = numpy.array(sct.grab(self.blood))
@@ -18,4 +20,4 @@ class CONFIG:
         ko = h[60:80, 378:424]
         kosum = numpy.sum(ko)
         self.rb.append(kosum)
-        return numpy.sum(b1), numpy.sum(b2), kosum 
+        self.sumb1, self.sumb2 = numpy.sum(b1), numpy.sum(b2)

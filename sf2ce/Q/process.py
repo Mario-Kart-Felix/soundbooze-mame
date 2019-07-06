@@ -82,7 +82,7 @@ class PROCESS:
         except:
             pass
 
-    def process(self, prev, curr, player, sumb1, sumb2):
+    def process(self, prev, curr, player):
 
         self.wait = True
         pink = PIL.Image.fromarray(prev)

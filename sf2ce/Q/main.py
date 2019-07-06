@@ -30,29 +30,29 @@ class Play (threading.Thread):
 
             while [ 1 ]:
 
-                sumb1, sumb2, kosum = config.sum(sct)
+                config.sum(sct)
                 rbsum = _rbsum()
 
-                if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
+                if config.sumb1 >= config.BLOOD[0] and config.sumb1 <= config.BLOOD[1]:
 
                     if config.play:
                         red = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),(200,100)))
-                        process.process(pink, red, ryu, sumb1, sumb2)
+                        process.process(pink, red, ryu)
                         pink = red
 
-                    if sumb1 == config.BLOOD[1] and sumb2 == config.BLOOD[1] and not config.play:
+                    if config.sumb1 == config.BLOOD[1] and config.sumb2 == config.BLOOD[1] and not config.play:
                         print '[Start]'
                         config.play = True
                         time.sleep(1)
 
-                    elif sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
+                    elif config.sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
                         print 'P1 [KO]'
                         if config.play:
                             process.save()
                         config.play = False
                         time.sleep(1)
 
-                    elif sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
+                    elif config.sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
                         print 'P2 [KO]'
                         if config.play:
                             process.save()
@@ -63,50 +63,44 @@ class Que (threading.Thread):
 
     def run(self):
 
-        with mss.mss() as sct:
+        while [ 1 ]:
 
-            while [ 1 ]:
+            if config.sumb1 >= config.BLOOD[0] and config.sumb1 <= config.BLOOD[1]:
 
-                sumb1, sumb2, _ = config.sum(sct)
+                if config.play:
 
-                if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
+                    if not process.wait:
+                        hit = process.hitcount(config.sumb1, config.sumb2)
 
-                    if config.play:
+                        if hit[0] != 0:
+                            print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
+                            process.hit(process.hash[0], hit)
+                            process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                            process.rminus(process.hash[0], process.hash[2])
 
-                        if not process.wait:
-                            hit = process.hitcount(sumb1, sumb2)
+                        if hit[1] != 0:
+                            print '[+]', process.hash[0], process.hash[2], process.hash[1], hit
+                            process.hit(process.hash[0], hit)
+                            process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                            process.rplus(process.hash[0], process.hash[2])
 
-                            if hit[0] != 0:
-                                print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
-                                process.hit(process.hash[0], hit)
-                                process.update(process.hash[0], process.hash[2], process.hash[1], hit)
-                                process.rminus(process.hash[0], process.hash[2])
+                        process.que.put((0))
 
-                            if hit[1] != 0:
-                                print '[+]', process.hash[0], process.hash[2], process.hash[1], hit
-                                process.hit(process.hash[0], hit)
-                                process.update(process.hash[0], process.hash[2], process.hash[1], hit)
-                                process.rplus(process.hash[0], process.hash[2])
-
-                            process.que.put((0))
-
-                            process.hitupdate()
+                        process.hitupdate()
 
 class Resume (threading.Thread):
 
     def run(self):
 
-        with mss.mss() as sct:
+        while [ 1 ]:
 
-            while [ 1 ]:
+            if config.sumb1 == config.RESUME[0]:
+                ryu.insertcoin()
+            
+            elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2]:
+                ryu.select()
 
-                sumb1, _, _ = config.sum(sct)
-
-                if sumb1 == config.RESUME[0]:
-                    ryu.insertcoin()
-                
-                elif sumb1 == config.RESUME[1] or sumb1 == config.RESUME[2]:
-                    ryu.select()
+            time.sleep(1)
 
 if __name__ == '__main__':
 
