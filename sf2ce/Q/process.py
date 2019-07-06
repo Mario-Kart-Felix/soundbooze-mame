@@ -49,10 +49,16 @@ class PROCESS:
             self.prevhit[i] = self.currenthit[i]
 
     def rminus(self, h, r):
-        self.HQ[h][2][r] -= 0.01
+        try:
+            self.HQ[h][2][r] -= 0.01
+        except:
+            pass
 
     def rplus(self, h, r):
-        self.HQ[h][2][r] += 0.01
+        try:
+            self.HQ[h][2][r] += 0.01
+        except:
+            pass
 
     def act(self, curr):
         try:
