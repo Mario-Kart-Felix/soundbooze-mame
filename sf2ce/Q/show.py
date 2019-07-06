@@ -29,14 +29,14 @@ def show():
         Pts.append(p)
         Rts.append(r)
 
-    plt.title('Q')
     plt.subplot(211)
     Q = numpy.array(Q)
+    plt.title('Q')
     sns.heatmap(Q)
 
-    plt.title('R')
     plt.subplot(212)
     R = numpy.array(R)
+    plt.title('R')
     sns.heatmap(R)
 
     plt.show()
