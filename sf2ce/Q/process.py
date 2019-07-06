@@ -16,7 +16,12 @@ class PROCESS:
         self.currenthit = [0, 0]
         self.que        = Queue.Queue()
         self.timeout    = 1.6
+        self.wait       = True
+        self.hash       = ['','', 0]
         self.root = root + '/'
+
+    def lock(self, p, n, r):
+        self.hash[0], self.hash[1], self.hash[2] = p, n, r
 
     def _append(self, h):
         if not h in self.HQ:
@@ -59,6 +64,12 @@ class PROCESS:
             else:
                 return numpy.random.choice(len(self.p), 1, p=self.p)[0]
 
+    def hit(self, h, hit):
+        try:
+            self.HQ[h][1] = hit
+        except:
+            pass
+
     def update(self, prev, a, curr, hit):
         try:
             self.HQ[prev][0][a] = self.HQ[prev][0][a] + self.lr * (numpy.sum(hit) + self.y * numpy.max(self.HQ[curr][0]) - self.HQ[prev][0][a])
@@ -67,36 +78,29 @@ class PROCESS:
 
     def process(self, prev, curr, player, sumb1, sumb2):
 
-        r = None
+        self.wait = True
 
+        r = None
         pink = PIL.Image.fromarray(prev)
         red = PIL.Image.fromarray(curr)
         hprev = self._hash(pink)
         hcurr = self._hash(red)
-
         self._append(hcurr)
+        r = self.act(hcurr)
+        player.act(r)
+        self.lock(hprev, hcurr, r)
+        self.wait = False
+        
+        _q, _ = self.que.get(self.timeout), self.que.task_done()
 
-        hit = self._hitcount(sumb1, sumb2)
-
-        if hit[0] == 0 and hit[1] == 0:
-
-            r = self.act(hcurr)
-            player.act(r)
-            hq = self.que.get(self.timeout)
-            self.que.put((0))
-            self.que.task_done()
-
-            try:
-                self.update(hprev, r, hcurr, hit)
-                print("HQ[%d] - [%s] [%d %d] (%s)" %(len(self.HQ), hcurr, hit[0], hit[1], self.action[r]))
-            except:
-                pass
-
-        self._hitupdate()
+        try:
+            print("HQ[%d] - [%s] [%d %d] (%s)" %(len(self.HQ), hcurr, self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
+        except:
+            pass
 
     def reduce(self):
-       for k, v in self.HQ.items():
-            if numpy.sum(self.HQ[k][1]) == 0:
+        for k, v in self.HQ.items():
+            if numpy.sum(v[1]) == 0:
                 del self.HQ[k]
 
     def load(self, filename):
