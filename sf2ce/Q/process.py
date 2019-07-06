@@ -96,7 +96,7 @@ class PROCESS:
 
     def reduce(self):
        for k, v in self.HQ.items():
-            if numpy.sum(self.HQ[h][1]) == 0:
+            if numpy.sum(self.HQ[k][1]) == 0:
                 del self.HQ[k]
 
     def load(self, filename):
