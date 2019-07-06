@@ -1,8 +1,8 @@
 [continous]
 
   QTs = (SIZE, SIZE) / 100.0  #state-trans tsdiff [avg[0,1,2,3]]
-  R = numpy.vstack((SIZE))    #hit-rate reward-sukses
-  SS = []                     #ord-state
+  QR  = (SIZE, SIZE)          #hit-rate reward-sukses
+  SS  = []                    #ord-state
 
 [hash-serufulness] even with noisy-dataZ
 
