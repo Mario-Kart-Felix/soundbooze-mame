@@ -27,12 +27,6 @@ class PROCESS:
         if not h in self.HQ:
             self.HQ[h] = [self.p, [0,0], numpy.zeros(len(self.p))]
 
-    def _rminus(self, h, r):
-        self.HQ[h][r] -= 0.01
-
-    def _rplus(self, h, r):
-        self.HQ[h][r] += 0.01
-
     def _hash(self, frame):
         return self._chop(imagehash.phash(frame))
 
@@ -43,20 +37,26 @@ class PROCESS:
             hchop += hc[i]
         return hchop
 
-    def _hitcount(self, sumb1, sumb2):
+    def hitcount(self, sumb1, sumb2):
         self.currenthit[0], self.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
         hit = [0, 0]
         hit[0], hit[1] = self.currenthit[0] - self.prevhit[0], self.currenthit[1] - self.prevhit[1]
         hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
         return hit
 
-    def _hitupdate(self):
+    def hitupdate(self):
         for i in range(2):
             self.prevhit[i] = self.currenthit[i]
 
+    def rminus(self, h, r):
+        self.HQ[h][2][r] -= 0.01
+
+    def rplus(self, h, r):
+        self.HQ[h][2][r] += 0.01
+
     def act(self, curr):
         try:
-            return numpy.argmax(self.HQ[curr][0]) + numpy.random.choice(len(self.p), 1, p=self.p)[0] #
+            return numpy.argmax(self.HQ[curr][0] + self.HQ[curr][2]) #+ numpy.random.choice(len(self.p), 1, p=self.p)[0] #
         except:
             z = 1 - numpy.sum(self.p)
             if z != 0:
@@ -79,8 +79,6 @@ class PROCESS:
     def process(self, prev, curr, player, sumb1, sumb2):
 
         self.wait = True
-
-        r = None
         pink = PIL.Image.fromarray(prev)
         red = PIL.Image.fromarray(curr)
         hprev = self._hash(pink)
@@ -94,7 +92,7 @@ class PROCESS:
         _q, _ = self.que.get(self.timeout), self.que.task_done()
 
         try:
-            print("HQ[%d] - [%s] [%d %d] (%s)" %(len(self.HQ), hcurr, self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
+            print("HQ[%d] - [%s]%s [%d %d] (%s)" %(len(self.HQ), hcurr, '*' if hcurr in self.HQ else '', self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
         except:
             pass
 

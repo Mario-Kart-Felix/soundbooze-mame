@@ -74,20 +74,23 @@ class Que (threading.Thread):
                     if config.play:
 
                         if not process.wait:
-                            hit = process._hitcount(sumb1, sumb2)
+                            hit = process.hitcount(sumb1, sumb2)
 
                             if hit[0] != 0:
                                 print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
                                 process.hit(process.hash[0], hit)
                                 process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                                process.rminus(process.hash[0], process.hash[2])
+
                             if hit[1] != 0:
                                 print '[+]', process.hash[0], process.hash[2], process.hash[1], hit
                                 process.hit(process.hash[0], hit)
                                 process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                                process.rplus(process.hash[0], process.hash[2])
 
                             process.que.put((0))
 
-                            process._hitupdate()
+                            process.hitupdate()
 
 class Resume (threading.Thread):
 
