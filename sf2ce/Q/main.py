@@ -2,6 +2,7 @@ import mss
 import cv2
 import time
 import numpy
+import Queue
 import threading
 
 from config import *
@@ -9,7 +10,6 @@ from ring import *
 from transform import *
 from ryu import *
 from process import *
-from queue import *
 
 class Play (threading.Thread):
 
@@ -41,8 +41,6 @@ class Play (threading.Thread):
 
                     if sumb1 == config.BLOOD[1] and sumb2 == config.BLOOD[1] and not config.play:
                         print '[Start]'
-                        if config.play:
-                            process.save()
                         config.play = True
                         time.sleep(1)
 
@@ -55,8 +53,35 @@ class Play (threading.Thread):
 
                     elif sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
                         print 'P2 [KO]'
+                        if config.play:
+                            process.save()
                         config.play = False
                         time.sleep(1)
+
+class Que (threading.Thread):
+
+    def run(self):
+
+        with mss.mss() as sct:
+
+            while [ 1 ]:
+
+                sumb1, sumb2, _ = config.sum(sct)
+
+                if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
+
+                    if config.play:
+
+                        hit = process._hitcount(sumb1, sumb2)
+
+                        if hit[0] != 0:
+                            process.que.put((-1))
+                            process.que.put((0))
+                        if hit[1] != 0:
+                            process.que.put((1))
+                            process.que.put((0))
+
+                        process._hitupdate()
 
 class Resume (threading.Thread):
 
@@ -82,9 +107,13 @@ if __name__ == '__main__':
     process   = PROCESS(sys.argv[1])
 
     play = Play()
+    que = Que()
     resume = Resume()
 
     play.start()
+    que.start()
     resume.start()
+
     play.join()
+    que.join()
     resume.join()
