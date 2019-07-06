@@ -94,7 +94,7 @@ class PROCESS:
 
         self._hitupdate()
 
-    def reduce():
+    def reduce(self):
        for k, v in self.HQ.items():
             if numpy.sum(self.HQ[h][1]) == 0:
                 del self.HQ[k]
