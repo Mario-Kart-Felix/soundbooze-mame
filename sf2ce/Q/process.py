@@ -28,7 +28,7 @@ class PROCESS:
         self.HQ[h][r] += 0.01
 
     def _hash(self, frame):
-        return _chop(imagehash.phash(frame))
+        return self._chop(imagehash.phash(frame))
 
     def _chop(self, h):
         hchop = ''
@@ -44,7 +44,7 @@ class PROCESS:
         hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
         return hit
 
-    def _hitupdate():
+    def _hitupdate(self):
         for i in range(2):
             self.prevhit[i] = self.currenthit[i]
 
@@ -60,14 +60,14 @@ class PROCESS:
         except:
             pass
 
-    def process(self, prev, curr, player, sumb1, sumb2, QQ):
+    def process(self, prev, curr, player, sumb1, sumb2):
 
         r = None
 
         pink = PIL.Image.fromarray(prev)
         red = PIL.Image.fromarray(curr)
-        hprev = _hash.compute(pink)
-        hcurr = _hash.compute(red)
+        hprev = self._hash(pink)
+        hcurr = self._hash(red)
 
         #self._append(hcurr)
 
