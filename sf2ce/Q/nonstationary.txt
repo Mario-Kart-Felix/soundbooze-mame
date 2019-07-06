@@ -1,78 +1,15 @@
-import numpy
+Table
+=====
 
-SIZE = 5
+Q   = self.HQ[h][0]
+hit = self.HQ[h][1]
+R   = self.HQ[h][2]
 
-HQ  = {}
-Q  = numpy.random.rand(SIZE)
-R  = numpy.zeros(SIZE)
-TS = numpy.zeros(SIZE)
+numpy.argmax(self.HQ[h][0])
+self.HQ[h][0][r]
 
-for i in range(4):
-    Q  = numpy.random.rand(SIZE)
-    HQ[chr(i+64)] = [Q, [0,0], R, TS]
-
-for s in HQ:
-    Q   = HQ[s][0]
-    hit = HQ[s][1]
-    R   = HQ[s][2]
-    TS  = HQ[s][3]
-
-    print s, Q, hit, R, TS
-
-a = numpy.argmax(HQ['A'][0])
-print a
-
-previous = 'C'
-current = 'A'
-
-a = HQ[previous][0][3]
-print a
-
-a = HQ[current][0][3]
-print a
-
-
-'''
-for k, v in HQ.items():
-    print k, v
-'''
-
-'''
-Q = np.zeros([env.observation_space.n,env.action_space.n])
-lr = .85
-y  = .99
-
-rList = []
-for i in range(num_episodes):
-    s = env.reset()
-
-    while j < 99:
-
-        a = np.argmax(Q[s,:] + np.random.randn(1,env.action_space.n) * (1./(i+1)))
-
-        s1,r,d,_ = env.step(a)
-
-        Q[s,a] = Q[s,a] + lr*(r + y*np.max(Q[s1,:]) - Q[s,a])
-
-        s = s1
-'''
-
-
-'''
-def minus(q):
-    q.QR[s][a] -= 0.01
-
-def plus(q):
-    q.QR[s][a] += 0.01
-'''
-
-H = {}
-def chop(h, s):
-    hchop = ''
-    hc = str(h)
-    for i in range(s):
-        hchop += hc[i]
-    return hchop
+State Transition - ts(diff):
+============================
 
 def qts(ts, hchop):
     t = ts[1]
@@ -126,29 +63,3 @@ def preact(hash, sumb1, sumb2):
     if hit[1] != 0:
         que.put((1))
         que.put((0))
-
-
-
-
-
-
-        def _act(hit, hcurr, r, que):
-        if hit[0] == 0 and hit[1] == 0:
-            r = q.act(hcurr, hash.p)
-            print r
-            ryu.act(r)
-            hq = que.get(1)
-            print hq
-            que.put((0))
-
-
-...
-  -1 1
-
-...
-  [s]
-  act(r)
-  que.get(2)
-  que.put(0)
-
-resumable,multi-trainning
