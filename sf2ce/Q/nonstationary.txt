@@ -150,3 +150,5 @@ def preact(hash, sumb1, sumb2):
   act(r)
   que.get(2)
   que.put(0)
+
+resumable,multi-trainning
