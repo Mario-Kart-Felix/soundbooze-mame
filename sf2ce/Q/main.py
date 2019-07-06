@@ -112,6 +112,9 @@ if __name__ == '__main__':
     ryu       = RYU()
     process   = PROCESS(sys.argv[1])
 
+    if len(sys.argv) == 3:
+        process.load(sys.argv[2])
+
     play = Play()
     que = Que()
     resume = Resume()
