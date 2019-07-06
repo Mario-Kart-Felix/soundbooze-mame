@@ -20,9 +20,6 @@ class PROCESS:
         self.hash       = ['','', 0]
         self.root = root + '/'
 
-    def lock(self, p, n, r):
-        self.hash[0], self.hash[1], self.hash[2] = p, n, r
-
     def _append(self, h):
         if not h in self.HQ:
             self.HQ[h] = [self.p, [0,0], numpy.zeros(len(self.p))]
@@ -36,6 +33,9 @@ class PROCESS:
         for i in range(len(hc)/2):
             hchop += hc[i]
         return hchop
+
+    def lock(self, p, n, r):
+        self.hash[0], self.hash[1], self.hash[2] = p, n, r
 
     def hitcount(self, sumb1, sumb2):
         self.currenthit[0], self.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
@@ -84,6 +84,12 @@ class PROCESS:
 
     def process(self, prev, curr, player):
 
+        def _log(hcurr, r):
+            try:
+                print("HQ[%d] - [%s]%s [%d %d] (%s)" %(len(self.HQ), hcurr, '*' if hcurr in self.HQ else '', self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
+            except:
+                pass
+
         self.wait = True
         pink = PIL.Image.fromarray(prev)
         red = PIL.Image.fromarray(curr)
@@ -95,12 +101,8 @@ class PROCESS:
         self.lock(hprev, hcurr, r)
         self.wait = False
         
+        _log(hcurr, r)
         _q, _ = self.que.get(self.timeout), self.que.task_done()
-
-        try:
-            print("HQ[%d] - [%s]%s [%d %d] (%s)" %(len(self.HQ), hcurr, '*' if hcurr in self.HQ else '', self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
-        except:
-            pass
 
     def reduce(self):
         for k, v in self.HQ.items():
