@@ -76,7 +76,7 @@ class Que (threading.Thread):
                 if config.play:
 
                     if not process.wait:
-                        hit = process.hitcount(config.sumb1, config.sumb2)
+                        hit = config.hitcount(config.sumb1, config.sumb2)
 
                         if hit[0] != 0:
                             print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
@@ -92,7 +92,7 @@ class Que (threading.Thread):
 
                         process.que.put((0))
 
-                        process.hitupdate()
+                        config.hitupdate()
 
 if __name__ == '__main__':
 
