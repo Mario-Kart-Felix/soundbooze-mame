@@ -4,7 +4,7 @@ Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
 ### World 920513
 
-![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/obsolete/sync/noise/sf2.png "sf2ce")
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/obsolete/sync/noise/sf2.png =395x289 "sf2ce")
 
 ## Q Learning
 
