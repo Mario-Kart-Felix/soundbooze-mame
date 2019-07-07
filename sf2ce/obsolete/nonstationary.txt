@@ -41,7 +41,7 @@ with mss.mss() as sct:
 QUE, stream
 ===========
 
-act, wait/que, recv[reward/penalty/0] - learn()- blocking(timeout)
+act, async/que, recv[reward/penalty/0] - learn() //blocking(timeout)
 
                               q1    a1
                               q2    a2

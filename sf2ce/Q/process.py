@@ -72,7 +72,7 @@ class PROCESS:
         player.act(a)
         self.lock(hprev, hcurr, a)
         
-        _log(hcurr, r)
+        _log(hcurr, a)
         _q, _ = self.que.get(self.timeout), self.que.task_done()
 
     def reduce(self):
