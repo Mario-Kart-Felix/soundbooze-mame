@@ -87,6 +87,6 @@ class PROCESS:
     def load(self, filename):
         self.HQ = pickle.load(open(filename, 'rb'))
 
-    def save(self):
+    def save(self, root):
         self.reduce()
-        pickle.dump(self.HQ, open(config.root + 'HQ.pkl', 'wb'))
+        pickle.dump(self.HQ, open(root + 'HQ.pkl', 'wb'))

@@ -48,14 +48,14 @@ class Play (threading.Thread):
                     elif config.sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
                         print 'P1 [KO]'
                         if config.play:
-                            process.save()
+                            process.save(config.root)
                         config.play = False
                         time.sleep(1)
 
                     elif config.sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
                         print 'P2 [KO]'
                         if config.play:
-                            process.save()
+                            process.save(config.root)
                         config.play = False
                         time.sleep(1)
 
