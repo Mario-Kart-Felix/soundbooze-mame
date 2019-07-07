@@ -17,7 +17,7 @@ class PROCESS:
 
     def _append(self, h):
         if not h in self.HQ:
-            self.HQ[h] = [self.p, [0,0], numpy.zeros(len(self.p))]
+            self.HQ[h] = [numpy.zeros(len(self.p)), [0,0], numpy.random.random(len(self.p)) / numpy.iinfo(numpy.int16).max]
 
     def _hash(self, frame):
         return imagehash.phash(frame)
@@ -51,7 +51,7 @@ class PROCESS:
 
     def update(self, prev, a, curr, hit):
         try:
-            self.HQ[prev][0][a] = self.HQ[prev][0][a] + self.lr * (numpy.sum(hit) + self.y * numpy.max(self.HQ[curr][0]) - self.HQ[prev][0][a])
+            self.HQ[prev][0][a] = (self.HQ[prev][0][a] + self.lr * (numpy.sum(hit) + self.y * numpy.max(self.HQ[curr][0]) - self.HQ[prev][0][a])) / numpy.iinfo(numpy.int16).max
         except:
             pass
 
