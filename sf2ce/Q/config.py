@@ -5,7 +5,7 @@ class CONFIG:
 
     def __init__(self, root):
         self.BLOOD      = [2744512, 4089536, 745816 * 4]
-        self.RESUME     = [1358640, 2617406, 2264400]
+        self.RESUME     = [1358640, 2617406, 2264400, 2623509]
         self.blood      = {"top": 100+24, "left": 100, "width": 800, "height":600}
         self.scene      = {"top": 240+24, "left": 100, "width": 800, "height":400}
         self.shape      = (200,100)

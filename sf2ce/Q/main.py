@@ -62,7 +62,7 @@ class Play (threading.Thread):
                 elif config.sumb1 == config.RESUME[0]:
                     ryu.insertcoin()
             
-                elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2]:
+                elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2] or config.sumb1 == config.RESUME[3]:
                     ryu.select()
 
 class Que (threading.Thread):
