@@ -3,31 +3,21 @@ import numpy
 import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
+from multiprocessing import Process
 
-def show():
-
-    HQ = pickle.load(open(sys.argv[1], 'rb'))
-
+def load(filename):
+    HQ = pickle.load(open(filename, 'rb'))
     print '[HQ]:', len(HQ)
+    return HQ
+
+def table(HQ):
 
     Q         = [] 
     R         = []
-    LP, LR    = [], []
-    Pts, Rts  = [], []
 
     for k, v in HQ.items():
         Q.append(v[0])
         R.append(v[2])
-
-        p = v[1][0]
-        r = v[1][1]
-        if p == -1:
-            LP.append(p)
-        if r == 1:
-            LR.append(r)
-
-        Pts.append(p)
-        Rts.append(r)
 
     plt.subplot(211)
     Q = numpy.array(Q)
@@ -41,6 +31,23 @@ def show():
 
     plt.show()
 
+def score(HQ):
+
+    LP, LR    = [], []
+    Pts, Rts  = [], []
+
+    for k, v in HQ.items():
+
+        p = v[1][0]
+        r = v[1][1]
+        if p == -1:
+            LP.append(p)
+        if r == 1:
+            LR.append(r)
+
+        Pts.append(p)
+        Rts.append(r)
+
     plt.subplot(211)
     plt.title('[Penalty: ' + str(len(LP)) + ']')
     plt.bar(range(len(Pts)), Pts)
@@ -51,4 +58,12 @@ def show():
 
     plt.show()
 
-show()
+HQ = load(sys.argv[1])
+
+t = Process(target=table, args=(HQ,))
+s = Process(target=score, args=(HQ,))
+
+t.start()
+s.start()
+t.join()
+s.join()
