@@ -6,7 +6,7 @@ import imagehash
 
 class PROCESS:
 
-    def __init__(self, root):
+    def __init__(self):
         self.HQ = {}
         self.lr = .85
         self.y  = .99
@@ -16,7 +16,6 @@ class PROCESS:
         self.timeout    = 1.6
         self.wait       = True
         self.hash       = ['','', 0]
-        self.root = root + '/'
 
     def _append(self, h):
         if not h in self.HQ:
@@ -90,4 +89,4 @@ class PROCESS:
 
     def save(self):
         self.reduce()
-        pickle.dump(self.HQ, open(self.root + 'HQ.pkl', 'wb'))
+        pickle.dump(self.HQ, open(config.root + 'HQ.pkl', 'wb'))

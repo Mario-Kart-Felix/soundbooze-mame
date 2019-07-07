@@ -3,7 +3,7 @@ from ring import *
 
 class CONFIG:
 
-    def __init__(self):
+    def __init__(self, root):
         self.BLOOD      = [2744512, 4089536, 745816 * 4]
         self.RESUME     = [1358640, 2617406, 2264400]
         self.blood      = {"top": 100+24, "left": 100, "width": 800, "height":600}
@@ -15,6 +15,7 @@ class CONFIG:
         self.currenthit = [0, 0]
         self.play       = False
         self.rb         = RINGBUFFER(4)
+        self.root = root + '/'
 
     def sum(self, sct):
         h = numpy.array(sct.grab(self.blood))

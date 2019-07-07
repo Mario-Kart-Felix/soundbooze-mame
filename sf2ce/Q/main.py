@@ -26,7 +26,7 @@ class Play (threading.Thread):
 
         with mss.mss() as sct:
 
-            pink = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),(200,100)))
+            pink = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),config.shape))
 
             while [ 1 ]:
 
@@ -36,7 +36,7 @@ class Play (threading.Thread):
                 if config.sumb1 >= config.BLOOD[0] and config.sumb1 <= config.BLOOD[1]:
 
                     if config.play:
-                        red = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),(200,100)))
+                        red = transform.red(cv2.resize(numpy.array(sct.grab(config.scene)),config.shape))
                         process.process(pink, red, ryu)
                         pink = red
 
@@ -96,10 +96,10 @@ class Que (threading.Thread):
 
 if __name__ == '__main__':
 
-    config    = CONFIG()
+    config    = CONFIG(sys.argv[1])
     transform = TRANSFORM()
     ryu       = RYU()
-    process   = PROCESS(sys.argv[1])
+    process   = PROCESS()
 
     if len(sys.argv) == 3:
         process.load(sys.argv[2])
