@@ -15,7 +15,7 @@ class CONFIG:
         self.currenthit = [0, 0]
         self.play       = False
         self.rb         = RINGBUFFER(4)
-        self.root = root + '/'
+        self.root       = root + '/'
 
     def sum(self, sct):
         h = numpy.array(sct.grab(self.blood))

@@ -7,14 +7,12 @@ import imagehash
 class PROCESS:
 
     def __init__(self):
-        self.HQ = {}
-        self.lr = .85
-        self.y  = .99
-        self.action = ['punch', 'kick', 'downkick', 'kick|right|kick', 'kick|jumpup|kick', 'jumpleft|kick', 'jumpright|kick', 'fire(0)', 'fire(1)', 'superpunch(0)', 'superpunch(1)', 'superkick(0)', 'superkick(1)', 'defendup(0)', 'defendup(1)', 'defenddown(0)', 'defenddown(1)'] 
-        self.p = [1.0-(0.058*16), 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058]
+        self.HQ         = {}
+        self.lr         = .85
+        self.y          = .99
+        self.p          = [1.0-(0.058*16), 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058]
         self.que        = Queue.Queue()
         self.timeout    = 1.6
-        self.wait       = True
         self.hash       = ['','', 0]
 
     def _append(self, h):
@@ -24,18 +22,18 @@ class PROCESS:
     def _hash(self, frame):
         return imagehash.phash(frame)
 
-    def lock(self, p, n, r):
-        self.hash[0], self.hash[1], self.hash[2] = p, n, r
+    def lock(self, p, n, a):
+        self.hash[0], self.hash[1], self.hash[2] = p, n, a
 
-    def rminus(self, h, r):
+    def rminus(self, h, a):
         try:
-            self.HQ[h][2][r] -= 0.01
+            self.HQ[h][2][a] -= 0.01
         except:
             pass
 
-    def rplus(self, h, r):
+    def rplus(self, h, a):
         try:
-            self.HQ[h][2][r] += 0.01
+            self.HQ[h][2][a] += 0.01
         except:
             pass
 
@@ -59,22 +57,20 @@ class PROCESS:
 
     def process(self, prev, curr, player):
 
-        def _log(hcurr, r):
+        def _log(hcurr, a):
             try:
-                print("HQ[%d] - [%s]%s [%d %d] (%s)" %(len(self.HQ), hcurr, '*' if hcurr in self.HQ else '', self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], self.action[r]))
+                print("HQ[%d] - [%s]%s [%d %d] (%s)" %(len(self.HQ), hcurr, '*' if hcurr in self.HQ else '', self.HQ[hcurr][1][0], self.HQ[hcurr][1][1], player.action[a]))
             except:
                 pass
 
-        self.wait = True
         pink = PIL.Image.fromarray(prev)
         red = PIL.Image.fromarray(curr)
         hprev = self._hash(pink)
         hcurr = self._hash(red)
         self._append(hcurr)
-        r = self.act(hcurr)
-        player.act(r)
-        self.lock(hprev, hcurr, r)
-        self.wait = False
+        a = self.act(hcurr)
+        player.act(a)
+        self.lock(hprev, hcurr, a)
         
         _log(hcurr, r)
         _q, _ = self.que.get(self.timeout), self.que.task_done()

@@ -75,24 +75,23 @@ class Que (threading.Thread):
 
                 if config.play:
 
-                    if not process.wait:
-                        hit = config.hitcount(config.sumb1, config.sumb2)
+                    hit = config.hitcount(config.sumb1, config.sumb2)
 
-                        if hit[0] != 0:
-                            print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
-                            process.hit(process.hash[0], hit)
-                            process.update(process.hash[0], process.hash[2], process.hash[1], hit)
-                            process.rminus(process.hash[0], process.hash[2])
+                    if hit[0] != 0:
+                        print '[-]', process.hash[0], process.hash[2], process.hash[1], hit
+                        process.hit(process.hash[0], hit)
+                        process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                        process.rminus(process.hash[0], process.hash[2])
 
-                        if hit[1] != 0:
-                            print '[+]', process.hash[0], process.hash[2], process.hash[1], hit
-                            process.hit(process.hash[0], hit)
-                            process.update(process.hash[0], process.hash[2], process.hash[1], hit)
-                            process.rplus(process.hash[0], process.hash[2])
+                    if hit[1] != 0:
+                        print '[+]', process.hash[0], process.hash[2], process.hash[1], hit
+                        process.hit(process.hash[0], hit)
+                        process.update(process.hash[0], process.hash[2], process.hash[1], hit)
+                        process.rplus(process.hash[0], process.hash[2])
 
-                        process.que.put((0))
+                    process.que.put((0))
 
-                        config.hitupdate()
+                    config.hitupdate()
 
 if __name__ == '__main__':
 
