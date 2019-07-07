@@ -11,7 +11,7 @@ self.HQ[h][0][r]
 State Transition - ts(diff):
 ============================
 
-def qts(ts, hchop):
+def qts(ts, h):
     t = ts[1]
     try:
         print("%d %d (%.3f %.3f %.3f) - %s" %(len(H), len(t), numpy.quantile(t, 0.25), numpy.quantile(t, 0.50), numpy.quantile(t, 0.75), hchop))
@@ -27,10 +27,8 @@ with mss.mss() as sct:
         ts[0] = time.time()
 
                 h = hash.compute(Image.fromarray(blue))
-                hchop = chop(h, len(str(h))/2)
-                H[hchop] = hchop 
 
-                qts(ts, hchop)
+                qts(ts, h)
 
                 if len(ts[1]) > 1000:
                     ts[1].pop(0)
@@ -40,7 +38,22 @@ with mss.mss() as sct:
                     ts[0] = ts[1]
 
 
-QUE
-===
+QUE, stream
+===========
 
 act, wait/que, recv[reward/penalty/0] - learn()- blocking(timeout)
+
+                              q1    a1
+                              q2    a2
+                              q3    a3
+                              q4    a4
+                              q5    a5*
+                              q6      - que[curr3, curr4, a]
+                              q7
+                              q8
+                       *[0,1] q9
+
+                                ...
+
+prev:   curr1        curr1  curr2  curr3  curr4  curr5
+curr:         curr1  curr2  curr3  curr4  curr5  curr6 ...
