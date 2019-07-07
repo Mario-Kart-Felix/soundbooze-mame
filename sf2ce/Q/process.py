@@ -17,7 +17,7 @@ class PROCESS:
 
     def _append(self, h):
         if not h in self.HQ:
-            self.HQ[h] = [numpy.zeros(len(self.p)), [0,0], numpy.random.random(len(self.p)) / numpy.iinfo(numpy.int16).max]
+            self.HQ[h] = [numpy.random.random(len(self.p)) / numpy.iinfo(numpy.int16).max, [0,0], numpy.zeros(len(self.p))]
 
     def _hash(self, frame):
         return imagehash.phash(frame)
