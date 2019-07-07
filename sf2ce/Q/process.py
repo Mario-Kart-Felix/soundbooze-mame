@@ -81,8 +81,12 @@ class PROCESS:
                 del self.HQ[k]
 
     def load(self, filename):
-        self.HQ = pickle.load(open(filename, 'rb'))
+        fp = open(filename, 'rb')
+        self.HQ = pickle.load(fp)
+        fp.close()
 
     def save(self, root):
         self.reduce()
-        pickle.dump(self.HQ, open(root + 'HQ.pkl', 'wb'))
+        fp = open(root + 'HQ.pkl', 'wb')
+        pickle.dump(self.HQ, fp)
+        fp.close()

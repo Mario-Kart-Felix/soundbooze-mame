@@ -6,7 +6,9 @@ import seaborn as sns; sns.set()
 from multiprocessing import Process
 
 def load(filename):
-    HQ = pickle.load(open(filename, 'rb'))
+    fp = open(filename, 'rb') 
+    HQ = pickle.load(fp)
+    fp.close()
     print '[HQ]:', len(HQ)
     return HQ
 
