@@ -1,3 +1,4 @@
+import time
 import numpy
 import pickle
 import collections
@@ -11,12 +12,15 @@ class TRANSITION:
         self.H = []
         self.depth = 3
 
-    def _hash(self, frame):
-        H = str(imagehash.phash(frame))
+    def _chop(self, H):
         chop = ''
         for h in range(0, self.depth): 
             chop += H[h]
         return chop
+
+    def _hash(self, frame):
+        return self._chop(str(imagehash.phash(frame)))
+        #return str(imagehash.phash(frame))
 
     def _count(self, hprev, hcurr):
         h = str(hprev) + ':' + str(hcurr)
@@ -81,7 +85,7 @@ class TRANSITION:
         S0, S1 = _split(T)
         FREQ, TRANS = _fill(T, S0, S1)
 
-        return FREQ, TRANS
+        return FREQ, TRANS, S0
 
     def process(self, pink, red):
 
@@ -90,7 +94,7 @@ class TRANSITION:
             red.save('ram/public/' + str(hcurr) + '.png')
 
         def _log(hprev, hcurr):
-            self.H.append(hprev)
+            self.H.append([time.time(), hprev])
             print("T[%d] - [%s] [%s] %d" %(len(self.T), hprev, hcurr, self.T[hprev + ':' + hcurr]))
 
         pink = PIL.Image.fromarray(pink)
@@ -110,8 +114,12 @@ class TRANSITION:
 
     def save(self, root):
         fp = open(root + 'T.pkl', 'wb')
-        _, T = self._matrix(self.T)
+        _, T, S0 = self._matrix(self.T)
         pickle.dump(T, fp)
+        fp.close()
+
+        fp = open(root + 'S0.pkl', 'wb')
+        pickle.dump(S0, fp)
         fp.close()
 
         fp = open(root + 'H.pkl', 'wb')
