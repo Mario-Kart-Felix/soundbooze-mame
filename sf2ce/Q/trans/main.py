@@ -10,7 +10,6 @@ from config import *
 from ring import *
 from transform import *
 from ryu import *
-from process import *
 from transition import *
 
 class Play (threading.Thread):
