@@ -75,7 +75,7 @@ class TRANSITION:
 
             for i in range(len(O)):
                 fsum = float(numpy.sum(O[i]))
-                for j in range(len(O[j])):
+                for j in range(len(O[i])):
                     if fsum != 0:
                         R[i][j] = O[i][j]/fsum
 
