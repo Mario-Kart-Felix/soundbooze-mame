@@ -1,3 +1,4 @@
+import os
 import sys
 import numpy
 import pickle
@@ -24,11 +25,13 @@ def zeroself(T):
                 T[i][j] = 0
     return T
 
-def _check(T):
+def _fix(T):
     for i in range(len(T)):
         fsum = float(numpy.sum(T[i]))
-        if fsum != 1.0:
-            print '[!]'
+        if fsum != 1.0 and fsum != 0.0:
+            print '[!]', fsum
+
+    return T
 
 def _video(directory):
     img_array = []
@@ -39,7 +42,7 @@ def _video(directory):
         size = (width,height)
         img_array.append(img)
 
-    out = cv2.VideoWriter('sample.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+    out = cv2.VideoWriter('sample.avi',cv2.VideoWriter_fourcc(*'DIVX'), 30, size)
      
     for i in range(len(img_array)):
         out.write(img_array[i])
@@ -63,12 +66,12 @@ def simulate(TRANS, S0):
     model.means_ = numpy.array(M)
     model.covars_ = numpy.tile(numpy.identity(2), (len(TRANS[0]),1,1))
 
-    X, Z = model.sample(1000)
+    X, Z = model.sample(5000)
 
     for z in Z:
         h = _n(z)
         os.system('cp ram/public/' + h + '.png' + ' ' + 'ram/tmp/')
-        print h
+        #print h
 
     _video('ram/tmp/')
 
@@ -89,6 +92,7 @@ lbl = []
 for h, c in count.items():
     lbl.append(h)
 
+'''
 pos = [i for i, _ in enumerate(count.values())]
 
 plt.subplot(311)
@@ -104,6 +108,7 @@ plt.title('Zero')
 sns.heatmap(zeroself(TRANS))
 
 plt.show()
+'''
 
-_check(TRANS)
+#TRANS = _fix(TRANS)
 simulate(TRANS, S0)
