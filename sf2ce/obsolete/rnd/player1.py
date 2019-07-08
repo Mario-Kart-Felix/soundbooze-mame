@@ -1,9 +1,14 @@
+import subprocess
 import random
 import time
 import sys
 import os
 
-winid = sys.argv[1]
+cmd        = "xdotool search --pid `pgrep mame`"
+r          =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
+v          = r.read()
+winid      = hex(int(v.decode()))
+os.system('xdotool windowfocus --sync ' + winid)
 
 def focus(winid):
     os.system('xdotool windowfocus --sync ' + winid)
@@ -86,11 +91,6 @@ def down(winid):
     os.system('xdotool key --window ' + winid + ' keyup Left keyup Down')
 
 focus(winid)
-
-# opflow, orb, templateMatch
-# distance
-# attack, defense, relax, 
-# check blood, check Position (tmplFace)
 
 while [ 1 ]:
 

@@ -3,24 +3,28 @@ import time
 import sys
 import os
 
-winid = sys.argv[1]
+cmd        = "xdotool search --pid `pgrep mame`"
+r          =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
+v          = r.read()
+winid      = hex(int(v.decode()))
+os.system('xdotool windowfocus --sync ' + winid)
 
 def focus(winid):
     os.system('xdotool windowfocus --sync ' + winid)
 
 def kick(winid):
     for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key M')
+        os.system('xdotool key --window ' + winid + ' key H')
 
 def downKick(winid):
     os.system('xdotool key --window ' + winid + ' keydown K')
     for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key M')
+        os.system('xdotool key --window ' + winid + ' key H')
     os.system('xdotool key --window ' + winid + ' keyup K')
 
 def punch(winid):
     for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key N')
+        os.system('xdotool key --window ' + winid + ' key Y')
 
 def left(winid):
     os.system('xdotool key --window ' + winid + ' keydown J')
@@ -35,13 +39,13 @@ def right(winid):
 def fire(winid):
     os.system('xdotool key --window ' + winid + ' keydown K')
     os.system('xdotool key --window ' + winid + ' keydown L')
-    os.system('xdotool key --window ' + winid + ' keydown N')
+    os.system('xdotool key --window ' + winid + ' keydown Y')
 
     time.sleep(0.1)
 
     os.system('xdotool key --window ' + winid + ' keydown K')
     os.system('xdotool key --window ' + winid + ' keydown L')
-    os.system('xdotool key --window ' + winid + ' keydown N')
+    os.system('xdotool key --window ' + winid + ' keydown Y')
 
 def jumpRight(winid):
     os.system('xdotool key --window ' + winid + ' keydown L')
@@ -61,16 +65,11 @@ def jumpUp(winid):
     os.system('xdotool key --window ' + winid + ' key I')
 
 def down(winid):
-    os.system('xdotool key --window ' + winid + ' keydown J keydown J')
+    os.system('xdotool key --window ' + winid + ' keydown J')
     time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup J keyup K')
+    os.system('xdotool key --window ' + winid + ' keyup J')
 
 focus(winid)
-
-# opflow, orb, templateMatch
-# distance
-# attack, defense, relax, 
-# check blood, check Position (tmplFace)
 
 while [ 1 ]:
 
