@@ -55,7 +55,7 @@ def simulate(TRANS, S0):
             if i == idx:
                 return h
 
-    model = hmm.GaussianHMM(n_components=len(TRANS[0]), covariance_type="full",  n_iter=1000, init_params="mcs")
+    model = hmm.GaussianHMM(n_components=len(TRANS[0]), covariance_type="full",  n_iter=100, init_params="mcs")
     model.startprob_ = numpy.array(TRANS[numpy.random.randint(0,len(TRANS[0]))])
     model.transmat_ = numpy.array(TRANS)
 
@@ -66,14 +66,14 @@ def simulate(TRANS, S0):
     model.means_ = numpy.array(M)
     model.covars_ = numpy.tile(numpy.identity(2), (len(TRANS[0]),1,1))
 
-    X, Z = model.sample(5000)
+    X, Z = model.sample(50)
 
     for z in Z:
         h = _n(z)
         os.system('cp ram/public/' + h + '.png' + ' ' + 'ram/tmp/')
         #print h
 
-    _video('ram/tmp/')
+    #_video('ram/tmp/')
 
 TRANS = load(sys.argv[1])
 S0    = load(sys.argv[2])
@@ -92,7 +92,9 @@ lbl = []
 for h, c in count.items():
     lbl.append(h)
 
-'''
+#TRANS = _fix(TRANS)
+simulate(TRANS, S0)
+
 pos = [i for i, _ in enumerate(count.values())]
 
 plt.subplot(311)
@@ -108,7 +110,3 @@ plt.title('Zero')
 sns.heatmap(zeroself(TRANS))
 
 plt.show()
-'''
-
-#TRANS = _fix(TRANS)
-simulate(TRANS, S0)
