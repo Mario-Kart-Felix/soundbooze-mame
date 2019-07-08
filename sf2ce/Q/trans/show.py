@@ -35,7 +35,7 @@ def simulate(TRANS, S0):
             if i == idx:
                 return h
 
-    model = hmm.GaussianHMM(n_components=len(TRANS[0]), covariance_type="full",  n_iter=100, init_params="mcs")
+    model = hmm.GaussianHMM(n_components=len(TRANS[0]), covariance_type="full",  n_iter=1000, init_params="mcs")
     model.startprob_ = numpy.array(TRANS[numpy.random.randint(0,len(TRANS[0]))])
     model.transmat_ = numpy.array(TRANS)
 
