@@ -4,6 +4,8 @@ import pickle
 import collections
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
+import cv2
+import glob
 
 from hmmlearn import hmm
 numpy.random.seed(505)
@@ -28,6 +30,21 @@ def _check(T):
         if fsum != 1.0:
             print '[!]'
 
+def _video(directory):
+    img_array = []
+    size = (0,0)
+    for filename in glob.glob(directory + '*.png'):
+        img = cv2.imread(filename)
+        height, width, layers = img.shape
+        size = (width,height)
+        img_array.append(img)
+
+    out = cv2.VideoWriter('sample.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+     
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
+
 def simulate(TRANS, S0):
 
     def _n(idx):
@@ -49,7 +66,11 @@ def simulate(TRANS, S0):
     X, Z = model.sample(1000)
 
     for z in Z:
-        print _n(z)
+        h = _n(z)
+        os.system('cp ram/public/' + h + '.png' + ' ' + 'ram/tmp/')
+        print h
+
+    _video('ram/tmp/')
 
 TRANS = load(sys.argv[1])
 S0    = load(sys.argv[2])
@@ -84,5 +105,5 @@ sns.heatmap(zeroself(TRANS))
 
 plt.show()
 
-#_check(TRANS)
-#Q(simulate(TRANS, S0))
+_check(TRANS)
+simulate(TRANS, S0)

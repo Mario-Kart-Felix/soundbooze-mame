@@ -104,7 +104,7 @@ class TRANSITION:
 
         self._count(hprev, hcurr)
 
-        #_save(hprev, hcurr, pink, red)
+        _save(hprev, hcurr, pink, red)
         _log(hprev, hcurr)
 
     def load(self, filename):
