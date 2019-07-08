@@ -41,6 +41,12 @@ with mss.mss() as sct:
 QUE, stream
 ===========
 
+[state]
+
+ - phash
+ - ssim-simd (> 0.817)
+ - ...
+
 act, async/que, recv[reward/penalty/0] - learn() //blocking(timeout)
 
                               q1    a1
