@@ -12,6 +12,13 @@ def load(filename):
     print '[Length]:', len(T)
     return T
 
+def zeroself(T):
+    for i in range(len(T)):
+        for j in range(len(T)):
+            if i == j:
+                T[i][j] = 0
+    return T
+
 TRANS = load(sys.argv[1])
 H = load(sys.argv[2])
 
@@ -23,12 +30,16 @@ for h, c in count.items():
 
 pos = [i for i, _ in enumerate(count.values())]
 
-plt.subplot(211)
+plt.subplot(311)
 plt.xticks(pos, lbl)
 plt.bar(range(len(count)), count.values())
 
-plt.subplot(212)
+plt.subplot(312)
 plt.title('Transition')
 sns.heatmap(TRANS)
+
+plt.subplot(313)
+plt.title('Zero')
+sns.heatmap(zeroself(TRANS))
 
 plt.show()
