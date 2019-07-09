@@ -29,8 +29,9 @@ class HASH:
     def __init__(self):
         self.root = str(time.time()) + '/'
         self.Z = {}
-        self.action = ['punch', 'kick', 'downkick', 'kick|right|kick', 'kick|jumpup|kick', 'jumpleft|kick', 'jumpright|kick', 'fire(0)', 'fire(1)', 'superpunch(0)', 'superpunch(1)', 'superkick(0)', 'superkick(1)', 'defendup(0)', 'defendup(1)', 'defenddown(0)', 'defenddown(1)'] 
-        self.p = [1.0-(0.058*16), 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058]
+        self.action = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
+        self.p = numpy.random.rand(len(self.action))
+        self.p /= numpy.sum(self.p)
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
 
@@ -51,59 +52,7 @@ class HASH:
 
     def dump(self):
         pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
-
-def act(r, h, hash):
-
-    hit = hash.Z[h][1]
-    if hit[0] == -1:
-        hash.p[(r+1)%len(hash.p)] += hash.p[r]
-        hash.p[r] = 0.0
-
-    if r == 0:
-      ryu.punch()
-    elif r == 1:
-      ryu.kick()
-    elif r == 2:
-      ryu.downkick()
-    elif r == 3:
-      ryu.kick()
-      ryu.right()
-      ryu.kick()
-    elif r == 4:
-      ryu.kick()
-      ryu.jumpup()
-      ryu.kick()
-    elif r == 5:
-      ryu.jumpleft(0.6)
-      ryu.kick()
-    elif r == 6:
-      ryu.jumpright(0.6)
-      ryu.kick()
-    elif r == 7:
-      ryu.fire(0)
-    elif r == 8:
-      ryu.fire(1)
-    elif r == 9:
-      ryu.superpunch(0)
-    elif r == 10:
-      ryu.superpunch(1)
-    elif r == 11:
-      ryu.superkick(0)
-    elif r == 12:
-      ryu.superkick(1)
-    elif r == 13:
-      ryu.defendup(0)
-      ryu.kick()
-    elif r == 14:
-      ryu.defenddown(0)
-      ryu.downkick()
-    elif r == 15:
-      ryu.defendup(1)
-      ryu.kick()
-    elif r == 16:
-      ryu.defenddown(1)
-      ryu.downkick()
-
+    
 def preact(blue, ryu, hash, sumb1, sumb2):
 
     h = hash.compute(blue)
@@ -117,9 +66,13 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     hit[0], hit[1] = hash.currenthit[0] - hash.prevhit[0], hash.currenthit[1] - hash.prevhit[1]
     hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
 
+    if hit[0] == -1:
+        hash.p[(r+1)%len(hash.p)] += hash.p[r]
+        hash.p[r] = 0.0
+
     hash.append(h, r, hit)
 
-    act(r, h, hash)
+    ryu.act(r)
 
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
@@ -134,9 +87,9 @@ with mss.mss() as sct:
 
     startGame = False
 
-    ryu       = RYU()
-    transform = TRANSFORM()
-    hash      = HASH()
+    ryu         = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
+    transform   = TRANSFORM()
+    hash        = HASH()
 
     while [ 1 ]:
 
