@@ -39,7 +39,7 @@ prev /= numpy.sum(prev)
 curr = numpy.random.rand(20)
 curr /= numpy.sum(prev)
 
-ryu = RYU('J', 'L', 'I', 'K', 'T', 'G')
+ryu = RYU('J', 'L', 'I', 'K', 'Y', 'H')
 
 while [ 1 ]:
     
