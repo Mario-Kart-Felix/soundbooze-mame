@@ -4,45 +4,45 @@ import os
 
 class RYU:
 
-    def __init__(self, left, right, up, down, kick, punch):
+    def __init__(self, l, r, up, down, kick, punch):
         self.action     = ['punch', 'kick', 'downkick', 'kick|right|kick', 'kick|jumpup|kick', 'jumpleft|kick', 'jumpright|kick', 'fire(0)', 'fire(1)', 'superpunch(0)', 'superpunch(1)', 'superkick(0)', 'superkick(1)', 'defendup(0)', 'defendup(1)', 'defenddown(0)', 'defenddown(1)'] 
         cmd             = "xdotool search --pid `pgrep mame`"
-        r               =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
-        v               = r.read()
+        srp             =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
+        v               = srp.read()
         self.winid      = hex(int(v.decode()))
         os.system('xdotool windowfocus --sync ' + self.winid)
-        self.left       = left
-        self.right      = right
-        self.up         = up
-        self.down       = down
-        self.kick       = kick
-        self.punch      = punch
+        self.l       = l
+        self.r       = r
+        self.up      = up
+        self.down    = down
+        self.kk      = kick
+        self.pp      = punch
 
     def kick(self):
         for i in range(0,2):
-            os.system('xdotool key --window ' + self.winid + ' key ' + self.kick)
+            os.system('xdotool key --window ' + self.winid + ' key ' + self.kk)
 
     def punch(self):
         for i in range(0,2):
-            os.system('xdotool key --window ' + self.winid + ' key ' + self.punch)
+            os.system('xdotool key --window ' + self.winid + ' key ' + self.pp)
 
     def defendup(self, pos):
-        key = self.left 
+        key = self.l
         if pos == 0:
-            key = self.left
+            key = self.l
         elif pos == 1:
-            key = self.right
+            key = self.r
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
         time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
     def defenddown(self, pos):
-        key = self.left 
+        key = self.l
         if pos == 0:
-            key = self.left
+            key = self.l
         elif pos == 1:
-            key = self.right
+            key = self.r
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
@@ -53,70 +53,70 @@ class RYU:
     def downkick(self):
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         for i in range(0,2):
-            os.system('xdotool key --window ' + self.winid + ' key ' + self.kick)
+            os.system('xdotool key --window ' + self.winid + ' key ' + self.kk)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
 
     def left(self):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.left)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.l)
         time.sleep(0.6)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.left)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.l)
 
     def right(self):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.right)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.r)
         time.sleep(0.6)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.right)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
 
     def jumpright(self, s):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.right)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.r)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
         time.sleep(s)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.right)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
 
     def jumpleft(self, s):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.left)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.l)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
         time.sleep(s)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.left)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.l)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
 
     def jumpup(self):
         os.system('xdotool key --window ' + self.winid + ' key ' + self.up)
 
     def fire(self, pos):
-        z = self.right 
+        z = self.r
         if pos == 0:
-            z = self.right
+            z = self.r
         else:
-            z = self.left
+            z = self.l
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup Down')
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.punch)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.pp)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.punch)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.pp)
 
     def superkick(self, pos):
-        z = self.left
+        z = self.l
         if pos == 0:
-            z = self.left 
+            z = self.l
         else:
-            z = self.right
+            z = self.r
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.kick)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.kk)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kick)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kk)
 
     def superpunch(self, pos):
-        z = self.right
+        z = self.r
         if pos == 0:
-            z = self.right
+            z = self.r
         else:
-            z = self.left
+            z = self.l
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
@@ -128,9 +128,9 @@ class RYU:
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
 
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.punch)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.pp)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.punch)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.pp)
 
     def act(self, r):
         if r == 0:
