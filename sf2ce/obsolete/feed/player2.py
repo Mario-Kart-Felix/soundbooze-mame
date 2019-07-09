@@ -2,7 +2,7 @@ import numpy
 import random
 import time
 
-from ryu import *
+from bison import *
 
 def skewone(V, LR, p):
 
@@ -39,14 +39,14 @@ prev /= numpy.sum(prev)
 curr = numpy.random.rand(20)
 curr /= numpy.sum(prev)
 
-ryu = RYU('j', 'l', 'i', 'k', 'y', 'h')
+bison = BISON('j', 'l', 'i', 'k', 'y', 'h')
 
 while [ 1 ]:
     
     l = numpy.random.randint(0,2)
     curr = skewone(curr, lerp(prev, curr, numpy.random.rand()), l)
     r = numpy.random.choice(len(curr), 1, p=curr)[0]
-    ryu.act(r)
+    bison.act(r)
 
     prev = curr
     time.sleep(0.29)
