@@ -89,22 +89,22 @@ class Play (threading.Thread):
                         curr = cv2.resize(numpy.array(sct.grab(config.scene)),config.shape)
                         curr = PIL.Image.fromarray(curr)
 
-                        print '\t\t', hash(curr)
+                        print "%50s" % hash(curr)
 
                         prev = curr
 
                     if config.sumb1 == config.BLOOD[1] and config.sumb2 == config.BLOOD[1] and not config.play:
-                        print '\t\t' + '[Start]'
+                        print "%50s" % '[Start]' 
                         config.play = True
                         time.sleep(1)
 
                     elif config.sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
-                        print '\t\t' + 'P1 [KO]'
+                        print "%50s" + 'P1 [KO]'
                         config.play = False
                         time.sleep(1)
 
                     elif config.sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
-                        print '\t\t' + 'P2 [KO]'
+                        print "%50s" + 'P2 [KO]'
                         config.play = False
                         time.sleep(1)
 
@@ -127,10 +127,10 @@ class Que (threading.Thread):
                     hit = config.hitcount(config.sumb1, config.sumb2)
 
                     if hit[0] != 0:
-                        print '\t\t[-]', hit
+                        print hit
 
                     if hit[1] != 0:
-                        print '\t\t[+]', hit
+                        print hit
 
                     config.hitupdate()
 
@@ -139,15 +139,17 @@ attr = ['char', 'up', 'down', 'left', 'right']
 def on_press(key):
 
     if hasattr(key, attr[0]):
-        print time.time(), 0, key.char
+        print("[%s %d] (%s)" %(time.time(), 0, key.char))
 
     elif hasattr(key, attr[1]) or hasattr(key, attr[2]) or hasattr(key, attr[3]) or hasattr(key, attr[4]):
         k = ('{0}'.format(key))
         z = k.split('.')
-        print time.time(), 0, z[1]
+        print("[%s %d] (%s)" %(time.time(), 0, z[1]))
 
 def on_release(key):
+    pass
 
+    '''
     if hasattr(key, attr[0]):
         print time.time(), 1, key.char
 
@@ -155,6 +157,7 @@ def on_release(key):
         k = ('{0}'.format(key))
         z = k.split('.')
         print time.time(), 1, z[1]
+    '''
 
 class Key (threading.Thread):
 
