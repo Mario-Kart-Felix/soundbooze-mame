@@ -9,6 +9,13 @@ import PIL
 
 from pynput.keyboard import Key, Listener
 
+def transform(frame):
+    blue = frame.copy()
+    blue[:,:,1] = 0
+    blue[:,:,2] = 0
+    blue[blue < 250] = 0
+    return blue
+
 def hash(frame):
     return imagehash.phash(frame)
 
@@ -75,7 +82,7 @@ class Play (threading.Thread):
         with mss.mss() as sct:
 
             prev = cv2.resize(numpy.array(sct.grab(config.scene)),config.shape)
-            prev = PIL.Image.fromarray(prev)
+            prev = PIL.Image.fromarray(transform(prev))
 
             while [ 1 ]:
 
@@ -87,9 +94,22 @@ class Play (threading.Thread):
                     if config.play:
 
                         curr = cv2.resize(numpy.array(sct.grab(config.scene)),config.shape)
-                        curr = PIL.Image.fromarray(curr)
+                        curr = PIL.Image.fromarray(transform(curr))
                         print("%50s" %(hash(curr)))
                         sys.stdout.flush()
+
+                        hit = config.hitcount(config.sumb1, config.sumb2)
+
+                        if hit[0] != 0:
+                            print("[%d %d]\n" %(hit[0], hit[1])),
+                            sys.stdout.flush()
+
+                        if hit[1] != 0:
+                            print("[%d %d]\n" %(hit[0], hit[1])),
+                            sys.stdout.flush()
+
+                        config.hitupdate()
+
                         prev = curr
 
                     if config.sumb1 == config.BLOOD[1] and config.sumb2 == config.BLOOD[1] and not config.play:
@@ -116,28 +136,6 @@ class Play (threading.Thread):
                 elif config.sumb1 == config.RESUME[1] or config.sumb1 == config.RESUME[2] or config.sumb1 == config.RESUME[3]:
                     pass
  
-class Que (threading.Thread):
-
-    def run(self):
-
-        while [ 1 ]:
-
-            if config.sumb1 >= config.BLOOD[0] and config.sumb1 <= config.BLOOD[1]:
-
-                if config.play:
-
-                    hit = config.hitcount(config.sumb1, config.sumb2)
-
-                    if hit[0] != 0:
-                        print("[%d %d]\n" %(hit[0], hit[1])),
-                        sys.stdout.flush()
-
-                    if hit[1] != 0:
-                        print("[%d %d]\n" %(hit[0], hit[1])),
-                        sys.stdout.flush()
-
-                    config.hitupdate()
-
 attr = ['char', 'up', 'down', 'left', 'right']
 
 def on_press(key):
@@ -153,9 +151,6 @@ def on_press(key):
         sys.stdout.flush()
 
 def on_release(key):
-    pass
-
-    '''
     if hasattr(key, attr[0]):
         print time.time(), 1, key.char
 
@@ -163,7 +158,6 @@ def on_release(key):
         k = ('{0}'.format(key))
         z = k.split('.')
         print time.time(), 1, z[1]
-    '''
 
 class Key (threading.Thread):
 
@@ -179,13 +173,9 @@ if __name__ == '__main__':
     config    = CONFIG('.')
 
     play = Play()
-    que = Que()
     key = Key()
-
     play.start()
-    que.start()
     key.start()
 
     play.join()
-    que.join()
-    key.start()
+    key.join()
