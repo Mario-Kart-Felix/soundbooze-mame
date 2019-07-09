@@ -131,6 +131,17 @@ class RYU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.pp)
 
+    def insertcoin(self):
+        os.system('xdotool key --window ' + self.winid + ' keydown 5')
+        time.sleep(0.2)
+        os.system('xdotool key --window ' + self.winid + ' keyup 5')
+        time.sleep(0.2)
+        os.system('xdotool key --window ' + self.winid + ' key 1')
+
+    def select(self):
+        time.sleep(0.2)
+        os.system('xdotool key --window ' + self.winid + ' key A')
+
     def act(self, r):
         if r == 0:
           self.left()
