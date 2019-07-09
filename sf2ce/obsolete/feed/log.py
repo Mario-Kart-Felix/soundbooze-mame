@@ -129,11 +129,11 @@ class Que (threading.Thread):
                     hit = config.hitcount(config.sumb1, config.sumb2)
 
                     if hit[0] != 0:
-                        print("[%d\t%d]" %(hit[0], hit[1]))
+                        print("[%d %d]\n" %(hit[0], hit[1])),
                         sys.stdout.flush()
 
                     if hit[1] != 0:
-                        print("[%d\t%d]" %(hit[0], hit[1]))
+                        print("[%d %d]\n" %(hit[0], hit[1])),
                         sys.stdout.flush()
 
                     config.hitupdate()
