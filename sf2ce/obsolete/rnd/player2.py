@@ -1,132 +1,52 @@
-import subprocess
+import numpy
 import random
 import time
-import sys
-import os
 
-cmd        = "xdotool search --pid `pgrep mame`"
-r          =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
-v          = r.read()
-winid      = hex(int(v.decode()))
-os.system('xdotool windowfocus --sync ' + winid)
+from ryu import *
 
-def focus(winid):
-    os.system('xdotool windowfocus --sync ' + winid)
+def skewone(V, LR, p):
 
-def kick(winid):
-    for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key H')
+    def _rndsumone(n):
+        R = []
+        while (numpy.sum(R)) != 1.0:
+            R = numpy.random.multinomial(100.0, numpy.ones(n)/n, size=1)[0]/100.0
+        return R
 
-def downKick(winid):
-    os.system('xdotool key --window ' + winid + ' keydown K')
-    for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key H')
-    os.system('xdotool key --window ' + winid + ' keyup K')
+    prob = numpy.zeros(len(LR))
+    if p == 0:
+        for i in range(len(LR)/2):
+            prob[i] += LR[i] * V[i]
+    elif p == 1:
+        for i in range(len(LR)/2, len(LR)):
+            prob[i] += LR[i] * V[i]
+    prob /= numpy.sum(prob)
 
-def punch(winid):
-    for i in range(0,2):
-        os.system('xdotool key --window ' + winid + ' key Y')
+    if numpy.sum(prob) != 1.0:
+        return _rndsumone(len(LR))
 
-def left(winid):
-    os.system('xdotool key --window ' + winid + ' keydown J')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup J')
+    return prob
 
-def right(winid):
-    os.system('xdotool key --window ' + winid + ' keydown L')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup L')
+def lerp(V0, V1, t):
+    l = []
+    if len(V0) == len(V1):
+        for x, y in zip(V0, V1):
+            l.append((1 - t) * x + t * y)
+    return l
 
-def fire(winid):
-    os.system('xdotool key --window ' + winid + ' keydown K')
-    os.system('xdotool key --window ' + winid + ' keydown L')
-    os.system('xdotool key --window ' + winid + ' keydown Y')
+prev = numpy.random.rand(20)
+prev /= numpy.sum(prev)
 
-    time.sleep(0.1)
+curr = numpy.random.rand(20)
+curr /= numpy.sum(prev)
 
-    os.system('xdotool key --window ' + winid + ' keydown K')
-    os.system('xdotool key --window ' + winid + ' keydown L')
-    os.system('xdotool key --window ' + winid + ' keydown Y')
-
-def jumpRight(winid):
-    os.system('xdotool key --window ' + winid + ' keydown L')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' key I')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup L')
-
-def jumpLeft(winid):
-    os.system('xdotool key --window ' + winid + ' keydown J')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' key I')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup J')
-
-def jumpUp(winid):
-    os.system('xdotool key --window ' + winid + ' key I')
-
-def down(winid):
-    os.system('xdotool key --window ' + winid + ' keydown J')
-    time.sleep(0.1)
-    os.system('xdotool key --window ' + winid + ' keyup J')
-
-focus(winid)
+ryu = RYU()
 
 while [ 1 ]:
+    
+    l = numpy.random.randint(0,2)
+    curr = skewone(curr, lerp(prev, curr, numpy.random.rand()), l)
+    r = numpy.random.choice(len(curr), 1, p=curr)[0]
+    ryu.act(r)
 
-    r = random.choice([0, 1, 2])
-    s = random.sample([0, 1, 2, 3], 3)
-
-    if r == 0:
-        for i in s:
-            if i % 2 == 0:
-                for z in range(0, i):
-                    left(winid)
-                    if z % 2 == 0:
-                        kick(winid)
-                    elif z % 3 == 0:
-                        jumpLeft(winid)
-
-                kick(winid)
-
-            else:
-                for z in range(0, i):
-                    right(winid)
-                    if z % 2 == 0:
-                        punch(winid)       
-                    elif z % 3 == 0:
-                        jumpUp(winid)
-
-                punch(winid)       
-
-    elif r == 1:
-        for i in s:
-            if i % 2 == 0:
-                for z in range(0, i):
-                    punch(winid)
-
-            else:
-                for z in range(0, i):
-                    kick(winid)
-
-        jumpLeft(winid)
-
-    elif r == 2: 
-        fire(winid)
-
-        for i in s:
-            if i % 2 == 0:
-                for z in range(0, i):
-                    if i % 2 == 0:
-                        jumpRight(winid)
-                        down(winid)
-                    else:
-                        jumpLeft(winid)
-                        down(winid)
-            else:
-                for z in range(0, i):
-                    down(winid)
-
-        downKick(winid)
-
+    prev = curr
     time.sleep(0.29)
