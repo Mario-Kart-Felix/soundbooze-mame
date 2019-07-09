@@ -113,7 +113,7 @@ class BISON:
         time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down + ' ' + z)
-        time.sleep(1.8)
+        time.sleep(3.1)
         os.system('xdotool key --window ' + self.winid + ' key ' + self.up)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down + ' ' + z)
         os.system('xdotool key --window ' + self.winid + ' key ' + self.kk)
