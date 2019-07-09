@@ -5,7 +5,6 @@ import os
 class RYU:
 
     def __init__(self, l, r, up, down, kick, punch):
-        self.action     = ['punch', 'kick', 'downkick', 'kick|right|kick', 'kick|jumpup|kick', 'jumpleft|kick', 'jumpright|kick', 'fire(0)', 'fire(1)', 'superpunch(0)', 'superpunch(1)', 'superkick(0)', 'superkick(1)', 'defendup(0)', 'defendup(1)', 'defenddown(0)', 'defenddown(1)'] 
         cmd             = "xdotool search --pid `pgrep mame`"
         srp             =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
         v               = srp.read()
