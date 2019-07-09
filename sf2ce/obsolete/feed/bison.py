@@ -88,9 +88,11 @@ class BISON:
         if pos == 0:
             z1 = self.l
             z2 = self.r
+            self.jumpleft(0.3)
         else:
             z1 = self.r
             z2 = self.l
+            self.jumpright(0.3)
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
         time.sleep(1.8)
@@ -107,18 +109,22 @@ class BISON:
         else:
             z = self.r
 
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
+        time.sleep(0.6)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         time.sleep(1.8)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.kk)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kk)
-        time.sleep(0.3)
+        '''
+        time.sleep(0.4)
         for i in range(0,2):
             os.system('xdotool key --window ' + self.winid + ' key ' + self.pp)
+        '''
 
     def sidekick(self, pos):
         z1 = self.l
@@ -126,9 +132,11 @@ class BISON:
         if pos == 0:
             z1 = self.l
             z2 = self.r
+            self.jumpleft(0.3)
         else:
             z1 = self.r
             z2 = self.l
+            self.jumpright(0.3)
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
         time.sleep(1.8)
