@@ -27,11 +27,12 @@ class TRANSFORM:
 class HASH:
 
     def __init__(self):
-        self.root = str(time.time()) + '/'
-        self.Z = {}
-        self.action = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
-        self.p = numpy.random.rand(len(self.action))
-        self.p /= numpy.sum(self.p)
+        self.root       = str(time.time()) + '/'
+        self.Z          = {}
+        self.action     = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
+        self.p          = numpy.random.rand(len(self.action))
+        self.p         /= numpy.sum(self.p)
+        self.shift      = 0
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
 
@@ -53,6 +54,35 @@ class HASH:
     def dump(self):
         pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
     
+def skewone(V, LR, p):
+
+    def _rndsumone(n):
+        R = []
+        while (numpy.sum(R)) != 1.0:
+            R = numpy.random.multinomial(100.0, numpy.ones(n)/n, size=1)[0]/100.0
+        return R
+
+    prob = numpy.zeros(len(LR))
+    if p == 0:
+        for i in range(len(LR)/2):
+            prob[i] += LR[i] * V[i]
+    elif p == 1:
+        for i in range(len(LR)/2, len(LR)):
+            prob[i] += LR[i] * V[i]
+    prob /= numpy.sum(prob)
+
+    if numpy.sum(prob) != 1.0:
+        return _rndsumone(len(LR))
+
+    return prob
+
+def lerp(V0, V1, t):
+    l = []
+    if len(V0) == len(V1):
+        for x, y in zip(V0, V1):
+            l.append((1 - t) * x + t * y)
+    return l
+
 def preact(blue, ryu, hash, sumb1, sumb2):
 
     h = hash.compute(blue)
@@ -67,8 +97,12 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
 
     if hit[0] == -1:
+        hash.shift = (hash.shift + 1) % 2
+        hash.p = skewone(hash.p, lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
+        '''
         hash.p[(r+1)%len(hash.p)] += hash.p[r]
         hash.p[r] = 0.0
+        '''
 
     hash.append(h, r, hit)
 
@@ -77,7 +111,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d) - [%s] %s (%s)" %(len(hash.Z), h, hash.Z[h], hash.action[r]))
+    print("(%d) - [%s] %s (%s) %d" %(len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
 
 with mss.mss() as sct:
 
