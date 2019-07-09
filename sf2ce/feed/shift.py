@@ -9,8 +9,20 @@ from PIL import Image
 
 from ryu import *
 
-BLOOD  = [2744512, 4089536, 745816 * 4]
-RESUME = [1358640, 2623509]
+BLOOD      = [2744512, 4089536, 745816 * 4]
+RESUME     = [1358640, 2617406, 2264400, 2623509]
+
+class RINGBUFFER:
+
+    def __init__(self, size):
+        self.data = [None for i in xrange(size)]
+
+    def append(self, x):
+        self.data.pop(0)
+        self.data.append(x)
+
+    def get(self):
+        return self.data
 
 class TRANSFORM:
 
@@ -111,7 +123,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d) - [%s] %s (%s) %d" %(len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
+    print("(%d) - [%s] %s (%s) [%d]" %(len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
 
 with mss.mss() as sct:
 
@@ -122,6 +134,7 @@ with mss.mss() as sct:
     startGame = False
 
     ryu         = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
+    rb          = RINGBUFFER(4)
     transform   = TRANSFORM()
     hash        = HASH()
 
@@ -136,6 +149,12 @@ with mss.mss() as sct:
 
         sumb1, sumb2, kosum = numpy.sum(b1), numpy.sum(b2), numpy.sum(ko)
 
+        rbsum = 0
+        try:
+            rbsum = numpy.sum(rb.get())
+        except:
+            pass
+
         if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
             if startGame:
@@ -148,13 +167,13 @@ with mss.mss() as sct:
                 startGame = True
                 time.sleep(1)
 
-            elif sumb1 == BLOOD[0]:
+            elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
                 hash.flush()
                 startGame = False
                 time.sleep(1)
 
-            elif sumb2 == BLOOD[0]:
+            elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
                 hash.flush()
                 startGame = False
@@ -163,5 +182,5 @@ with mss.mss() as sct:
         elif sumb1 == RESUME[0]:
             ryu.insertcoin()
         
-        elif sumb1 == RESUME[1]:
+        elif sumb1 == RESUME[1] or sumb1 == RESUME[2] or sumb1 == RESUME[3]:
             ryu.select()
