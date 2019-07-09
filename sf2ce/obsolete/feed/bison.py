@@ -120,6 +120,26 @@ class BISON:
         for i in range(0,2):
             os.system('xdotool key --window ' + self.winid + ' key ' + self.pp)
 
+    def sidekick(self, pos):
+        z1 = self.l
+        z2 = self.r
+        if pos == 0:
+            z1 = self.l
+            z2 = self.r
+        else:
+            z1 = self.r
+            z2 = self.l
+
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
+        time.sleep(1.8)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.z2)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.z2)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.kk)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kk)
+
     def superpunch(self):
         for i in range(38):
             os.system('xdotool key --window ' + self.winid + ' keydown a')
@@ -143,7 +163,7 @@ class BISON:
         elif r == 5:
           self.fire(0)
         elif r == 6:
-          self.superpunch()
+          self.sidekick(0)
         elif r == 7:
           self.superkick(0)
 
@@ -154,9 +174,7 @@ class BISON:
         elif r == 10:
           self.downkick()
         elif r == 11:
-          self.kick()
-          self.jumpup()
-          self.kick()
+          self.superpunch()
 
         elif r == 12:
           self.right()
@@ -174,6 +192,6 @@ class BISON:
         elif r == 17:
           self.fire(1)
         elif r == 18:
-          self.superpunch()
+          self.sidekick(1)
         elif r == 19:
           self.superkick(1)
