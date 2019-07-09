@@ -49,4 +49,5 @@ while [ 1 ]:
     bison.act(r)
 
     prev = curr
+
     time.sleep(0.29)
