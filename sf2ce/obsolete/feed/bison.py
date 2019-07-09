@@ -142,9 +142,9 @@ class BISON:
 
     def superpunch(self):
         for i in range(38):
-            os.system('xdotool key --window ' + self.winid + ' keydown a')
+            os.system('xdotool key --window ' + self.winid + ' keydown r')
             time.sleep(0.1)
-            os.system('xdotool key --window ' + self.winid + ' keyup a')
+            os.system('xdotool key --window ' + self.winid + ' keyup r')
 
     def act(self, r):
         if r == 0:
