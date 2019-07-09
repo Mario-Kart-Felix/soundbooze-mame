@@ -135,8 +135,8 @@ class BISON:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z1)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.z2)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.z2)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z2)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z2)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.kk)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kk)
 
