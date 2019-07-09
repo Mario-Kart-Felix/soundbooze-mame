@@ -92,7 +92,7 @@ class RYU:
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
-        os.system('xdotool key --window ' + self.winid + ' keyup Down')
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.pp)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.pp)
