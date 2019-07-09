@@ -143,7 +143,7 @@ class BISON:
         elif r == 5:
           self.fire(0)
         elif r == 6:
-          self.superpunch(0)
+          self.superpunch()
         elif r == 7:
           self.superkick(0)
 
@@ -174,6 +174,6 @@ class BISON:
         elif r == 17:
           self.fire(1)
         elif r == 18:
-          self.superpunch(1)
+          self.superpunch()
         elif r == 19:
           self.superkick(1)
