@@ -88,23 +88,25 @@ class Play (threading.Thread):
 
                         curr = cv2.resize(numpy.array(sct.grab(config.scene)),config.shape)
                         curr = PIL.Image.fromarray(curr)
-
-                        print "%50s" % hash(curr)
-
+                        print("%50s" %(hash(curr)))
+                        sys.stdout.flush()
                         prev = curr
 
                     if config.sumb1 == config.BLOOD[1] and config.sumb2 == config.BLOOD[1] and not config.play:
-                        print "%50s" % '[Start]' 
+                        print("%s\n" %('[Start]'))
+                        sys.stdout.flush()
                         config.play = True
                         time.sleep(1)
 
                     elif config.sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
-                        print "%50s" + 'P1 [KO]'
+                        print("%s" %('P1 [KO]'))
+                        sys.stdout.flush()
                         config.play = False
                         time.sleep(1)
 
                     elif config.sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
-                        print "%50s" + 'P2 [KO]'
+                        print("%s" %('P2 [KO]'))
+                        sys.stdout.flush()
                         config.play = False
                         time.sleep(1)
 
@@ -127,10 +129,12 @@ class Que (threading.Thread):
                     hit = config.hitcount(config.sumb1, config.sumb2)
 
                     if hit[0] != 0:
-                        print hit
+                        print("[%d\t%d]" %(hit[0], hit[1]))
+                        sys.stdout.flush()
 
                     if hit[1] != 0:
-                        print hit
+                        print("[%d\t%d]" %(hit[0], hit[1]))
+                        sys.stdout.flush()
 
                     config.hitupdate()
 
@@ -139,12 +143,14 @@ attr = ['char', 'up', 'down', 'left', 'right']
 def on_press(key):
 
     if hasattr(key, attr[0]):
-        print("[%s %d] (%s)" %(time.time(), 0, key.char))
+        print("%13s\t%1d\t(%5s)\n" %(time.time(), 0, key.char)),
+        sys.stdout.flush()
 
     elif hasattr(key, attr[1]) or hasattr(key, attr[2]) or hasattr(key, attr[3]) or hasattr(key, attr[4]):
         k = ('{0}'.format(key))
         z = k.split('.')
-        print("[%s %d] (%s)" %(time.time(), 0, z[1]))
+        print("%13s\t%1d\t(%5s)\n" %(time.time(), 0, z[1])),
+        sys.stdout.flush()
 
 def on_release(key):
     pass
