@@ -89,22 +89,22 @@ class Play (threading.Thread):
                         curr = cv2.resize(numpy.array(sct.grab(config.scene)),config.shape)
                         curr = PIL.Image.fromarray(curr)
 
-                        print '\t\t\t\t', hash(curr)
+                        print '\t\t', hash(curr)
 
                         prev = curr
 
                     if config.sumb1 == config.BLOOD[1] and config.sumb2 == config.BLOOD[1] and not config.play:
-                        print '\t\t\t\t' + '[Start]'
+                        print '\t\t' + '[Start]'
                         config.play = True
                         time.sleep(1)
 
                     elif config.sumb1 == config.BLOOD[0] and rbsum == config.BLOOD[2]:
-                        print '\t\t\t\t' + 'P1 [KO]'
+                        print '\t\t' + 'P1 [KO]'
                         config.play = False
                         time.sleep(1)
 
                     elif config.sumb2 == config.BLOOD[0] and rbsum == config.BLOOD[2] :
-                        print '\t\t\t\t' + 'P2 [KO]'
+                        print '\t\t' + 'P2 [KO]'
                         config.play = False
                         time.sleep(1)
 
@@ -127,10 +127,10 @@ class Que (threading.Thread):
                     hit = config.hitcount(config.sumb1, config.sumb2)
 
                     if hit[0] != 0:
-                        print '\t\t\t\t[-]', hit
+                        print '\t\t[-]', hit
 
                     if hit[1] != 0:
-                        print '\t\t\t\t[+]', hit
+                        print '\t\t[+]', hit
 
                     config.hitupdate()
 
