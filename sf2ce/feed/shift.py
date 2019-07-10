@@ -42,7 +42,14 @@ class HASH:
         return numpy.random.choice(len(self.p), 1, p=self.p)[0]
 
     def compute(self, frame):
-        phash = imagehash.phash(frame)
+
+        def _chop(H, s):
+            chop = ''
+            for h in range(0, s):
+                chop += H[h]
+            return chop
+
+        phash = _chop(str(imagehash.phash(frame)), 8)
         return phash
 
     def append(self, h, r, hit):
