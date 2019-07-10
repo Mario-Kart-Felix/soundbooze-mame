@@ -8,7 +8,16 @@ Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
 ## Q Learning
 
-Q/
+Q/ [under-development]
+
+## Feed
+
+Random exploration while preserving-serufulness
+
+```
+meth: {lr.py, shift.py}
+$ sleep 2 && python $meth
+```
 
 ### Play
 
