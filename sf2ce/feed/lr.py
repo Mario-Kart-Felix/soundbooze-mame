@@ -7,22 +7,11 @@ import pickle
 import imagehash
 from PIL import Image
 
+from ring import *
 from ryu import *
 
 BLOOD      = [2744512, 4089536, 745816 * 4]
 RESUME     = [1358640, 2617406, 2264400, 2623509]
-
-class RINGBUFFER:
-
-    def __init__(self, size):
-        self.data = [None for i in xrange(size)]
-
-    def append(self, x):
-        self.data.pop(0)
-        self.data.append(x)
-
-    def get(self):
-        return self.data
 
 class TRANSFORM:
 
@@ -72,31 +61,37 @@ class HASH:
                 del self.Z[k]
 
     def dump(self):
-        pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
+        fp = open(self.root + 'Z-' + str(time.time()) + '.pkl', 'wb')
+        pickle.dump(self.Z, fp)
+        fp.close()
     
-def shuffle(p, x):
+        fp = open(self.root + 'H-' + str(time.time()) + '.pkl', 'wb')
+        pickle.dump(self.H, fp)
+        fp.close()
 
-    def _logistic(x, beta, alpha):
-        return 1.0 / (1.0 + numpy.exp(numpy.dot(beta, x) + alpha))
+    def _logshift(self, x):
 
-    S = [[-88, 10], [88, -10], [88, 0], [-88, 0]]
+        def _logistic(x, beta, alpha):
+            return 1.0 / (1.0 + numpy.exp(numpy.dot(beta, x) + alpha))
 
-    prob = []
-    for i in p:
-        prob.append(_logistic(i, S[x][0], S[x][1]))
+        S = [[-88, 10], [88, -10], [88, 0], [-88, 0]]
 
-    prob /= numpy.sum(prob)
+        prob = []
+        for i in self.p:
+            prob.append(_logistic(i, S[x][0], S[x][1]))
 
-    return prob
+        prob /= numpy.sum(prob)
 
-def fill(hash, timesteps, z):
-    try:
-        H = timesteps.get()
-        for h in H:
-            hash.H[h] = shuffle(hash.p, z)
-            #print 'fix: ', h, hash.H[h] - [jgn diulangi|diulangi]
-    except:
-        pass
+        return prob
+
+    def fill(self, timesteps, z):
+
+        try:
+            H = timesteps.get()
+            for h in H:
+                self.H[h] = self._logshift(z)
+        except:
+            pass
 
 def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
 
@@ -106,7 +101,7 @@ def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
     if h in hash.H:
         prob = hash.H[h]
         r = numpy.random.choice(len(prob), 1, p=prob)[0]
-        print '* ',
+        print '*',
 
     if h in hash.Z:
         r = hash.Z[h][0]
@@ -119,11 +114,11 @@ def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
 
     if hit[0] == -1:
         hash.shift = (hash.shift + 1) % 2
-        fill(hash, timesteps, 1)
+        hash.fill(timesteps, 1)
         #hash.p = shuffle(hash.p, 1)
     if hit[1] == 1:
         hash.shift = (hash.shift + 1) % 2
-        fill(hash, timesteps, 0)
+        hash.fill(timesteps, 0)
         #hash.p = shuffle(hash.p, 0)
 
     hash.append(h, r, hit)
@@ -133,7 +128,7 @@ def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d)(%d) - [%s] %s (%s) [%d]" %(len(hash.Z), len(hash.H), h, hash.Z[h], hash.action[r], hash.shift))
+    print("(%d/%d) - [%s] %s (%s) [%d]" %(len(hash.H), len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
 
 with mss.mss() as sct:
 
