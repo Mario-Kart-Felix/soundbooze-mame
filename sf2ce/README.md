@@ -6,9 +6,13 @@ Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/obsolete/sync/noise/sf2.png "sf2ce")
 
-## Q Learning
+### Reposition
 
-Q/ [under-development]
+- Launch mame
+
+```
+$ ../reposition.sh
+```
 
 ## Feed
 
@@ -27,10 +31,13 @@ $ sleep 2 && python $meth
 $ sleep 2 && (python shift.py | python lr2.py)
 ```
 
+## Q Learning
+
+Q/ [under-development]
+
 ### Play
 
 ```
-$ ../reposition.sh
 $ python main.py $1
 ```
 
