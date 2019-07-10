@@ -7,22 +7,11 @@ import pickle
 import imagehash
 from PIL import Image
 
+from ring import *
 from ryu import *
 
 BLOOD      = [2744512, 4089536, 745816 * 4]
 RESUME     = [1358640, 2617406, 2264400, 2623509]
-
-class RINGBUFFER:
-
-    def __init__(self, size):
-        self.data = [None for i in xrange(size)]
-
-    def append(self, x):
-        self.data.pop(0)
-        self.data.append(x)
-
-    def get(self):
-        return self.data
 
 class TRANSFORM:
 
@@ -41,6 +30,7 @@ class HASH:
     def __init__(self):
         self.root       = str(time.time()) + '/'
         self.Z          = {}
+        self.H          = {}
         self.action     = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
         self.p          = numpy.random.rand(len(self.action))
         self.p         /= numpy.sum(self.p)
@@ -64,43 +54,55 @@ class HASH:
                 del self.Z[k]
 
     def dump(self):
-        pickle.dump(self.Z, open(self.root + 'hash-' + str(time.time()) + '.pkl', 'wb'))
+        fp = open(self.root + 'Z-' + str(time.time()) + '.pkl', 'wb')
+        pickle.dump(self.Z, fp)
+        fp.close()
     
-def skewone(V, LR, p):
+        fp = open(self.root + 'H-' + str(time.time()) + '.pkl', 'wb')
+        pickle.dump(self.H, fp)
+        fp.close()
 
-    def _rndsumone(n):
-        R = []
-        while (numpy.sum(R)) != 1.0:
-            R = numpy.random.multinomial(100.0, numpy.ones(n)/n, size=1)[0]/100.0
-        return R
+    def shift(self, V, LR, p):
 
-    prob = numpy.zeros(len(LR))
-    if p == 0:
-        for i in range(len(LR)/2):
-            prob[i] += LR[i] * V[i]
-    elif p == 1:
-        for i in range(len(LR)/2, len(LR)):
-            prob[i] += LR[i] * V[i]
-    prob /= numpy.sum(prob)
+        def _rndsumone(n):
+            R = []
+            while (numpy.sum(R)) != 1.0:
+                R = numpy.random.multinomial(100.0, numpy.ones(n)/n, size=1)[0]/100.0
+            return R
 
-    if numpy.sum(prob) != 1.0:
-        return _rndsumone(len(LR))
+        prob = numpy.zeros(len(LR))
+        if p == 0:
+            for i in range(len(LR)/2):
+                prob[i] += LR[i] * V[i]
+        elif p == 1:
+            for i in range(len(LR)/2, len(LR)):
+                prob[i] += LR[i] * V[i]
+        prob /= numpy.sum(prob)
 
-    return prob
+        if numpy.sum(prob) != 1.0:
+            return _rndsumone(len(LR))
 
-def lerp(V0, V1, t):
-    l = []
-    if len(V0) == len(V1):
-        for x, y in zip(V0, V1):
-            l.append((1 - t) * x + t * y)
-    return l
+        return prob
+
+    def lerp(self, V0, V1, t):
+        l = []
+        if len(V0) == len(V1):
+            for x, y in zip(V0, V1):
+                l.append((1 - t) * x + t * y)
+        return l
 
 def preact(blue, ryu, hash, sumb1, sumb2):
 
     h = hash.compute(blue)
     r = hash.next()
+
     if h in hash.Z:
         r = hash.Z[h][0]
+
+    if h in hash.H:
+        prob = hash.H[h]
+        r = numpy.random.choice(len(prob), 1, p=prob)[0]
+        print '*',
 
     hash.currenthit[0], hash.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
 
@@ -109,8 +111,18 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     hit[0], hit[1] =  -1 if hit[0] else 0, 1 if hit[1] else 0
 
     if hit[0] == -1:
+
         hash.shift = (hash.shift + 1) % 2
-        hash.p = skewone(hash.p, lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
+
+        try:
+            H = timesteps.get()
+            for h in H:
+                self.H[h] = hash.shift(hash.p, lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
+        except:
+            pass
+        '''
+        hash.p = shift(hash.p, lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
+        '''
         '''
         hash.p[(r+1)%len(hash.p)] += hash.p[r]
         hash.p[r] = 0.0
@@ -123,7 +135,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print("(%d) - [%s] %s (%s) [%d]" %(len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
+    print("(%d/%d) - [%s] %s (%s) [%d]" %(len(hash.H), len(hash.Z), h, hash.Z[h], hash.action[r], hash.shift))
 
 with mss.mss() as sct:
 
@@ -137,6 +149,11 @@ with mss.mss() as sct:
     rb          = RINGBUFFER(4)
     transform   = TRANSFORM()
     hash        = HASH()
+    timesteps   = RINGBUFFER(8)
+
+    prev_timestep = Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))
+    for i in range(8):
+        timesteps.append(hash.compute(prev_timestep))
 
     while [ 1 ]:
 
@@ -160,6 +177,7 @@ with mss.mss() as sct:
             if startGame:
                 x = cv2.resize(numpy.array(sct.grab(scene)),(200,100))
                 blue = transform.blue(x)
+                timesteps.append(hash.compute(Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))))
                 preact(Image.fromarray(blue), ryu, hash, sumb1, sumb2)
                 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
