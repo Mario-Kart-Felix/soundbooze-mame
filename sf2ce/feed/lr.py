@@ -76,10 +76,7 @@ class HASH:
 
         S = [[-88, 10], [88, -10], [88, 0], [-88, 0]]
 
-        prob = []
-        for i in self.p:
-            prob.append(_logistic(i, S[x][0], S[x][1]))
-
+        prob = list(_logistic(self.p, S[x][0], S[x][1]))
         prob /= numpy.sum(prob)
 
         return prob
@@ -98,13 +95,13 @@ def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
     h = hash.compute(blue)
     r = hash.next()
 
+    if h in hash.Z:
+        r = hash.Z[h][0]
+
     if h in hash.H:
         prob = hash.H[h]
         r = numpy.random.choice(len(prob), 1, p=prob)[0]
         print '*',
-
-    if h in hash.Z:
-        r = hash.Z[h][0]
 
     hash.currenthit[0], hash.currenthit[1] = (0.4089536-sumb1/10000000.0), (0.4089536-sumb2/10000000.0)
 
