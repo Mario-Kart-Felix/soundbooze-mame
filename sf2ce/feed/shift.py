@@ -62,7 +62,7 @@ class HASH:
         pickle.dump(self.H, fp)
         fp.close()
 
-    def shift(self, V, LR, p):
+    def lerpshift(self, V, LR, p):
 
         def _rndsumone(n):
             R = []
@@ -117,7 +117,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
         try:
             H = timesteps.get()
             for h in H:
-                self.H[h] = hash.shift(hash.p, lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
+                hash.H[h] = hash.lerpshift(hash.p, hash.lerp(hash.p, hash.p, numpy.random.rand()), hash.shift)
         except:
             pass
         '''
