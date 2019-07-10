@@ -14,9 +14,17 @@ Q/ [under-development]
 
 Random exploration while preserving-serufulness
 
+- vs Machine
+
 ```
 meth: {lr.py, shift.py}
 $ sleep 2 && python $meth
+```
+
+- P1 vs P2
+
+```
+$ sleep 2 && (python shift.py | python lr2.py)
 ```
 
 ### Play
