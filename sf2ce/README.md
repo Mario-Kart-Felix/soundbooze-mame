@@ -31,6 +31,16 @@ $ sleep 2 && python $meth
 $ sleep 2 && (python shift.py | python lr2.py)
 ```
 
+## Policy Gradient
+
+pg/
+
+### Play
+
+```
+$ python play.py
+```
+
 ## Q Learning
 
 Q/ [under-development]
