@@ -11,7 +11,7 @@ class LogisticRegression(object):
         self.W = numpy.zeros((n_in, n_out))
         self.b = numpy.zeros(n_out)
 
-    def _softmax(x):
+    def _softmax(self, x):
         e = numpy.exp(x - numpy.max(x))
         if e.ndim == 1:
             return e / numpy.sum(e, axis=0)
@@ -28,20 +28,20 @@ class LogisticRegression(object):
         self.d_y = d_y
         
     def output(self, x):
-        return _softmax(numpy.dot(x, self.W) + self.b)
+        return self._softmax(numpy.dot(x, self.W) + self.b)
 
     def predict(self, x):
         return self.output(x)
 
     def negative_log_likelihood(self):
-        s_activation = _softmax(numpy.dot(self.x, self.W) + self.b)
+        s_activation = self._softmax(numpy.dot(self.x, self.W) + self.b)
         cross_entropy = - numpy.mean(
             numpy.sum(self.y * numpy.log(s_activation) +
             (1 - self.y) * numpy.log(1 - s_activation),
                       axis=1))
         return cross_entropy
 
-def test_lr(learning_rate=0.1, n_epochs=500):
+def test_lr(learning_rate=0.1, n_epochs=1505):
 
     #pre-transform[255, 1]
     x = numpy.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
