@@ -142,7 +142,7 @@ class RYU:
         time.sleep(0.2)
         os.system('xdotool key --window ' + self.winid + ' key A')
 
-    def nav(self, r):
+    def nav(self, r): # manual- pre-auto
         if r == 0:
           self.left()
         elif r == 2:
@@ -156,7 +156,7 @@ class RYU:
         elif r == 8:
           self.defenddown(1)
 
-    def act(self, r):
+    def act(self, r): # manual- pre-auto
         if r == 0:
           self.kick()
           self.right()
