@@ -31,6 +31,15 @@ $ sleep 2 && python $meth
 $ sleep 2 && (python shift.py | python lr2.py)
 ```
 
+- Stage Rehearsal
+
+Load stage, choose P1 | P2
+
+```
+$ sleep 2 && python (cd pg/play.py | python lr2.py)
+
+```
+
 ## Policy Gradient
 
 Timestep Policy Gradient
