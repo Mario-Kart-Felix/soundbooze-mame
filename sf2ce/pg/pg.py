@@ -1,3 +1,5 @@
+#https://github.com/keon/policy-gradient/blob/master/pg.py
+
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Reshape, Flatten
