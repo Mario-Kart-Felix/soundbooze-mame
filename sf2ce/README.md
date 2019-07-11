@@ -52,7 +52,7 @@ pg/ ddqn/
 $ python play.py
 ```
 
-## Continous-State Q Learning
+## Continuous-State Q Learning
 
 Q/ [under-development]
 
