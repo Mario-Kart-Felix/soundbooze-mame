@@ -56,6 +56,8 @@ $ python play.py
 
 Q/ [under-development]
 
+- dipikir-LAN-nurut problem, similar/same state doesn't guarantee similar reward
+
 ### Play
 
 ```
