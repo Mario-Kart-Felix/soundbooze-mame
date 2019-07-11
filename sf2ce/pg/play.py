@@ -5,6 +5,9 @@ import cv2
 import numpy
 import multiprocessing
 
+import tensorflow 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 from ring import *
 from ryu import *
 from pg import *
@@ -101,7 +104,7 @@ with mss.mss() as sct:
                 hit = reward(white, config, sumb1, sumb2)
                 a = multiprocessing.Process(target=act, args=(pg,white,hit,ev,ns)) 
                 a.start() 
-                #a.join()
+                a.join()
                 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
