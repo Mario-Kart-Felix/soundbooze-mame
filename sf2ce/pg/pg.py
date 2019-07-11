@@ -8,7 +8,8 @@ from keras.layers.convolutional import Convolution2D
 
 class PGAgent:
 
-    def __init__(self, state_size, action_size):
+    def __init__(self, dim, state_size, action_size):
+        self.dim = dim
         self.state_size = state_size
         self.action_size = action_size
         self.gamma = 0.99
@@ -22,7 +23,7 @@ class PGAgent:
 
     def _build_model(self):
         model = Sequential()
-        model.add(Reshape((1, 100, 50), input_shape=(self.state_size,)))
+        model.add(Reshape((1, self.dim[0], self.dim[1]), input_shape=(self.state_size,)))
         model.add(Convolution2D(32, 6, 6, subsample=(3, 3), border_mode='same',
                                 activation='relu', init='he_uniform'))
         model.add(Flatten())
