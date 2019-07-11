@@ -1,6 +1,6 @@
 # soundbooze-mame
 
-Distributed-Hybrid Training for MAME Fightcade
+(Curiosity-Driven) Distributed-Hybrid Training for MAME Fightcade
 
 ### cfg/
 
@@ -24,9 +24,13 @@ Distributed-Hybrid Training for MAME Fightcade
 
 #### Street Fighter 2 (sf2ce)
 
+No {GPU | Network} required
+
 - Level: 7
 
 #### Fatal Fury 2 (fatfury2)
+
+No {GPU | Network} required
 
 - Level: 8
 
