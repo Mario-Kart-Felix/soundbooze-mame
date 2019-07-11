@@ -24,13 +24,13 @@
 
 #### Street Fighter 2 (sf2ce)
 
-No {GPU | Network} required
+No {GPU | Distributed resources} required
 
 - Level: 7
 
 #### Fatal Fury 2 (fatfury2)
 
-No {GPU | Network} required
+No {GPU | Distributed resources} required
 
 - Level: 8
 
