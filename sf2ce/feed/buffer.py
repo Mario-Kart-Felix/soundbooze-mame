@@ -64,7 +64,8 @@ def preact(blue, ryu, hash, sumb1, sumb2, timesteps):
     for i in range(2):
         hash.prevhit[i] = hash.currenthit[i]
 
-    print timesteps.get(), hit
+    TG = timesteps.get()
+    print TG, TG.count(h), hit
 
     time.sleep(0.19)
 
@@ -80,7 +81,7 @@ with mss.mss() as sct:
     rb          = RINGBUFFER(4)
     transform   = TRANSFORM()
     hash        = HASH()
-    timesteps   = RINGBUFFER(32)
+    timesteps   = RINGBUFFER(8)
 
     prev_timestep = Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))
     for i in range(32):
