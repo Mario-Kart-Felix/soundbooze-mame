@@ -8,7 +8,7 @@ Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
 ### Reposition
 
-- Launch mame
+- Launch mame | (multi, under composite window)
 
 ```
 $ ../reposition.sh
