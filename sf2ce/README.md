@@ -33,6 +33,8 @@ $ sleep 2 && (python shift.py | python lr2.py)
 
 ## Policy Gradient
 
+Timestep Policy Gradient
+
 pg/
 
 ### Play
