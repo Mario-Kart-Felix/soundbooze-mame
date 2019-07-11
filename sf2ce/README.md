@@ -36,15 +36,16 @@ $ sleep 2 && (python shift.py | python lr2.py)
 Load stage, choose P1 | P2
 
 ```
-$ sleep 2 && python (cd pg/play.py | python lr2.py)
+$ sleep 2 && python (cd pg/ && play.py | python lr2.py)
 
 ```
 
 ## Policy Gradient
 
 Timestep Policy Gradient
+Timestep Deep Q 
 
-pg/
+pg/ ddqn/
 
 ### Play
 
@@ -52,7 +53,7 @@ pg/
 $ python play.py
 ```
 
-## Q Learning
+## Multi-step Q Learning
 
 Q/ [under-development]
 
