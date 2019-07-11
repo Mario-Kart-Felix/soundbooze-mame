@@ -18,6 +18,8 @@ RESUME    = [1358640, 2617406, 2264400, 2623509]
 class CONFIG:
 
     def __init__(self):
+        self.timestep   = 16
+        self.size       = [100, 50]
         self.action     = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
@@ -32,14 +34,15 @@ class CONFIG:
         white[white > 0] = 255
         return white
 
-def act(pg, curr, hit, ev, ns):
+def act(pg, curr, timesteps, hit, ev, ns):
 
     def _run():
         ns.value = True
         ev.set()
         r, p = pg.act(curr.ravel())
         ryu.act(r)
-        pg.remember(curr.ravel(), r, p, numpy.sum(hit))
+        for t in timesteps.get():
+            pg.remember(t, r, p, numpy.sum(hit))
         ns.value = False
         ev.set()
 
@@ -71,14 +74,19 @@ with mss.mss() as sct:
 
     startGame = False
 
+    config      = CONFIG()
     ryu         = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
     rb          = RINGBUFFER(4)
-    config      = CONFIG()
-    pg          = PGAgent(100*50, len(config.action))
+    timesteps   = RINGBUFFER(config.timestep)
+    pg          = PGAgent(config.size, config.size[0]*config.size[1], len(config.action))
 
     mgr = multiprocessing.Manager()
     ns = mgr.Namespace()
     ev = multiprocessing.Event()
+
+    prev = config.white(cv2.resize(numpy.array(sct.grab(scene)),(config.size[0],config.size[1])))
+    for i in range(config.timestep):
+        timesteps.append(prev.ravel())
 
     while [ 1 ]:
 
@@ -100,9 +108,10 @@ with mss.mss() as sct:
         if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
             if startGame:
-                white = config.white(cv2.resize(numpy.array(sct.grab(scene)),(100,50)))
+                white = config.white(cv2.resize(numpy.array(sct.grab(scene)),(config.size[0],config.size[1])))
+                timesteps.append(white.ravel())
                 hit = reward(white, config, sumb1, sumb2)
-                a = multiprocessing.Process(target=act, args=(pg,white,hit,ev,ns)) 
+                a = multiprocessing.Process(target=act, args=(pg,white,timesteps,hit,ev,ns)) 
                 a.start() 
                 a.join()
                 
@@ -113,13 +122,11 @@ with mss.mss() as sct:
 
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
-                hash.flush()
                 startGame = False
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
-                hash.flush()
                 startGame = False
                 time.sleep(1)
 
