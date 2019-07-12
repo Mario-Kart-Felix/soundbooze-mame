@@ -39,9 +39,6 @@ class DQNAV:
         model.compile(loss=self._huber_loss, optimizer=Adam(lr=self.learning_rate))
         return model
 
-    def update(self):
-        self.target_model.set_weights(self.model.get_weights())
-
     def remember(self, state, action, reward):
         self.timestep.append((state, action, reward))
 
