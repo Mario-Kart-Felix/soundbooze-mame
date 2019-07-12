@@ -23,6 +23,7 @@ class CONFIG:
         self.action     = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
+        self.stack      = 4
 
     def white(self, frame):
         b = frame.copy()
@@ -88,6 +89,8 @@ with mss.mss() as sct:
     for i in range(config.timestep):
         timesteps.append(prev.ravel())
 
+    i = 0
+
     while [ 1 ]:
 
         p1 = numpy.array(sct.grab(blood))
@@ -109,7 +112,8 @@ with mss.mss() as sct:
 
             if startGame:
                 white = config.white(cv2.resize(numpy.array(sct.grab(scene)),(config.size[0],config.size[1])))
-                timesteps.append(white.ravel())
+                if i % config.stack == 0:
+                    timesteps.append(white.ravel())
                 hit = reward(white, config, sumb1, sumb2)
                 a = multiprocessing.Process(target=act, args=(pg,white,timesteps,hit,ev,ns)) 
                 a.start() 
@@ -135,3 +139,5 @@ with mss.mss() as sct:
         
         elif sumb1 == RESUME[1] or sumb1 == RESUME[2] or sumb1 == RESUME[3]:
             ryu.select()
+
+    i += 0
