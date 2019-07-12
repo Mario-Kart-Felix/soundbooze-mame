@@ -44,7 +44,7 @@ $ sleep 2 && python (cd pg/ && play.py | python lr2.py)
 
 ## Policy Gradient
 
-- Timestep (Policy Gradient | Hybrid Deep Q)
+- Timestep (Policy Gradient | Split Hybrid Deep-Q)
 
 pg/ ddqn/
 
