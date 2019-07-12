@@ -54,6 +54,12 @@ pg/ ddqn/
 $ python play.py
 ```
 
+## Spin Imitate Reverse
+
+sir/
+
+(Under work)
+
 ## Continuous-States Q Learning
 
 Q/ [under-development]
