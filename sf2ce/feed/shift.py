@@ -37,6 +37,7 @@ class HASH:
         self.shift      = 0
         self.prevhit    = [0, 0]
         self.currenthit = [0, 0]
+        self.stack      = 4
 
     def next(self):
         return numpy.random.choice(len(self.p), 1, p=self.p)[0]
@@ -162,6 +163,8 @@ with mss.mss() as sct:
     for i in range(8):
         timesteps.append(hash.compute(prev_timestep))
 
+    i = 0
+
     while [ 1 ]:
 
         p1 = numpy.array(sct.grab(blood))
@@ -184,7 +187,8 @@ with mss.mss() as sct:
             if startGame:
                 x = cv2.resize(numpy.array(sct.grab(scene)),(200,100))
                 blue = transform.blue(x)
-                timesteps.append(hash.compute(Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))))
+                if i % hash.stack == 0:
+                    timesteps.append(hash.compute(Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))))
                 preact(Image.fromarray(blue), ryu, hash, sumb1, sumb2)
                 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
@@ -209,3 +213,5 @@ with mss.mss() as sct:
         
         elif sumb1 == RESUME[1] or sumb1 == RESUME[2] or sumb1 == RESUME[3]:
             ryu.select()
+        
+        i += 1
