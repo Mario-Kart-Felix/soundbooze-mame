@@ -10,7 +10,7 @@ World 920513
 
 ### Reposition
 
-- Launch mame | (multi, under composite window)
+- Launch mame | (for multi-training use composite window)
 
 ```
 $ ../reposition.sh
@@ -44,7 +44,7 @@ $ sleep 2 && python (cd pg/ && play.py | python lr2.py)
 
 ## Policy Gradient
 
-- Timestep (Policy Gradient | Timestep Deep Q)
+- Timestep (Policy Gradient | Hybrid Deep Q)
 
 pg/ ddqn/
 
