@@ -2,7 +2,9 @@
 
 Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
-### World 920513
+### Version
+
+World 920513
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/obsolete/sync/noise/sf2.png "sf2ce")
 
