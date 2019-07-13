@@ -44,9 +44,9 @@ $ sleep 2 && python (cd pg/ && play.py | python lr2.py)
 
 ## Policy Gradient
 
-- Timestep (Policy Gradient | Split Hybrid Deep-Q)
+- Timestep (Policy Gradient)
 
-pg/ ddqn/
+pg/
 
 ### Play
 
@@ -56,7 +56,7 @@ $ python play.py
 
 ## Spin Imitate Reverse
 
-sir/
+sir/ hybrid/
 
 (Under work)
 
