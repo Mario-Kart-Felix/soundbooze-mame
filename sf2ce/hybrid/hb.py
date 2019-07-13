@@ -7,29 +7,21 @@ import numpy
 
 from scipy.signal import find_peaks
 
-with mss.mss() as sct:
+class FEATURE:
 
-    body = {"top": 324, "left": 100, "width": 800, "height": 400}
-    head = {"top": 124, "left": 100, "width": 800, "height": 100}
+    def __init__(self):
+        self.HB         = [0, 0, 0, 0]
+        self.prevzcount = 0
 
-    prevframe_h = numpy.array(sct.grab(head))
-    prevzcount = 0
-
-    HB = [0, 0, 0, 0]
-
-    while [ 1 ]:
-
-        frame_h = numpy.array(sct.grab(head))
-        frame_b = numpy.array(sct.grab(body))
-
-        red = frame_b.copy()
+    def transform(self, frame):
+        red = frame.copy()
         red[:,:,0] = 0
         red[:,:,1] = 0
         red[red < 250] = 0
+        return red
 
-        # head
-
-        sumdiff = numpy.sum(frame_h - prevframe_h)
+    def head(self, curr, prev):
+        sumdiff = numpy.sum(curr - prev)
         if sumdiff > 0:
             (b, g, r, _) = cv2.split(frame_h)
             B = b.ravel()
@@ -42,16 +34,11 @@ with mss.mss() as sct:
                 if B[i] == 255 and G[i] == 255:
                     zcount += 1
                     
-            j = numpy.absolute(zcount - prevzcount)/1000.0
+            j = numpy.absolute(zcount - self.prevzcount)/1000.0
+            self.HB[0], self.HB[1] = j, self.prevzcount
+            self.prevzcount = zcount
 
-            HB[0], HB[1] = j, prevzcount
-
-            prevzcount = zcount
-
-        prevframe_h = frame_h
-
-        # body
-
+    def body(self, red):
         H = numpy.hsplit(red, 8)
         S = []
         for h in H:
@@ -65,6 +52,25 @@ with mss.mss() as sct:
             p2 = S[peaks[1]] 
             pabs = numpy.absolute(p1-p2)
             h = numpy.argmax(S)
-            HB[2], HB[3] = h, pabs
+            self.HB[2], self.HB[3] = h, pabs
 
-        print HB
+with mss.mss() as sct:
+
+    body = {"top": 324, "left": 100, "width": 800, "height": 400}
+    head = {"top": 124, "left": 100, "width": 800, "height": 100}
+
+    feature = FEATURE()
+
+    prevframe_h = numpy.array(sct.grab(head))
+
+    while [ 1 ]:
+
+        frame_h = numpy.array(sct.grab(head))
+        frame_b = numpy.array(sct.grab(body))
+
+        feature.head(frame_h, prevframe_h)
+        feature.body(feature.transform(frame_b))
+
+        print feature.HB
+
+        prevframe_h = frame_h
