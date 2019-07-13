@@ -11,7 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from ring import *
 from ryu import *
-from huber import *
+from ddqn import *
 
 BLOOD     = [2744512, 4089536, 745816 * 4]
 RESUME    = [1358640, 2617406, 2264400, 2623509]
@@ -75,13 +75,14 @@ def act(dnh, HB, hit, timesteps, ev, ns):
     def _run():
         ns.value = True
         ev.set()
-        state = np.reshape(HB, [1, dnh.state_size])
+
         r = dnh.act(HB)
         ryu.act(r)
 
         if numpy.sum(hit) > 0:
-            for t in timesteps.get():
-                dnh.update(t, r)
+            TG = timesteps.get()
+            for i in range(len(TG) - 1):
+                dnh.remember(TG[i], r, np.sum(hit), TG[i+1])
 
         ns.value = False
         ev.set()
@@ -118,7 +119,7 @@ with mss.mss() as sct:
     ryu         = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
     rb          = RINGBUFFER(4)
     timesteps   = RINGBUFFER(8)
-    dnh         = DNH(4, len(config.action))
+    dnh         = DQNAgent(4, len(config.action))
 
     mgr = multiprocessing.Manager()
     ns = mgr.Namespace()
@@ -167,11 +168,15 @@ with mss.mss() as sct:
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
                 startGame = False
+                dnh.update_target_model()
+                dnh.replay(batch_size)
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
                 startGame = False
+                dnh.update_target_model()
+                dnh.replay(batch_size)
                 time.sleep(1)
 
         elif sumb1 == RESUME[0]:
