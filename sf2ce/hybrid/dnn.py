@@ -13,7 +13,7 @@ import tensorflow as tf
 
 from ring import *
 
-class DQNAV:
+class DNH:
 
     def __init__(self, state_size, action_size):
         self.state_size = state_size
