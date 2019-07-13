@@ -11,6 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from ring import *
 from ryu import *
+from huber import *
 
 BLOOD     = [2744512, 4089536, 745816 * 4]
 RESUME    = [1358640, 2617406, 2264400, 2623509]
@@ -69,17 +70,19 @@ class FEATURE:
             h = numpy.argmax(S)
             self.HB[2], self.HB[3] = h, pabs
 
-def act(pg, curr, timesteps, hit, ev, ns):
+def act(dnh, HB, hit, timesteps, ev, ns):
 
     def _run():
         ns.value = True
         ev.set()
-        '''
-        r, p = pg.act(curr.ravel())
+        state = np.reshape(HB, [1, dnh.state_size])
+        r = dnh.act(HB)
         ryu.act(r)
-        for t in timesteps.get():
-            pg.remember(t, r, p, numpy.sum(hit))
-        '''
+
+        if numpy.sum(hit) > 0:
+            for t in timesteps.get():
+                dnh.update(t, r)
+
         ns.value = False
         ev.set()
 
@@ -114,7 +117,8 @@ with mss.mss() as sct:
     feature     = FEATURE()
     ryu         = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
     rb          = RINGBUFFER(4)
-    #dnh         = DNH(4, len(config.action))
+    timesteps   = RINGBUFFER(8)
+    dnh         = DNH(4, len(config.action))
 
     mgr = multiprocessing.Manager()
     ns = mgr.Namespace()
@@ -148,14 +152,12 @@ with mss.mss() as sct:
 
                 feature.head(frame_h, prevframe_h)
                 feature.body(feature.transform(frame_b))
+                timesteps.append(feature.HB)
 
                 hit = reward(frame_h, config, sumb1, sumb2)
-                print feature.HB, hit
-                '''
-                a = multiprocessing.Process(target=act, args=(pg,white,timesteps,hit,ev,ns)) 
+                a = multiprocessing.Process(target=act, args=(dnh,feature.HB,hit,timesteps,ev,ns)) 
                 a.start() 
                 a.join()
-                '''
                 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
