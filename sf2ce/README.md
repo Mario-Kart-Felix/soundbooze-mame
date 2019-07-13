@@ -2,6 +2,8 @@
 
 Various Reinforcement Learning methods for Street Fighter II: Champion Edition
 
+(Under development)
+
 ### Version
 
 World 920513
@@ -10,7 +12,9 @@ World 920513
 
 ### Reposition
 
-- Launch mame | (for multi-training use composite window)
+- Launch mame | (for multi-training use composite window) **
+
+** need more scalabe-solution
 
 ```
 $ ../reposition.sh
