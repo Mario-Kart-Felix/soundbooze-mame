@@ -66,7 +66,8 @@ Q/ [under-development]
 
 - dipikir-LAN-nurut problem, similar/same state doesn't guarantee similar reward
 - variable-naming-convention *won't hellp much
-- long/lat arrival measuring  --* too
+- long/lat arrival labeling|measuring  --* too (mbrojol-on-arrival)
+- forced-reward-penalty injection
 
 ### Play
 
