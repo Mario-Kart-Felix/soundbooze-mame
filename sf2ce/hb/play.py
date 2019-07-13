@@ -84,6 +84,8 @@ def act(dnh, HB, hit, timesteps, ev, ns):
             for i in range(len(TG) - 1):
                 dnh.remember(TG[i], r, np.sum(hit), TG[i+1])
 
+        print HB, r
+
         ns.value = False
         ev.set()
 
