@@ -17,9 +17,10 @@ class DQNAgent:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
         self.action_size = action_size
+        self.shift = 0
         self.memory = deque(maxlen=2000)
         self.gamma = 0.95
-        self.epsilon = 1.0
+        self.epsilon = 0.9
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.99
         self.learning_rate = 0.001
@@ -50,6 +51,7 @@ class DQNAgent:
         self.memory.append((state, action, reward, next_state))
 
     def act(self, state):
+        state = state = np.reshape(state, [1, self.state_size])
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_size)
         act_values = self.model.predict(state)
