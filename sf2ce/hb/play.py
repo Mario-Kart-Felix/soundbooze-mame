@@ -79,7 +79,7 @@ def act(dnh, HB, hit, timesteps, ev, ns):
         r = dnh.act(HB)
         ryu.act(r)
 
-        if numpy.sum(hit) > 0:
+        if numpy.sum(hit) > 0: #split 0 > -1 (def)
             TG = timesteps.get()
             for i in range(len(TG) - 1):
                 dnh.remember(TG[i], r, np.sum(hit), TG[i+1])
