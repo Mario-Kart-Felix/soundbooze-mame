@@ -60,7 +60,7 @@ $ python play.py
 
 ## Spin Imitate Reverse
 
-sir/ hybrid/
+hb/ sir/ hybrid/
 
 (Under work)
 
