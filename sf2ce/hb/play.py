@@ -84,7 +84,10 @@ def act(dnh, HB, hit, timesteps, ev, ns):
             for i in range(len(TG) - 1):
                 dnh.remember(TG[i], r, np.sum(hit), TG[i+1])
 
-        print HB, r
+        if hit[0] == -1:
+            dnh.shift += (dnh.shift + 1) % dnh.action_size 
+
+        print HB, r, '[' + str(dnh.shift) + ']'
 
         ns.value = False
         ev.set()
