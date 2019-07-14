@@ -187,7 +187,10 @@ class THREAD:
             q.append(ts)
             q.update(M[0], ts, a, R)
 
-            print("%s [%s] - (%s) [%d %d %d %d] %.5f" %(h, ts, act.action[a], M.count(h), redmax, orbmax, orbper, R))
+            try: 
+                print("%s [%s] - (%s) [%d %d %d %d] %.5f" %(h, ts, act.action[a], M.count(h), redmax, orbmax, orbper, R))
+            except:
+                pass
 
             prevZ = [h, s, redhistskew, redmax, orbsum, orbmax]
 
