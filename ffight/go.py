@@ -192,7 +192,7 @@ class THREAD:
             prevZ = [h, s, redhistskew, redmax, orbsum, orbmax]
 
             res = str(h)
-            if res.find('8e963') or res.find('c9e6e') or res.find('93e3e') or res.find('91e3e'):
+            if res.find('8e963') or res.find('c9e6e') or res.find('93e3e') or res.find('91e3e') or res.find('9993b'):
                 act.resume()
 
             time.sleep(self.sleep)
