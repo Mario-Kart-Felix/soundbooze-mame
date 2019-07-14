@@ -118,11 +118,11 @@ class PLAYER:
 
     def resume(self):
         os.system('xdotool key --window ' + self.winid + ' keydown 5')
-        time.sleep(0.2)
+        time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' keyup 5')
-        time.sleep(0.2)
+        time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' key 1')
         os.system('xdotool key --window ' + self.winid + ' key 1')
-        self.walk(0.3, 1)
-        time.sleep(0.3)
+        self.walk(0.1, 1)
+        time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' key A')
