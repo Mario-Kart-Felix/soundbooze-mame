@@ -34,6 +34,10 @@ No {GPU | Distributed resources} required
 
 - Level: 8
 
+#### Final Fight 2 (ffight)
+
+No {GPU | Distributed resources} required
+
 ## License
 
 UDUK™ Free as an AIR License
