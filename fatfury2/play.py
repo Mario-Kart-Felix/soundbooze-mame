@@ -31,7 +31,7 @@ class HASH:
 class ACT:
 
     def __init__(self):
-        self.terry = TERRY('Left', 'Right', 'Up', 'Down', 'D', 'F')
+        self.terry = TERRY('Left', 'Right', 'Up', 'Down', 'd', 'f')
         self.action = ['powerwave(0)','burnknuckle(0)','risingtackle(0)','crackshoot(0)','left','jumpleft','defendup(0)','defenddown(0)','shift(0)','punch','kick','downpunch','downkick','powerwave(1)','burnknuckle(1)','risingtackle(1)','crackshoot(1)','right()','jumpright()','defendup(1)','defenddown(1)','shift(1)']
 
     def act(self, r, ev, ns):

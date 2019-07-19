@@ -4,18 +4,18 @@ import os
 
 class TERRY:
 
-    def __init__(self, l, r, u, d, p, k):
+    def __init__(self, left, right, up, down, punch, kick):
         cmd = "xdotool search --pid `pgrep mame`"
         r =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
         v = r.read()
         self.winid = hex(int(v.decode()))
         os.system('xdotool windowfocus --sync ' + self.winid)
-        self.l = l
-        self.r = r
-        self.u = u
-        self.d = d
-        self.p = p
-        self.k = k
+        self.l = left
+        self.r = right
+        self.u = up
+        self.d = down
+        self.p = punch
+        self.k = kick
 
     def punch(self):
         os.system('xdotool key --window ' + self.winid + ' key ' + self.p)
