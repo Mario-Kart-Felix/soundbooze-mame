@@ -28,7 +28,7 @@ No {GPU | Distributed resources} required
 
 - Level: 7
 
-#### Art of Fighting 2 (fatfury2)
+#### Art of Fighting 2 (aof2)
 
 No {GPU | Distributed resources} required
 
