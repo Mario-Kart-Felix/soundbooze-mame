@@ -174,6 +174,7 @@ if __name__ == '__main__':
                     a = q.act(hblue5)
                     mp = multiprocessing.Process(target=act.act, args=(a, ev,ns)) 
                     mp.start() 
+                    mp.join()
                     
                     hit = 0
                     if (sp1 != 0 and sp2 != 0):
