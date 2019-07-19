@@ -2,7 +2,7 @@
 
 Q Reinforcement Learning
 
-![alt text]( "aof2")
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/aof2/aof2.png "aof2")
 
 ### Reposition
 
