@@ -8,6 +8,7 @@ import PIL
 import imagehash
 
 from terry import *
+from transform import *
 
 class HASH:
 
@@ -122,7 +123,7 @@ class CONFIG:
         self.SELECT      = [831168, 764772]
         self.INTRO       = [508206, 510494]
         self.BLOOD       = [925269, 1434654]
-        self.blood       = {"top": 124, "left": 100, "width": 800, "height":600}
+        self.blood       = {"top": 124, "left": 100, "width": 800, "height":100}
         self.scene       = {"top": 284, "left": 100, "width": 800, "height":400}
         self.play        = False
         self.prevBloodP1 = 0
@@ -158,6 +159,7 @@ if __name__ == '__main__':
 
         act    = ACT()
         phash  = HASH()
+        trans  = TRANSFORM()
         config = CONFIG()
 
         while [ 1 ]:
@@ -175,7 +177,7 @@ if __name__ == '__main__':
 
                 if config.play:
 
-                    print phash.compute(scene)
+                    hblue = phash.compute(trans.blue(scene))
 
                     a = multiprocessing.Process(target=act.act, args=(ev,ns)) 
                     a.start() 
@@ -187,12 +189,12 @@ if __name__ == '__main__':
                             sp2 = 0
                         if sp1 > 0:
                             act.shift = (act.shift + 1) % 2
-                            print -1.0
+                            print hblue, -1.0
                         elif sp2 > 0:
                             act.shift = (act.shift + 1) % 2
-                            print 1.0
+                            print hblue, 1.0
                         else:
-                            pass #print 0.0
+                            print hblue, 0.0
 
                     config.blood_update()
 
