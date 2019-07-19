@@ -170,23 +170,23 @@ class ROBERT:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z2)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.p)
 
-    def hienryuujinkyaku(self, ts, pos):
+    def hienryuujinkyaku(self, pos, ts):
         z = self.l
         if pos == 0:
             z = self.l
         elif pos == 1:
             z = self.r
 
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.u)
         time.sleep(ts)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.d)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.u)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.d)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.k)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.k)
 
     def defendup(self, pos, ts):
