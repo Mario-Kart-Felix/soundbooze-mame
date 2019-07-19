@@ -7,6 +7,8 @@ import multiprocessing
 import PIL
 import imagehash
 
+from q import *
+from ring import *
 from terry import *
 from transform import *
 
@@ -16,13 +18,14 @@ class HASH:
         self.H     = {}
         self.depth = 12
 
+    def chop(self, H, s):
+        chop = ''
+        for h in range(0, s):
+            chop += H[h]
+        return chop
+
     def compute(self, frame):
-        def _chop(H, s):
-            chop = ''
-            for h in range(0, s):
-                chop += H[h]
-            return chop
-        phash = _chop(str(imagehash.phash(PIL.Image.fromarray(frame))), self.depth)
+        phash = self.chop(str(imagehash.phash(PIL.Image.fromarray(frame))), self.depth)
         return phash
 
 class ACT:
@@ -30,29 +33,12 @@ class ACT:
     def __init__(self):
         self.terry = TERRY()
         self.action = ['powerwave(0)','burnknuckle(0)','risingtackle(0)','crackshoot(0)','left','jumpleft','defendup(0)','defenddown(0)','shift(0)','punch','kick','downpunch','downkick','powerwave(1)','burnknuckle(1)','risingtackle(1)','crackshoot(1)','right()','jumpright()','defendup(1)','defenddown(1)','shift(1)']
-        self.prob   = numpy.random.rand(len(self.action))
-        self.prob  /= numpy.sum(self.prob)
-        self.shift  = 0
 
-    def next(self):
-        self.prob = numpy.random.rand(len(self.action))
-        prob = numpy.zeros(len(self.action))
-        if self.shift == 0:
-            for i in range(len(self.action)/2):
-                prob[i] += numpy.random.uniform() * self.prob[i]
-        elif self.shift == 1:
-            for i in range(len(self.action)/2, len(self.action)):
-                prob[i] += numpy.random.uniform() * self.prob[i]
-        prob /= numpy.sum(prob)
-        return numpy.random.choice(len(prob), 1, p=prob)[0]
+    def act(self, r, ev, ns):
 
-    def act(self, ev, ns):
-
-        def _run():
+        def _run(r):
             ns.value = True
             ev.set()
-
-            r = self.next()
 
             if r == 0:
                 self.terry.powerwave(0)
@@ -108,10 +94,10 @@ class ACT:
         try:
             z = ns.value
             if not z:
-                _run()
+                _run(r)
 
         except Exception, err:
-            _run()
+            _run(r)
             pass
 
         ev.wait()
@@ -158,9 +144,11 @@ if __name__ == '__main__':
     with mss.mss() as sct:
 
         act    = ACT()
+        q      = Q(len(act.action))
         phash  = HASH()
         trans  = TRANSFORM()
         config = CONFIG()
+        ring   = RINGBUFFER(16)
 
         while [ 1 ]:
 
@@ -178,23 +166,38 @@ if __name__ == '__main__':
                 if config.play:
 
                     hblue = phash.compute(trans.blue(scene))
+                    hblue5 = phash.chop(hblue, 5)
+                    z = '*' if hblue5 in q.HQ else ''
+                    ring.append(hblue5)
+                    q.append(hblue5)
 
-                    a = multiprocessing.Process(target=act.act, args=(ev,ns)) 
-                    a.start() 
+                    a = q.act(hblue5)
+                    mp = multiprocessing.Process(target=act.act, args=(a, ev,ns)) 
+                    mp.start() 
                     
+                    hit = 0
                     if (sp1 != 0 and sp2 != 0):
                         if numpy.isnan(sp1):
                             sp1 = 0
                         if numpy.isnan(sp2):
                             sp2 = 0
                         if sp1 > 0:
-                            act.shift = (act.shift + 1) % 2
-                            print hblue, -1.0
+                            hit = -1
+                            R = ring.get()
+                            for i in range(len(R)-1):
+                                q.update(R[i], R[i+1], a, -1)
                         elif sp2 > 0:
-                            act.shift = (act.shift + 1) % 2
-                            print hblue, 1.0
+                            hit = 1
+                            R = ring.get()
+                            for i in range(len(R)-1):
+                                q.update(R[i], R[i+1], a, 1)
                         else:
-                            print hblue, 0.0
+                            hit = 0
+                            R = ring.get()
+                            for i in range(len(R)-1):
+                                q.update(R[i], R[i+1], a, 0)
+
+                    print '(', len(q.HQ), ')', z, '[', hblue5, hblue, ']', act.action[a], hit
 
                     config.blood_update()
 
