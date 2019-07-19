@@ -44,11 +44,10 @@ class TERRY:
         elif pos == 1:
             key = "Right"
 
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-        time.sleep(0.1)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        for i in range(4):
+            os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+            time.sleep(0.1)
+            os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
     def powerwave(self, pos):
         z = "Right"
@@ -64,8 +63,6 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup D')
 
-        time.sleep(0.1)
-
     def burnknuckle(self, pos):
         z = "Left"
         if pos == 0:
@@ -78,8 +75,7 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' keydown D')
         os.system('xdotool key --window ' + self.winid + ' keyup Down')
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
-
-        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' keyup D')
 
     def risingtackle(self, pos):
         z = "Left"
@@ -95,7 +91,6 @@ class TERRY:
             os.system('xdotool key --window ' + self.winid + ' keyup ' + z + ' Down')
         os.system('xdotool key --window ' + self.winid + ' keyup Up')
         os.system('xdotool key --window ' + self.winid + ' keyup D')
-        time.sleep(0.2)
 
     def crackshoot(self, pos):
         z = "Left"
@@ -114,8 +109,6 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
         os.system('xdotool key --window ' + self.winid + ' keyup Up')
         os.system('xdotool key --window ' + self.winid + ' keyup F')
-
-        time.sleep(0.1)
 
     def defendup(self, pos, ts):
         key = "Left"
@@ -143,20 +136,17 @@ class TERRY:
 
     def jumpright(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
-        os.system('xdotool key --window ' + self.winid + ' keydown Up F')
+        os.system('xdotool key --window ' + self.winid + ' keydown Up')
         time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
-        os.system('xdotool key --window ' + self.winid + ' keyup Up F')
+        os.system('xdotool key --window ' + self.winid + ' keyup Up')
 
     def jumpleft(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
-        os.system('xdotool key --window ' + self.winid + ' keydown Up F')
+        os.system('xdotool key --window ' + self.winid + ' keydown Up')
         time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
-        os.system('xdotool key --window ' + self.winid + ' keyup Up F')
-
-    def jumpup(self):
-        os.system('xdotool key --window ' + self.winid + ' key Up')
+        os.system('xdotool key --window ' + self.winid + ' keyup Up')
 
     def insertcoin(self):
         time.sleep(1)
