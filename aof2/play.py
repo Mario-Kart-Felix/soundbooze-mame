@@ -32,7 +32,7 @@ class ACT:
 
     def __init__(self):
         self.robert = ROBERT('Left', 'Right', 'Up', 'Down', 'a', 's', 'z')
-        self.action = ['shift(0)','ryugekiken(0)','ryuuga(0)','kyokugenryuurenbuken(0)','hienshippuukyaku(0)','geneikyaku(0)','haohshoukohken(0)','left()','jumpleft()','defendup(0)','defenddown(0)','punch()','kick()','downpunch()','downkick()','idle()','shift(1)','ryugekiken(1)','ryuuga(1)','kyokugenryuurenbuken(1)','hienshippuukyaku(1)','geneikyaku(1)','haohshoukohken(1)','right()','jumpright()','defendup(1)','defenddown(1)']
+        self.action = ['shift(0)','ryugekiken(0)','ryuuga(0)','kyokugenryuurenbuken(0)','hienshippuukyaku(0)','geneikyaku(0)','haohshoukohken(0)','left()','jumpleft()','defendup(0)','defenddown(0)','punch()','kick()','downpunch()','downkick()','recharge()','shift(1)','ryugekiken(1)','ryuuga(1)','kyokugenryuurenbuken(1)','hienshippuukyaku(1)','geneikyaku(1)','haohshoukohken(1)','right()','jumpright()','defendup(1)','defenddown(1)']
 
     def act(self, r, ev, ns):
 
@@ -72,7 +72,7 @@ class ACT:
             elif r == 14:
                 act.robert.downkick()
             elif r == 15:
-                act.robert.idle()
+                act.robert.recharge(0.3)
 
             elif r == 16:
                 act.robert.shift(1)
