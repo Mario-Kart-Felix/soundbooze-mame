@@ -28,6 +28,12 @@ No {GPU | Distributed resources} required
 
 - Level: 7
 
+#### Art of Fighting 2 (fatfury2)
+
+No {GPU | Distributed resources} required
+
+- Level: 8
+
 #### Fatal Fury 2 (fatfury2)
 
 No {GPU | Distributed resources} required
