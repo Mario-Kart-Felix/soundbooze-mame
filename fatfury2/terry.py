@@ -27,14 +27,14 @@ class TERRY:
         os.system('xdotool key --window ' + self.winid + ' key F')
         os.system('xdotool key --window ' + self.winid + ' keyup Down')
 
-    def left(self):
+    def left(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
-        time.sleep(0.5)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
 
-    def right(self):
+    def right(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
-        time.sleep(0.5)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
 
     def shift(self, pos):
@@ -117,7 +117,7 @@ class TERRY:
 
         time.sleep(0.1)
 
-    def defendup(self, pos):
+    def defendup(self, pos, ts):
         key = "Left"
         if pos == 0:
             key = "Left"
@@ -125,10 +125,10 @@ class TERRY:
             key = "Right"
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-        time.sleep(0.6)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
-    def defenddown(self, pos):
+    def defenddown(self, pos, ts):
         key = "Left"
         if pos == 0:
             key = "Left"
@@ -137,21 +137,21 @@ class TERRY:
 
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
         os.system('xdotool key --window ' + self.winid + ' keydown Down')
-        time.sleep(0.6)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
         os.system('xdotool key --window ' + self.winid + ' keyup Down')
 
-    def jumpright(self):
+    def jumpright(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Right')
         os.system('xdotool key --window ' + self.winid + ' keydown Up F')
-        time.sleep(0.5)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Right')
         os.system('xdotool key --window ' + self.winid + ' keyup Up F')
 
-    def jumpleft(self):
+    def jumpleft(self, ts):
         os.system('xdotool key --window ' + self.winid + ' keydown Left')
         os.system('xdotool key --window ' + self.winid + ' keydown Up F')
-        time.sleep(0.5)
+        time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keyup Left')
         os.system('xdotool key --window ' + self.winid + ' keyup Up F')
 
