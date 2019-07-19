@@ -174,8 +174,6 @@ if __name__ == '__main__':
             ns = mgr.Namespace()
             ev = multiprocessing.Event()
 
-            print sumb1, sumb2
-
             if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
 
                 if config.play:
