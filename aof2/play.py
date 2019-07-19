@@ -115,9 +115,8 @@ class ACT:
 class CONFIG:
 
     def __init__(self):
-        self.INSERT      = [475320, 475320]
-        self.SELECT      = [1288631, 1373138]
-        self.INTRO       = [882168, 778873]
+        self.INSERT      = [0, 0]
+        self.SELECT      = [221782, 268034]
         self.BLOOD       = [0, 2276752]
         self.blood       = {"top": 124, "left": 100, "width": 800, "height":100}
         self.scene       = {"top": 284, "left": 100, "width": 800, "height":400}
@@ -178,13 +177,13 @@ if __name__ == '__main__':
 
                 if config.play:
 
-                    hblue = phash.compute(trans.blue(scene))
-                    hblue5 = phash.chop(hblue, 5)
-                    z = '*' if hblue5 in q.HQ else ''
-                    ring.append(hblue5)
-                    q.append(hblue5)
+                    hred = phash.compute(trans.red(scene))
+                    hred5 = phash.chop(hred, 5)
+                    z = '*' if hred5 in q.HQ else ''
+                    ring.append(hred5)
+                    q.append(hred5)
 
-                    a = q.act(hblue5)
+                    a = q.act(hred5)
                     mp = multiprocessing.Process(target=act.act, args=(a, ev,ns)) 
                     mp.start() 
                     mp.join()
@@ -211,7 +210,7 @@ if __name__ == '__main__':
                             for i in range(len(R)-1):
                                 q.update(R[i], R[i+1], a, 0)
 
-                    print '(', len(q.HQ), ')', z, '[', hblue5, hblue, ']', act.action[a], hit
+                    print '(', len(q.HQ), ')', z, '[', hred5, hred, ']', act.action[a], hit
 
                     config.blood_update()
 
@@ -230,12 +229,10 @@ if __name__ == '__main__':
                     config.play = False
                     time.sleep(1)
 
-            if sumb1 == config.INSERT[0] or sumb2 == config.INSERT[1]:
+            if sumb1 == config.INSERT[0] and sumb2 == config.INSERT[1]:
                 print '[Insert]'
                 act.robert.insertcoin()
-            elif sumb1 == config.SELECT[0] or sumb2 == config.SELECT[1]:
+
+            elif sumb1 == config.SELECT[0] and sumb2 == config.SELECT[1]:
                 print '[Select]'
                 act.robert.select()    
-            elif sumb1 == config.INTRO[0] or sumb2 == config.INTRO[1]:
-                print '[Intro]'
-                act.robert.intro()
