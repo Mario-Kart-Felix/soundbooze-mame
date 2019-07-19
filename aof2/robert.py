@@ -204,20 +204,12 @@ class ROBERT:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.u)
 
     def insertcoin(self):
-        time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' key 5')
         time.sleep(0.2)
         os.system('xdotool key --window ' + self.winid + ' key 1')
 
     def select(self):
-        time.sleep(0.3)
         os.system('xdotool key --window ' + self.winid + ' keydown A')
         time.sleep(0.2)
         os.system('xdotool key --window ' + self.winid + ' keyup A')
         time.sleep(2)
-
-    def intro(self):
-        time.sleep(0.3)
-        os.system('xdotool key --window ' + self.winid + ' keydown A')
-        time.sleep(0.2)
-        os.system('xdotool key --window ' + self.winid + ' keyup A')
