@@ -11,3 +11,11 @@ class TRANSFORM:
         b[:,:,2] = 0
         b[b < 250] = 0
         return cv2.resize(b, self.size)
+
+    def red(self, frame):
+        r = frame.copy()
+        r[:,:,0] = 0
+        r[:,:,1] = 0
+        r[r < 250] = 0
+        return cv2.resize(r, self.size)
+
