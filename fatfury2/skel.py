@@ -34,6 +34,7 @@ class ACT:
         self.shift  = 0
 
     def next(self):
+        self.prob = numpy.random.rand(len(self.action))
         prob = numpy.zeros(len(self.action))
         if self.shift == 0:
             for i in range(len(self.action)/2):
