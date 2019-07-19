@@ -2,7 +2,7 @@
 
 Q Reinforcement Learning
 
-![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/sf2ce/obsolete/sync/noise/sf2.png "sf2ce")
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/fatfury2/fatfruy2.png "fatfury2")
 
 ### Reposition
 
