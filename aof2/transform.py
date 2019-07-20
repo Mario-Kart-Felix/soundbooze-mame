@@ -23,4 +23,4 @@ class TRANSFORM:
         rg = frame.copy()
         rg[:,:,0] = 0
         rg[rg < 255] = 0
-        return cv2.resize(r, self.size)
+        return cv2.resize(rg, self.size)
