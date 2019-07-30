@@ -72,7 +72,7 @@ class ACT:
             elif r == 14:
                 act.robert.downkick()
             elif r == 15:
-                act.robert.recharge(0.3)
+                act.robert.idle(0.3)
 
             elif r == 16:
                 act.robert.shift(1)

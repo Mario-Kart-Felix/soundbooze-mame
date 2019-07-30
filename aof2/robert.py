@@ -56,13 +56,10 @@ class ROBERT:
             time.sleep(0.1)
             os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
-    def idle(self):
-        os.system('xdotool key --window ' + self.winid + ' key ' + self.i)
-
-    def recharge(self, ts):
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.p)
+    def idle(self, ts):
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.i)
         time.sleep(ts)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.p)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.i)
 
     def ryugekiken(self, pos):
         z = self.r
