@@ -175,9 +175,9 @@ if __name__ == '__main__':
             ns = mgr.Namespace()
             ev = multiprocessing.Event()
 
-            if 1:#sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
+            if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
 
-                if 1:#config.play:
+                if config.play:
 
                     hred = phash.compute(trans.red(scene))
                     hred5 = phash.chop(hred, 5)
