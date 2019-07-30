@@ -4,19 +4,20 @@ import os
 
 class ROBERT:
 
-    def __init__(self, left, right, up, down, punch, kick, idle):
+    def __init__(self, left, right, up, down, punch, kick, recharge, idle):
         cmd = "xdotool search --pid `pgrep mame`"
         r =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
         v = r.read()
         self.winid = hex(int(v.decode()))
         os.system('xdotool windowfocus --sync ' + self.winid)
-        self.l = left
-        self.r = right
-        self.u = up
-        self.d = down
-        self.p = punch
-        self.k = kick
-        self.i = idle
+        self.l  = left
+        self.r  = right
+        self.u  = up
+        self.d  = down
+        self.p  = punch
+        self.k  = kick
+        self.rc = recharge
+        self.i  = idle
 
     def punch(self):
         os.system('xdotool key --window ' + self.winid + ' key ' + self.p)
@@ -56,10 +57,10 @@ class ROBERT:
             time.sleep(0.1)
             os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
 
-    def idle(self, ts):
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.i)
+    def recharge(self, ts):
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.rc)
         time.sleep(ts)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.i)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.rc)
 
     def ryugekiken(self, pos):
         z = self.r
