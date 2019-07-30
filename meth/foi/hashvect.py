@@ -15,19 +15,23 @@ class CLUSTER:
     def __init__(self):
 
         self.vectorizer = HashingVectorizer(n_features=2**4)
-        self.H = []
+        self.H = {}
         self.model = None
-        self.period = 5150 #todo continuous
+        self.period = 1000
 
     def fit(self, size):
+        H = []
+        for k in self.H.keys():
+            H.append(k)
+
         true_k = size
-        X = self.vectorizer.fit_transform(self.H)
+        X = self.vectorizer.fit_transform(H)
         model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
         model.fit(X)
         self.model = model
 
     def append(self, h):
-        self.H.append(h)
+        self.H[h] = h
 
     def predict(self, h):
         Y = self.vectorizer.transform([h])
@@ -66,11 +70,11 @@ if __name__ == '__main__':
             h = transform.phash(PIL.Image.fromarray(transform.blue(numpy.array(sct.grab(body)))))
             cluster.append(h)
 
-            if i == cluster.period:
+            if i != 0 and i % cluster.period == 0:
                 cluster.fit(10)
 
             if cluster.model is not None:
                 p = cluster.predict(h)
-                print '[', p[0], ']', h
+                print len(cluster.H), '[', p[0], ']', h
 
             i+=1
