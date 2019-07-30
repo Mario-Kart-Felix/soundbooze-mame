@@ -55,13 +55,13 @@ class ACT:
             elif r == 6:
                 act.robert.haohshoukohken(0)
             elif r == 7:
-                act.robert.hienryuujinkyaku(0.2, 0)
+                act.robert.hienryuujinkyaku(0, 0.2)
             elif r == 8:
                 act.robert.left(0.1)
             elif r == 9:
-                act.robert.defendup(0, 0.1)
+                act.robert.defendup(0, 0.3)
             elif r == 10:
-                act.robert.defenddown(0, 0.1)
+                act.robert.defenddown(0, 0.3)
 
             elif r == 11:
                 act.robert.punch()
@@ -89,13 +89,13 @@ class ACT:
             elif r == 22:
                 act.robert.haohshoukohken(1)
             elif r == 23:
-                act.robert.hienryuujinkyaku(0.2, 1)
+                act.robert.hienryuujinkyaku(1, 0.2)
             elif r == 24:
                 act.robert.right(0.1)
             elif r == 25:
-                act.robert.defendup(1, 0.1)
+                act.robert.defendup(1, 0.3)
             elif r == 26:
-                act.robert.defenddown(1, 0.1)
+                act.robert.defenddown(1, 0.3)
 
             ns.value = False
             ev.set()
@@ -173,9 +173,10 @@ if __name__ == '__main__':
             ns = mgr.Namespace()
             ev = multiprocessing.Event()
 
-            if sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
+            if 1:#sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
 
-                if config.play:
+                if 1:#config.play:
+                    act.robert.recharge(0.3)
 
                     hred = phash.compute(trans.red(scene))
                     hred5 = phash.chop(hred, 5)
@@ -185,8 +186,8 @@ if __name__ == '__main__':
 
                     a = q.act(hred5)
                     mp = multiprocessing.Process(target=act.act, args=(a, ev,ns)) 
-                    mp.start() 
-                    mp.join()
+                    #mp.start() 
+                    #mp.join()
                     
                     hit = 0
                     if (sp1 != 0 and sp2 != 0):
