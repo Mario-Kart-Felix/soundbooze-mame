@@ -17,7 +17,7 @@ class CLUSTER:
         self.vectorizer = HashingVectorizer(n_features=2**4)
         self.H = []
         self.model = None
-        self.period = 5150
+        self.period = 5150 #todo continuous
 
     def fit(self, size):
         true_k = size
