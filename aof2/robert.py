@@ -62,6 +62,9 @@ class ROBERT:
         time.sleep(ts)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.rc)
 
+    def idle(self):
+        os.system('xdotool key --window ' + self.winid + ' key ' + self.i)
+
     def ryugekiken(self, pos):
         z = self.r
         if pos == 0:

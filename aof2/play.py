@@ -31,8 +31,8 @@ class HASH:
 class ACT:
 
     def __init__(self):
-        self.robert = ROBERT('Left', 'Right', 'Up', 'Down', 'a', 's', 'z')
-        self.action = ['shift(0)','ryugekiken(0)','ryuuga(0)','kyokugenryuurenbuken(0)','hienshippuukyaku(0)','geneikyaku(0)','haohshoukohken(0)','left()','hienryuujinkyaku(0)','defendup(0)','defenddown(0)','punch()','kick()','downpunch()','downkick()','recharge()','shift(1)','ryugekiken(1)','ryuuga(1)','kyokugenryuurenbuken(1)','hienshippuukyaku(1)','geneikyaku(1)','haohshoukohken(1)','right()','hienryuujinkyaku(1)','defendup(1)','defenddown(1)']
+        self.robert = ROBERT('Left', 'Right', 'Up', 'Down', 'a', 's', 'd', 'z')
+        self.action = ['shift(0)','ryugekiken(0)','ryuuga(0)','kyokugenryuurenbuken(0)','hienshippuukyaku(0)','geneikyaku(0)','haohshoukohken(0)','left()','hienryuujinkyaku(0)','defendup(0)','defenddown(0)','punch()','kick()','downpunch()','downkick()','recharge()','idle()','shift(1)','ryugekiken(1)','ryuuga(1)','kyokugenryuurenbuken(1)','hienshippuukyaku(1)','geneikyaku(1)','haohshoukohken(1)','right()','hienryuujinkyaku(1)','defendup(1)','defenddown(1)']
 
     def act(self, r, ev, ns):
 
@@ -72,29 +72,31 @@ class ACT:
             elif r == 14:
                 act.robert.downkick()
             elif r == 15:
-                act.robert.idle(0.3)
-
+                act.robert.recharge(0.6)
             elif r == 16:
-                act.robert.shift(1)
+                act.robert.idle()
+
             elif r == 17:
-                act.robert.ryugekiken(1)
+                act.robert.shift(1)
             elif r == 18:
-                act.robert.ryuuga(1)
+                act.robert.ryugekiken(1)
             elif r == 19:
-                act.robert.kyokugenryuurenbuken(1)
+                act.robert.ryuuga(1)
             elif r == 20:
-                act.robert.hienshippuukyaku(1)
+                act.robert.kyokugenryuurenbuken(1)
             elif r == 21:
-                act.robert.geneikyaku(1)
+                act.robert.hienshippuukyaku(1)
             elif r == 22:
-                act.robert.haohshoukohken(1)
+                act.robert.geneikyaku(1)
             elif r == 23:
-                act.robert.hienryuujinkyaku(1, 0.2)
+                act.robert.haohshoukohken(1)
             elif r == 24:
-                act.robert.right(0.1)
+                act.robert.hienryuujinkyaku(1, 0.2)
             elif r == 25:
-                act.robert.defendup(1, 0.3)
+                act.robert.right(0.1)
             elif r == 26:
+                act.robert.defendup(1, 0.3)
+            elif r == 27:
                 act.robert.defenddown(1, 0.3)
 
             ns.value = False
@@ -176,7 +178,6 @@ if __name__ == '__main__':
             if 1:#sumb1 >= config.BLOOD[0] and sumb1 <= config.BLOOD[1]:
 
                 if 1:#config.play:
-                    act.robert.recharge(0.3)
 
                     hred = phash.compute(trans.red(scene))
                     hred5 = phash.chop(hred, 5)
@@ -186,8 +187,8 @@ if __name__ == '__main__':
 
                     a = q.act(hred5)
                     mp = multiprocessing.Process(target=act.act, args=(a, ev,ns)) 
-                    #mp.start() 
-                    #mp.join()
+                    mp.start() 
+                    mp.join()
                     
                     hit = 0
                     if (sp1 != 0 and sp2 != 0):
