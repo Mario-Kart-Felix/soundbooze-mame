@@ -2,11 +2,11 @@
 
 (Curiosity-Driven) Distributed-Hybrid Training for MAME Fightcade
 
-### cfg/
+### `cfg/`
 
 - Mame Config
 
-### fs/
+### `fs/`
 
 - File system configuration
 
