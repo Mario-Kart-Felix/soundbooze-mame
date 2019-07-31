@@ -22,25 +22,25 @@
 
 - Mame Resume State
 
-#### Street Fighter 2 (sf2ce)
+#### <u>Street Fighter 2 (sf2ce)</u>
 
 No {GPU | Distributed resources} required
 
 - Level: 7
 
-#### Art of Fighting 2 (aof2)
+#### <u>Art of Fighting 2 (aof2)</u>
 
 No {GPU | Distributed resources} required
 
 - Level: 8
 
-#### Fatal Fury 2 (fatfury2)
+#### <u>Fatal Fury 2 (fatfury2)</u>
 
 No {GPU | Distributed resources} required
 
 - Level: 8
 
-#### Final Fight 2 (ffight)
+#### <u>Final Fight 2 (ffight)</u>
 
 No {GPU | Distributed resources} required
 
