@@ -17,7 +17,7 @@ with mss.mss() as sct:
     while [ 1 ]:
 
         img = numpy.array(sct.grab(monitor))
-        img = blue(img)
+        #img = blue(img)
 
         cA, cD = pywt.dwt(img, 'db2')
 
