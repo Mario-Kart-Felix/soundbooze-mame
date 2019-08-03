@@ -145,15 +145,15 @@ class RYU:
     def nav(self, r): # manual- pre-auto
         if r == 0:
           self.left()
-        elif r == 2:
+        elif r == 1:
           self.defendup(0)
-        elif r == 3:
+        elif r == 2:
           self.defenddown(0)
-        elif r == 4:
+        elif r == 3:
           self.right()
-        elif r == 7:
+        elif r == 4:
           self.defendup(1)
-        elif r == 8:
+        elif r == 5:
           self.defenddown(1)
 
     def act(self, r): # manual- pre-auto
