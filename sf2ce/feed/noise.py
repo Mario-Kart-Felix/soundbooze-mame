@@ -24,8 +24,8 @@ class ACT:
 
     def next(self, Z, subd):
         try:
-            self.max_sigma = numpy.argmax(Z)
-            self.min_sigma = numpy.argmin(Z)
+            self.max_sigma = Z[numpy.argmax(Z)]
+            self.min_sigma = Z[numpy.argmin(Z)]
             sigma = (self.max_sigma - (self.max_sigma - self.min_sigma) * min(1.0, self.t * 1.0 / self.decay_period))
             if self.decay_period < 0: 
                 self.decay_period = 1000000
