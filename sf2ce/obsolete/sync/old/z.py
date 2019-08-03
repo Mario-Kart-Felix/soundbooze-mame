@@ -10,7 +10,6 @@ from hmmlearn import hmm
 from PIL import Image, ImageChops
 
 from ryu import *
-from rb import *
 from archive import *
 
 ROUND  = 2744512
@@ -18,6 +17,18 @@ START  = 4089536
 INSERT = 1358640
 SELECT = 2623509
 KO     = 745816 * 4
+
+class RingBuffer:
+
+    def __init__(self, size):
+        self.data = [None for i in xrange(size)]
+
+    def append(self, x):
+        self.data.pop(0)
+        self.data.append(x)
+
+    def get(self):
+        return self.data
 
 def reward_penalty(img, prevBlood):
     b = img[:, :, 0]
@@ -107,7 +118,7 @@ with mss.mss() as sct:
 
     startGame = False
 
-    ryu = RYU()
+    ryu = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
     korb = RingBuffer(4)
     archive = Archive()
 
