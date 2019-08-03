@@ -2,6 +2,8 @@
 
 (Curiosity-Driven) Distributed-Hybrid Training for MAME Fightcade
 
+![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/logo.png "AI")
+
 ### `cfg/`
 
 - Mame Config
