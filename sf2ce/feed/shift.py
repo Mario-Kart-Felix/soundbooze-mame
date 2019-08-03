@@ -5,7 +5,8 @@ import cv2
 import numpy
 import pickle
 import imagehash
-from PIL import Image
+import PIL
+import multiprocessing
 
 from ring import *
 from ryu import *
@@ -70,7 +71,7 @@ class HASH:
         pickle.dump(self.H, fp)
         fp.close()
 
-    def lerpshift(self, V, LR, p):
+    def lerpshift(self, V, LR, s):
 
         def _rndsumone(n):
             R = []
@@ -79,10 +80,10 @@ class HASH:
             return R
 
         prob = numpy.zeros(len(LR))
-        if p == 0:
+        if s == 0:
             for i in range(len(LR)/2):
                 prob[i] += LR[i] * V[i]
-        elif p == 1:
+        elif s == 1:
             for i in range(len(LR)/2, len(LR)):
                 prob[i] += LR[i] * V[i]
         prob /= numpy.sum(prob)
@@ -100,6 +101,10 @@ class HASH:
         return l
 
 def preact(blue, ryu, hash, sumb1, sumb2):
+
+    def _shifter():
+        hash.shift = (hash.shift + 1) % 2
+        print '[!]'
 
     h = hash.compute(blue)
     r = hash.next()
@@ -120,7 +125,8 @@ def preact(blue, ryu, hash, sumb1, sumb2):
 
     if hit[0] == -1:
 
-        hash.shift = (hash.shift + 1) % 2
+        p = multiprocessing.Process(target=_shifter)
+        p.start()
 
         try:
             H = timesteps.get()
@@ -159,7 +165,7 @@ with mss.mss() as sct:
     hash        = HASH()
     timesteps   = RINGBUFFER(8)
 
-    prev_timestep = Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))
+    prev_timestep = PIL.Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))
     for i in range(8):
         timesteps.append(hash.compute(prev_timestep))
 
@@ -188,8 +194,8 @@ with mss.mss() as sct:
                 x = cv2.resize(numpy.array(sct.grab(scene)),(200,100))
                 blue = transform.blue(x)
                 if i % hash.stack == 0:
-                    timesteps.append(hash.compute(Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))))
-                preact(Image.fromarray(blue), ryu, hash, sumb1, sumb2)
+                    timesteps.append(hash.compute(PIL.Image.fromarray(transform.blue(cv2.resize(numpy.array(sct.grab(scene)),(200,100))))))
+                preact(PIL.Image.fromarray(blue), ryu, hash, sumb1, sumb2)
                 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
