@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# versus bison only
+
 import cv2
 import mss
 import time
