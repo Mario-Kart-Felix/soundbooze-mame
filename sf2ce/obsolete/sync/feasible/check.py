@@ -8,14 +8,23 @@ import pickle
 import math
 from PIL import Image, ImageChops
 
-from ryu import *
-from rb import *
-
 ROUND  = 2744512
 START  = 4089536
 INSERT = 1358640
 SELECT = 2623509
 KO     = 745816 * 4
+
+class RingBuffer:
+
+    def __init__(self, size):
+        self.data = [None for i in xrange(size)]
+
+    def append(self, x):
+        self.data.pop(0)
+        self.data.append(x)
+
+    def get(self):
+        return self.data
 
 def reward_penalty(img, prevBlood):
     b = img[:, :, 0]
@@ -109,7 +118,6 @@ with mss.mss() as sct:
 
     startGame = False
 
-    ryu = RYU()
     korb = RingBuffer(4)
 
     rewards = 0
@@ -192,9 +200,3 @@ with mss.mss() as sct:
 
             prevBloodP1 = curp1
             prevBloodP2 = curp2
-
-        elif sumb1 == INSERT:  
-            ryu.insertcoin()
-        
-        elif sumb1 == SELECT:
-            ryu.select()    
