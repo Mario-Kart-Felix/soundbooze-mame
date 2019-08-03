@@ -23,15 +23,25 @@ class ACT:
         self.action_space = len(self.action)
 
     def next(self, Z, subd):
-        self.max_sigma = numpy.argmax(Z)
-        self.min_sigma = numpy.argmin(Z)
-        sigma = (self.max_sigma - (self.max_sigma - self.min_sigma) * min(1.0, self.t * 1.0 / self.decay_period))
-        if self.decay_period < 0: 
-            self.decay_period = 1000000
-        self.decay_period -= 0.1
-        p  = numpy.clip(numpy.random.normal(size=len(self.action)) * (sigma * (1-subd)), 0, len(self.action))
-        p /= numpy.sum(p)
-        return numpy.random.choice(len(p), 1, p=p)[0]
+        try:
+            self.max_sigma = numpy.argmax(Z)
+            self.min_sigma = numpy.argmin(Z)
+            sigma = (self.max_sigma - (self.max_sigma - self.min_sigma) * min(1.0, self.t * 1.0 / self.decay_period))
+            if self.decay_period < 0: 
+                self.decay_period = 1000000
+            self.decay_period -= 0.1
+            p  = numpy.clip(numpy.random.normal(size=len(self.action)) * (sigma * (1-subd)), 0, len(self.action))
+            p /= numpy.sum(p)
+            return numpy.random.choice(len(p), 1, p=p)[0]
+        except:
+            pass
+
+    def blue(self, frame):
+        b = frame.copy()
+        b[:,:,1] = 0
+        b[:,:,2] = 0
+        b[b < 250] = 0
+        return b
 
     def phash(self, frame):
         phash = str(imagehash.phash(frame))
@@ -70,7 +80,7 @@ with mss.mss() as sct:
 
             if startGame:
 
-                img = cv2.resize(numpy.array(sct.grab(scene)),(400,300))
+                img = act.blue(cv2.resize(numpy.array(sct.grab(scene)),(400,300)))
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 
                 H = numpy.hsplit(img, 2)
@@ -105,11 +115,13 @@ with mss.mss() as sct:
                 elif  subd    >=  numpy.percentile(ZP, 90):
                     perc = 7
                 
-                r = act.next(Z, subd)
-                r = (r+perc) % len(act.action) #0-11 8-19
-                ryu.act(r)
-
-                print("[%d] %s : [%d] - [%.5f %.5f] - [%.5f] %d | %s" %(perc, act.phash(PIL.Image.fromarray(img)), numpy.argmax(Z), Lsum, Rsum, numpy.absolute(Lsum - Rsum), r, act.action[r]))
+                try:
+                    r = act.next(Z, subd)
+                    r = (r+perc) % len(act.action) #0-11 8-19
+                    ryu.act(r)
+                    print("[%d] %s : [%d] - [%.5f %.5f] - [%.5f] %d | %s" %(perc, act.phash(PIL.Image.fromarray(img)), numpy.argmax(Z), Lsum, Rsum, numpy.absolute(Lsum - Rsum), r, act.action[r]))
+                except:
+                    pass
 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
