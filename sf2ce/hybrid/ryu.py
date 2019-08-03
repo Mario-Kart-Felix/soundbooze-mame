@@ -57,12 +57,12 @@ class RYU:
 
     def left(self):
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.l)
-        time.sleep(0.6)
+        time.sleep(0.4)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.l)
 
     def right(self):
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.r)
-        time.sleep(0.6)
+        time.sleep(0.4)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
 
     def jumpright(self, s):
