@@ -3,6 +3,8 @@ import mss
 import cv2
 import time
 import numpy
+import imagehash
+import PIL
 
 from ring import *
 from ryu import *
@@ -20,16 +22,20 @@ class ACT:
         self.decay_period = 1000000
         self.action_space = len(self.action)
 
-    def next(self, Z):
+    def next(self, Z, subd):
         self.max_sigma = numpy.argmax(Z)
         self.min_sigma = numpy.argmin(Z)
         sigma = (self.max_sigma - (self.max_sigma - self.min_sigma) * min(1.0, self.t * 1.0 / self.decay_period))
         if self.decay_period < 0: 
             self.decay_period = 1000000
         self.decay_period -= 0.1
-        p  = numpy.clip(numpy.random.normal(size=len(self.action)) * sigma, 0, len(self.action))
+        p  = numpy.clip(numpy.random.normal(size=len(self.action)) * (sigma * (1-subd)), 0, len(self.action))
         p /= numpy.sum(p)
         return numpy.random.choice(len(p), 1, p=p)[0]
+
+    def phash(self, frame):
+        phash = str(imagehash.phash(frame))
+        return phash
 
 with mss.mss() as sct:
 
@@ -66,6 +72,7 @@ with mss.mss() as sct:
 
                 img = cv2.resize(numpy.array(sct.grab(scene)),(400,300))
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                
                 H = numpy.hsplit(img, 2)
                 L = numpy.vsplit(H[0], 2)
                 R = numpy.vsplit(H[1], 2)
@@ -76,30 +83,33 @@ with mss.mss() as sct:
                 Rsum = numpy.sum(r)/10000000.0
                 Z = [Lsum, Rsum]
 
-                r = act.next(Z)
-                ryu.act(r)
-
                 subd = numpy.absolute(Lsum - Rsum)
                 ZP.append(subd)
 
-                if    subd      < numpy.percentile(ZP, 20):
-                    print '[0]',
-                elif  subd    >=  numpy.percentile(ZP, 20) and subd < numpy.percentile(ZP, 30):
-                    print '[1]',
-                elif  subd    >=  numpy.percentile(ZP, 40) and subd < numpy.percentile(ZP, 50):
-                    print '[2]',
-                elif  subd    >=  numpy.percentile(ZP, 50) and subd < numpy.percentile(ZP, 60):
-                    print '[3]',
-                elif  subd    >=  numpy.percentile(ZP, 60) and subd < numpy.percentile(ZP, 70):
-                    print '[4]',
-                elif  subd    >=  numpy.percentile(ZP, 70) and subd < numpy.percentile(ZP, 80):
-                    print '[5]',
-                elif  subd    >=  numpy.percentile(ZP, 80) and subd < numpy.percentile(ZP, 90):
-                    print '[6]',
-                elif  subd    >=  numpy.percentile(ZP, 90):
-                    print '[7]',
+                perc = 0
 
-                print("[%d] - [%.5f %.5f] - [%.5f] %d | %s" %(numpy.argmax(Z), Lsum, Rsum, numpy.absolute(Lsum - Rsum), r, act.action[r]))
+                if    subd      < numpy.percentile(ZP, 20):
+                    perc = 0
+                elif  subd    >=  numpy.percentile(ZP, 20) and subd < numpy.percentile(ZP, 30):
+                    perc = 1
+                elif  subd    >=  numpy.percentile(ZP, 40) and subd < numpy.percentile(ZP, 50):
+                    perc = 2
+                elif  subd    >=  numpy.percentile(ZP, 50) and subd < numpy.percentile(ZP, 60):
+                    perc = 3
+                elif  subd    >=  numpy.percentile(ZP, 60) and subd < numpy.percentile(ZP, 70):
+                    perc = 4
+                elif  subd    >=  numpy.percentile(ZP, 70) and subd < numpy.percentile(ZP, 80):
+                    perc = 5
+                elif  subd    >=  numpy.percentile(ZP, 80) and subd < numpy.percentile(ZP, 90):
+                    perc = 6
+                elif  subd    >=  numpy.percentile(ZP, 90):
+                    perc = 7
+                
+                r = act.next(Z, subd)
+                r = (r+perc) % len(act.action) #0-11 8-19
+                ryu.act(r)
+
+                print("[%d] %s : [%d] - [%.5f %.5f] - [%.5f] %d | %s" %(perc, act.phash(PIL.Image.fromarray(img)), numpy.argmax(Z), Lsum, Rsum, numpy.absolute(Lsum - Rsum), r, act.action[r]))
 
             if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
                 print '[Start]'
