@@ -206,7 +206,7 @@ with mss.mss() as sct:
 
     startGame = False
 
-    ryu = RYU()
+    ryu = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
 
     korb = RingBuffer(4)
     archive = Archive()
