@@ -37,7 +37,7 @@ class Archive:
 
         ms = 0
         for e in self.E:
-            img = cv2.imread('noise/' + e + '/' + '1.png', 0)
+            img = cv2.imread('../noise/' + e + '/' + '1.png', 0)
             s = self._similar(cv2.resize(img, (200, 100)), cv2.resize(startframe, (200, 100)))
             print '[eList]', e, s
             if s > ms:
@@ -46,13 +46,13 @@ class Archive:
 
         print '[Found]', self.enemy, ms
 
-        for dir_path, subdir_list, file_list in os.walk('noise/' + self.enemy + '/penalty'):
+        for dir_path, subdir_list, file_list in os.walk('../noise/' + self.enemy + '/penalty'):
             for fname in file_list:
                 full_path = os.path.join(dir_path, fname)
                 r = _l(full_path)
                 self.P.append(r)
 
-        for dir_path, subdir_list, file_list in os.walk('noise/' + self.enemy + '/reward'):
+        for dir_path, subdir_list, file_list in os.walk('../noise/' + self.enemy + '/reward'):
             for fname in file_list:
                 full_path = os.path.join(dir_path, fname)
                 r = _l(full_path)
