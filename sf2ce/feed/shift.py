@@ -102,10 +102,6 @@ class HASH:
 
 def preact(blue, ryu, hash, sumb1, sumb2):
 
-    def _shifter():
-        hash.shift = (hash.shift + 1) % 2
-        print '[!]'
-
     h = hash.compute(blue)
     r = hash.next()
 
@@ -125,8 +121,7 @@ def preact(blue, ryu, hash, sumb1, sumb2):
 
     if hit[0] == -1:
 
-        p = multiprocessing.Process(target=_shifter)
-        p.start()
+        hash.shift = (hash.shift + 1) % 2
 
         try:
             H = timesteps.get()
