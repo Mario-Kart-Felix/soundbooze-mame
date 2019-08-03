@@ -1,3 +1,4 @@
+import os
 import numpy
 import cv2
 import time
@@ -5,14 +6,23 @@ import mss
 import pickle
 import hashlib 
 
-from ryu import *
-from rb import *
-
 ROUND  = 2744512
 START  = 4089536
 INSERT = 1358640
 SELECT = 2623509
 KO     = 745816 * 4
+
+class RingBuffer:
+
+    def __init__(self, size):
+        self.data = [None for i in xrange(size)]
+
+    def append(self, x):
+        self.data.pop(0)
+        self.data.append(x)
+
+    def get(self):
+        return self.data
 
 def reward_penalty(img, prevBlood):
     b = img[:, :, 0]
@@ -54,7 +64,6 @@ with mss.mss() as sct:
     startGame = False
     startFrame = None
 
-    ryu = RYU()
     korb = RingBuffer(4)
 
     idx = 0
@@ -153,9 +162,3 @@ with mss.mss() as sct:
             prevBloodP2 = curp2
 
             idx += 1
-
-        elif sumb1 == INSERT:  
-            ryu.insertcoin()
-        
-        elif sumb1 == SELECT:
-            ryu.select()    
