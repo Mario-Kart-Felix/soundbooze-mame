@@ -19,7 +19,7 @@ class ACT:
         self.max_sigma = 1.0
         self.min_sigma = 0.1
         self.t         = 0.8
-        self.decay_period = 1000000
+        self.decay_period = 1000000.0
         self.action_space = len(self.action)
 
     def next(self, Z, subd):
@@ -79,8 +79,8 @@ with mss.mss() as sct:
                 l, r = L[1], R[1]
                 l, r = l[0:100, 40:140], r[0:100, 40:140]
                 
-                Lsum = numpy.sum(l)/10000000.0
-                Rsum = numpy.sum(r)/10000000.0
+                Lsum = numpy.sum(l)/act.decay_period
+                Rsum = numpy.sum(r)/act.decay_period
                 Z = [Lsum, Rsum]
 
                 subd = numpy.absolute(Lsum - Rsum)
