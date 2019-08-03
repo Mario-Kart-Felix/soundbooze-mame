@@ -51,7 +51,7 @@ with mss.mss() as sct:
 
     scene = {"top": 124, "left": 100, "width": 800, "height":600}
 
-    startGame = False
+    play = False
 
     ryu = RYU('Left', 'Right', 'Up', 'Down', 'c', 'd')
     act = ACT()
@@ -78,7 +78,7 @@ with mss.mss() as sct:
 
         if sumb1 >= BLOOD[0] and sumb1 <= BLOOD[1]:
 
-            if startGame:
+            if play:
 
                 img = act.blue(cv2.resize(numpy.array(sct.grab(scene)),(400,300)))
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -123,19 +123,19 @@ with mss.mss() as sct:
                 except:
                     pass
 
-            if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not startGame:
+            if sumb1 == BLOOD[1] and sumb2 == BLOOD[1] and not play:
                 print '[Start]'
-                startGame = True
+                play = True
                 time.sleep(1)
 
             elif sumb1 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P1 [KO]'
-                startGame = False
+                play = False
                 time.sleep(1)
 
             elif sumb2 == BLOOD[0] and rbsum == BLOOD[2]:
                 print 'P2 [KO]'
-                startGame = False
+                play = False
                 time.sleep(1)
 
         elif sumb1 == RESUME[0]:
