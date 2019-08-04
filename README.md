@@ -4,6 +4,8 @@
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/logo.png "AI")
 
+> Under continual Development
+
 ### `cfg/`
 
 - Mame Config
