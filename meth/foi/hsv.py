@@ -28,7 +28,11 @@ with mss.mss() as sct:
         # yellow
         #lower = np.array([20,100,100])
         #upper = np.array([30,255,255])
-        lower = np.array([22,60,200])
+        #lower = np.array([22,60,200])
+        #upper = np.array([60,255,255])
+
+        # green
+        lower = np.array([50,100,100])
         upper = np.array([60,255,255])
 
         mask = cv.inRange(hsv, lower, upper)
