@@ -9,11 +9,11 @@
 #### Street Fighter 2 (sf2ce)
 
 - Player 1: Ryu
-- Level: 7
+- Level: 7 (*)
 
 #### Fatal Fury 2 (fatfury2)
 
-No {GPU | Distributed resources} required
-
 - Player 1: Terry Bogard
-- Level: 8
+- Level: 8 (*)
+
+(*) No {GPU | Distributed resources} required
