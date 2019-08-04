@@ -26,8 +26,10 @@ with mss.mss() as sct:
         #upper = np.array([0,255,255])
 
         # yellow
-        lower = np.array([20,100,100])
-        upper = np.array([30,255,255])
+        #lower = np.array([20,100,100])
+        #upper = np.array([30,255,255])
+        lower = np.array([22,60,200])
+        upper = np.array([60,255,255])
 
         mask = cv.inRange(hsv, lower, upper)
         res = cv.bitwise_and(frame,frame, mask= mask)
