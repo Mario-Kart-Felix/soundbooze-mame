@@ -1,6 +1,6 @@
 # soundbooze-mame
 
-(Curiosity-Driven) Distributed-Hybrid Training for MAME Fightcade
+(Curiosity-Driven) Distributed-Hybrid Training for MAME Fightcade Games
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/logo.png "AI")
 
