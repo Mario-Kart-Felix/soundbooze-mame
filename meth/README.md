@@ -39,7 +39,7 @@ Estimate valid feature
 
 - evo/
 
-Preserving Randomness, sampling and ...
+Preserving Randomness, feed, sampling and ...
 
 ### `N. Noise Reduction`
 
