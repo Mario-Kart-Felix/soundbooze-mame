@@ -51,7 +51,7 @@ class HASH:
                 chop += H[h]
             return chop
 
-        phash = _chop(str(imagehash.phash(frame)), 8)
+        phash = _chop(str(imagehash.phash(frame)), 14)
         return phash
 
     def append(self, h, r, hit):
