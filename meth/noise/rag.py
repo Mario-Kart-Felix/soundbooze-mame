@@ -20,7 +20,6 @@ def merge_mean_color(graph, src, dst):
     graph.node[dst]['mean color'] = (graph.node[dst]['total color'] /
                                      graph.node[dst]['pixel count'])
 
-
 with mss.mss() as sct:
 
     body = {"top": 264, "left": 100, "width": 800, "height": 360}
