@@ -20,6 +20,14 @@ World 920513
 $ ../reposition.sh
 ```
 
+## Random Agent
+
+Fully Random Agent 
+
+```
+$ sleep 2 && python stream.py
+```
+
 ## Feed
 
 Random exploration while preserving-serufulness
