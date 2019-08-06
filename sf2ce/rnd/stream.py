@@ -150,3 +150,5 @@ if __name__ == '__main__':
 
             if delta > 0:
                 time.sleep(delta)
+            else:
+                time.sleep(0.05)
