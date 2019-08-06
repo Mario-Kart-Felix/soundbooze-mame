@@ -1,9 +1,7 @@
 class RINGBUFFER:
 
     def __init__(self, size):
-        self.data = [None for i in xrange(size)]
-        for i in range(size):
-            self.append('')
+        self.data = ['' for i in xrange(size)]
 
     def append(self, x):
         self.data.pop(0)
