@@ -52,6 +52,8 @@ No {GPU | Distributed resources} required
 
 No {GPU | Distributed resources} required
 
+- Level: Default
+
 ## License
 
 UDUK™ Free as an AIR License
