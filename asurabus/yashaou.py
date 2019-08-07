@@ -124,7 +124,6 @@ class YASHAOU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
 
     def act(self, r):
-
         if r == 0:
             self.left()
         elif r == 1:
@@ -157,3 +156,18 @@ class YASHAOU:
             self.defenddown(1)
         elif r == 15:
             self.defendup(1) 
+
+    def cont(self):
+        os.system('xdotool key --window ' + self.winid + ' keydown 5')
+        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' keyup 5')
+        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' key 1')
+
+    def select(self):
+        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' key a')
+
+    def intro(self):
+        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' key a')
