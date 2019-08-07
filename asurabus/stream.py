@@ -68,13 +68,13 @@ if __name__ == '__main__':
             config.compute()
             frame = config.render()
 
-            if config.findmatch(frame, config.cont_t, 0.9):
+            if config.findmatch(frame, config.cont_t, 0.96):
                 print '[Continue]'
                 yashaou.cont()
-            elif config.findmatch(frame, config.intro_t, 0.9):
+            elif config.findmatch(frame, config.intro_t, 0.96):
                 print '[Intro]'
                 yashaou.intro()
-            elif config.findmatch(frame, config.fight_t, 0.9):
+            elif config.findmatch(frame, config.fight_t, 0.96):
                 print '[Fight]'
             elif config.sumselect == config.select:
                 print '[Select]'
