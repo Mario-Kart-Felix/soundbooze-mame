@@ -117,15 +117,29 @@ class YASHAOU:
             os.system('xdotool key --window ' + self.winid + ' key ' + self.c)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
 
-    def left(self):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.l)
-        time.sleep(0.6)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.l)
+    def death(self, pos):
+        key = self.r
+        if pos == 0:
+            key = self.r
+        elif pos == 1:
+            key = self.l
 
-    def right(self):
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.r)
-        time.sleep(0.6)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.c)
+
+    def extrememisfortune(self, pos):
+        if pos == 0:
+            self.death(1)
+        elif pos == 1:
+            self.death(0)
 
     def act(self, r):
         if r == 0:
@@ -140,25 +154,33 @@ class YASHAOU:
             self.defenddown(0)
         elif r == 5:
             self.defendup(0) 
-
         elif r == 6:
-            self.jumpslash()
+            self.death(0)
         elif r == 7:
+            self.extrememisfortune(0)
+            
+        elif r == 8:
+            self.jumpslash()
+        elif r == 9:
             self.downslash()
 
-        elif r == 8:
-            self.shift(1)
-        elif r == 9:
-            self.forwardkick(1)
         elif r == 10:
-            self.jumpforwardkick(1)
+            self.shift(1)
         elif r == 11:
-            self.bashkick(1)
+            self.forwardkick(1)
         elif r == 12:
-            self.defenddown(1)
+            self.jumpforwardkick(1)
         elif r == 13:
+            self.bashkick(1)
+        elif r == 14:
+            self.defenddown(1)
+        elif r == 15:
             self.defendup(1) 
-
+        elif r == 16:
+            self.death(1)
+        elif r == 17:
+            self.extrememisfortune(1)
+         
     def cont(self):
         os.system('xdotool key --window ' + self.winid + ' keydown 5')
         time.sleep(0.1)

@@ -12,15 +12,16 @@ class CONFIG:
 
     def __init__(self):
 
-        self.head      = {"top": 124, "left": 100, "width": 800, "height":100}
-        self.scene     = {"top": 124, "left": 100, "width": 800, "height":600}
-        self.select    = 668378
-        self.sumselect = 0
-        self.sumcont   = 0
-        self.cont_t    = cv2.imread('template/cont.png', 0)
-        self.intro_t   = cv2.imread('template/intro.png', 0)
-        self.fight_t   = cv2.imread('template/fight.png', 0)
-        self.sync      = 0.69
+        self.head          = {"top": 124, "left": 100, "width": 800, "height":100}
+        self.scene         = {"top": 124, "left": 100, "width": 800, "height":600}
+        self.select        = 668378
+        self.sumselect     = 0
+        self.sumcont       = 0
+        self.cont_t        = cv2.imread('template/cont.png', 0)
+        self.intro_t       = cv2.imread('template/intro.png', 0)
+        self.fight_t       = cv2.imread('template/fight.png', 0)
+        self.sync          = 0.69
+        self.bruteforce    = True
 
     def findmatch(self, background, template, threshold):
             gray = cv2.cvtColor(background, cv2.COLOR_BGR2GRAY)
@@ -44,7 +45,7 @@ class PHASH:
 
     def __init__(self):
         self.H       = {}
-        self.action  = ['shift', 'forwardkick', 'jumpforwardkick', 'bashkick', 'defenddown', 'defendup', 'jumpslash', 'downslash']
+        self.action  = ['shift', 'forwardkick', 'jumpforwardkick', 'bashkick', 'defenddown', 'defendup', 'death', 'jumpslash', 'downslash', 'extrememisfortune']
         self.p       = numpy.random.rand(len(self.action))
         self.p      /= numpy.sum(self.p)
 
@@ -65,7 +66,13 @@ if __name__ == '__main__':
         while [ 1 ]:
 
             start_ts = time.time()
-            
+
+            if config.bruteforce:
+                while 1:
+                     
+                    #yashaou.hellsgate(0)
+                    yashaou.extrememisfortune(0)
+
             config.compute()
             frame = config.render()
 
@@ -84,7 +91,7 @@ if __name__ == '__main__':
                 delta = 1 / fps - (time.time() - start_ts)
                 if delta > 0:
                     time.sleep(delta)
-                a = numpy.random.randint(0,8)
+                a = numpy.random.randint(0,10)
                 yashaou.act(a)
                 print phash.compute(frame), phash.action[a], 'fps:', fps, 'delta:', delta
                 time.sleep(config.sync)
