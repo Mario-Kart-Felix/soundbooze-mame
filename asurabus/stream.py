@@ -20,6 +20,7 @@ class CONFIG:
         self.cont_t    = cv2.imread('template/cont.png', 0)
         self.intro_t   = cv2.imread('template/intro.png', 0)
         self.fight_t   = cv2.imread('template/fight.png', 0)
+        self.sync      = 0.69
 
     def findmatch(self, background, template, threshold):
             gray = cv2.cvtColor(background, cv2.COLOR_BGR2GRAY)
@@ -43,9 +44,9 @@ class PHASH:
 
     def __init__(self):
         self.H       = {}
-        #self.action  = ['left', 'jumpleft|kick', 'kick|left|kick', 'defendup(0)', 'defenddown(0)', 'fire(0)', 'superpunch(0)', 'superkick(0)', 'punch', 'kick', 'downkick', 'kick|jumpup|kick', 'right', 'jumpright|kick', 'kick|right|kick', 'defendup(1)', 'defenddown(1)', 'fire(1)', 'superpunch(1)', 'superkick(1)']
-        #self.p       = numpy.random.rand(len(self.action))
-        #self.p      /= numpy.sum(self.p)
+        self.action  = ['shift', 'forwardkick', 'jumpforwardkick', 'bashkick', 'defenddown', 'defendup', 'jumpslash', 'downslash']
+        self.p       = numpy.random.rand(len(self.action))
+        self.p      /= numpy.sum(self.p)
 
     def append(self, h, r):
         self.H[h] = r
@@ -86,6 +87,7 @@ if __name__ == '__main__':
                 if delta > 0:
                     time.sleep(delta)
 
-                print phash.compute(frame), 'fps:', fps, 'delta:', delta
-
-                yashaou.act(numpy.random.randint(0,16))
+                a = numpy.random.randint(0,8)
+                yashaou.act(a)
+                print phash.compute(frame), phash.action[a], 'fps:', fps, 'delta:', delta
+                time.sleep(config.sync)

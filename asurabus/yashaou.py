@@ -47,7 +47,11 @@ class YASHAOU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.b)
 
     def jumpslash(self):
-        os.system('xdotool key --window ' + self.winid + ' key ' + self.up + ' ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
+        time.sleep(0.1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up )
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.c)
 
     def jumpforwardkick(self, pos):
         key = self.r
