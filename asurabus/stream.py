@@ -79,14 +79,11 @@ if __name__ == '__main__':
                 print '[Fight]'
             elif config.sumselect == config.select:
                 print '[Select]'
-                yashaou.select()
             else:
-
                 fps = 1 / (time.time() - start_ts)
                 delta = 1 / fps - (time.time() - start_ts)
                 if delta > 0:
                     time.sleep(delta)
-
                 a = numpy.random.randint(0,8)
                 yashaou.act(a)
                 print phash.compute(frame), phash.action[a], 'fps:', fps, 'delta:', delta
