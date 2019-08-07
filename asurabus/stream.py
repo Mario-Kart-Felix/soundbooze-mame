@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
             start_ts = time.time()
             
-            numpy.random.randint(0,16)
+            yashaou.act(numpy.random.randint(0,16))
 
             fps = 1 / (time.time() - start_ts)
             delta = 1 / fps - (time.time() - start_ts)
