@@ -22,13 +22,18 @@ $ ../reposition.sh
 
 ## Random Agent
 
-Fully Random Agent 
+rnd/
+
+- Fully Random Agent 
+- Sequential Flow
 
 ```
-$ sleep 2 && python stream.py
+$ sleep 2 && python (stream.py | seq.py)
 ```
 
 ## Feed
+
+feed/
 
 Random exploration while preserving-serufulness
 
