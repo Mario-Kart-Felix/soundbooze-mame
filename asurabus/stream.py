@@ -21,7 +21,6 @@ class CONFIG:
         self.intro_t       = cv2.imread('template/intro.png', 0)
         self.fight_t       = cv2.imread('template/fight.png', 0)
         self.sync          = 0.69
-        self.bruteforce    = True
 
     def findmatch(self, background, template, threshold):
             gray = cv2.cvtColor(background, cv2.COLOR_BGR2GRAY)
@@ -62,16 +61,10 @@ if __name__ == '__main__':
         yashaou  = YASHAOU('Left', 'Right', 'Up', 'Down', 'a', 's', 'd')
         config   = CONFIG()
         phash    = PHASH()
-        
+
         while [ 1 ]:
 
             start_ts = time.time()
-
-            if config.bruteforce:
-                while 1:
-                     
-                    #yashaou.hellsgate(0)
-                    yashaou.extrememisfortune(0)
 
             config.compute()
             frame = config.render()
