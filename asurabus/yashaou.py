@@ -125,36 +125,34 @@ class YASHAOU:
 
     def act(self, r):
         if r == 0:
-            self.left()
-        elif r == 1:
             self.shift(0)
-        elif r == 2:
+        elif r == 1:
             self.forwardkick(0)
-        elif r == 3:
+        elif r == 2:
             self.jumpforwardkick(0)
-        elif r == 4:
+        elif r == 3:
             self.bashkick(0)
-        elif r == 5:        
+        elif r == 4:        
             self.defenddown(0)
-        elif r == 6:
+        elif r == 5:
             self.defendup(0) 
-        elif r == 7:
+
+        elif r == 6:
             self.jumpslash()
-        elif r == 8:
+        elif r == 7:
             self.downslash()
-        elif r == 9:
-            self.right()
-        elif r == 10:
+
+        elif r == 8:
             self.shift(1)
-        elif r == 11:
+        elif r == 9:
             self.forwardkick(1)
-        elif r == 12:
+        elif r == 10:
             self.jumpforwardkick(1)
-        elif r == 13:
+        elif r == 11:
             self.bashkick(1)
-        elif r == 14:
+        elif r == 12:
             self.defenddown(1)
-        elif r == 15:
+        elif r == 13:
             self.defendup(1) 
 
     def cont(self):
