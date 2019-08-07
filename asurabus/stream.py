@@ -30,6 +30,7 @@ class CONFIG:
                 return True
             else:
                 return False
+
     def render(self):
         return numpy.array(sct.grab(self.scene))
 
