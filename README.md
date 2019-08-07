@@ -42,6 +42,12 @@ No {GPU | Distributed resources} required
 
 - Level: 8
 
+#### Asura Buster - Eternal Warriors (asurabus)
+
+No {GPU | Distributed resources} required
+
+- Level: 5
+
 #### Final Fight 2 (ffight)
 
 No {GPU | Distributed resources} required
