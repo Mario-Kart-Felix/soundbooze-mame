@@ -4,6 +4,10 @@
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/logo.png "AI")
 
+### Compatibility
+
+- GNOME / X11
+
 ### `cfg/`
 
 - Mame Config
