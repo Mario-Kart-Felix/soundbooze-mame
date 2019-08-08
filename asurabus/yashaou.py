@@ -70,22 +70,21 @@ class YASHAOU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.b)
 
-    def bashkick(self, pos):
+    def bashkick(self, pos): #err
         key = self.r
         if pos == 0:
             key = self.r
         elif pos == 1:
             key = self.l
 
-        for i in range(2):
-            os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-            os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-            time.sleep(0.05)
-            os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
-            os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
-            os.system('xdotool key --window ' + self.winid + ' key ' + self.b + ' ' + self.c)
-
-        os.system('xdotool key --window ' + self.winid + ' key ' + self.b + ' ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.b)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.b)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.c)
 
     def defendup(self, pos): 
         key = self.l
@@ -141,6 +140,43 @@ class YASHAOU:
         elif pos == 1:
             self.death(0)
 
+    def hellsgate(self, pos):
+        z = self.r
+        if pos == 0:
+            z = self.r
+        else:
+            z = self.l
+
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.c)
+
+    def downwardstab(self, pos): #*err
+        z1 = self.r
+        z2 = self.l
+        if pos == 0:
+            z1 = self.r
+            z2 = self.l
+        elif pos == 1:
+            z1 = self.l
+            z2 = self.r
+
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z1)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + z2)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.c)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + z2)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.c)
+
     def act(self, r):
         if r == 0:
             self.shift(0)
@@ -158,28 +194,32 @@ class YASHAOU:
             self.death(0)
         elif r == 7:
             self.extrememisfortune(0)
-            
         elif r == 8:
-            self.jumpslash()
+            self.hellsgate(0)
+            
         elif r == 9:
+            self.jumpslash()
+        elif r == 10:
             self.downslash()
 
-        elif r == 10:
-            self.shift(1)
         elif r == 11:
-            self.forwardkick(1)
+            self.shift(1)
         elif r == 12:
-            self.jumpforwardkick(1)
+            self.forwardkick(1)
         elif r == 13:
-            self.bashkick(1)
+            self.jumpforwardkick(1)
         elif r == 14:
-            self.defenddown(1)
+            self.bashkick(1)
         elif r == 15:
-            self.defendup(1) 
+            self.defenddown(1)
         elif r == 16:
-            self.death(1)
+            self.defendup(1) 
         elif r == 17:
+            self.death(1)
+        elif r == 18:
             self.extrememisfortune(1)
+        elif r == 19:
+            self.hellsgate(1)
          
     def cont(self):
         os.system('xdotool key --window ' + self.winid + ' keydown 5')
