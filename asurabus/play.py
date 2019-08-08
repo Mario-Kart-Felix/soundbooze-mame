@@ -44,7 +44,7 @@ class PHASH:
 
     def __init__(self):
         self.H       = {}
-        self.action  = ['shift', 'forwardkick', 'jumpforwardkick', 'bashkick', 'defenddown', 'defendup', 'death', 'jumpslash', 'downslash', 'extrememisfortune']
+        self.action  = ['shift', 'forwardkick', 'jumpforwardkick', 'bashkick', 'defenddown', 'defendup', 'death', 'jumpslash', 'downslash', 'extrememisfortune', 'hellsgate']
         self.p       = numpy.random.rand(len(self.action))
         self.p      /= numpy.sum(self.p)
 
@@ -84,7 +84,7 @@ if __name__ == '__main__':
                 delta = 1 / fps - (time.time() - start_ts)
                 if delta > 0:
                     time.sleep(delta)
-                a = numpy.random.randint(0,10)
+                a = numpy.random.randint(0,11)
                 yashaou.act(a)
                 print phash.compute(frame), phash.action[a], 'fps:', fps, 'delta:', delta
                 time.sleep(config.sync)
