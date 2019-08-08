@@ -12,7 +12,7 @@ if __name__ == '__main__':
         while [ 1 ]:
             #yashaou.death(0)
             #yashaou.extrememisfortune(0)
-            #yashaou.hellsgate(1)
+            yashaou.hellsgate(1)
             #yashaou.bashkick(0)
             #yashaou.downwardstab(0)
             time.sleep(1)
