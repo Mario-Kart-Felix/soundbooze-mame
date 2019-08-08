@@ -1,4 +1,4 @@
-# Asura Buster - Eternal Warriors
+# Asura Buster - Eternal Warriors (asurabus)
 
 ![alt text](https://raw.githubusercontent.com/soundbooze/soundbooze-mame/master/asurabus/logo.png "asurabus")
 
