@@ -20,6 +20,12 @@ $ ../reposition.sh
 $ sleep 2 && python play.py
 ```
 
+- Fully Random Agent (2 players)
+
+```
+$ sleep 2 && (python play.py | python p2.py)
+```
+
 ## License
 
 UDUK™ Free as an AIR License
