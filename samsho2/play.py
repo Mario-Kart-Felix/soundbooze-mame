@@ -11,27 +11,29 @@ if __name__ == '__main__':
 
         while [ 1 ]:
 
-            r = numpy.random.randint(0,11)
+            r = numpy.random.randint(0, 12)
 
             if r == 0:
-                haohmaru.Shift(0)
+                haohmaru.Walk(0)
             elif r == 1:
-                haohmaru.DefendUp(0)
+                haohmaru.Shift(0)
             elif r == 2:
-                haohmaru.DefendDown(0)
+                haohmaru.DefendUp(0)
             elif r == 3:
-                haohmaru.StabSwingBack(0)
+                haohmaru.DefendDown(0)
             elif r == 4:
-                haohmaru.OugiSenpuuRetsuZan(0)
+                haohmaru.StabSwingBack(0)
             elif r == 5:
-                haohmaru.OugiKogetsuZan(0)
+                haohmaru.OugiSenpuuRetsuZan(0)
             elif r == 6:
-                haohmaru.OugiResshinZan(0)
+                haohmaru.OugiKogetsuZan(0)
             elif r == 7:
-                haohmaru.JumpLeftSlash()
+                haohmaru.OugiResshinZan(0)
             elif r == 8:
-                haohmaru.JumpSlash()
+                haohmaru.JumpLeftSlash()
             elif r == 9:
-                haohmaru.DownSlash()
+                haohmaru.JumpSlash()
             elif r == 10:
+                haohmaru.DownSlash()
+            elif r == 11:
                 haohmaru.Slash()

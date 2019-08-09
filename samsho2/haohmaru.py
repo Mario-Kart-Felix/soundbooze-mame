@@ -19,6 +19,17 @@ class HAOHMARU:
         self.slash  = slash
         self.kick   = kick
 
+    def Walk(self, pos):
+        key = self.l
+        if pos == 0:
+            key = self.l
+        elif pos == 1:
+            key = self.r
+
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        time.sleep(0.3)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        
     def Shift(self, pos):
         key = self.l
         if pos == 0:
