@@ -15,7 +15,7 @@ class SCENE:
 class ACT:
 
     def __init__(self):
-        self.action = ['Walk(0)','Shift(0)','DefendUp(0)','DefendDown(0)','StabSwingBack(0)','OugiSenpuuRetsuZan(0)','OugiKogetsuZan(0)','OugiResshinZan(0)','JumpLeftSlash()','JumpSlash()','DownSlash()','Slash()','Walk(1)','Shift(1)','DefendUp(1)','DefendDown(1)','StabSwingBack(1)','OugiSenpuuRetsuZan(1)','OugiKogetsuZan(1)','OugiResshinZan(1)','JumpRightSlash()']
+        self.action = ['Walk(0)','Shift(0)','DefendUp(0)','DefendDown(0)','StabSwingBack(0)','OugiSenpuuRetsuZan(0)','OugiKogetsuZan(0)','OugiResshinZan(0)','TenhaSeiouZan(0)','JumpLeftSlash()','JumpSlash()','DownSlash()','Slash()','Walk(1)','Shift(1)','DefendUp(1)','DefendDown(1)','StabSwingBack(1)','OugiSenpuuRetsuZan(1)','OugiKogetsuZan(1)','OugiResshinZan(1)','TenhaSeiouZan(1)','JumpRightSlash()']
 
     def next(self):
         return numpy.random.randint(0, len(self.action))
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     with mss.mss() as sct:
 
-        haohmaru  = HAOHMARU('Left', 'Right', 'Up', 'Down', 's', 'z')
+        haohmaru  = HAOHMARU('Left', 'Right', 'Up', 'Down', 's', 'z', 'a')
         scene     = SCENE()
         act       = ACT()
         phash     = PHASH()
@@ -41,5 +41,3 @@ if __name__ == '__main__':
             r = act.next()
             print phash.compute(frame), '-', act.action[r]
             haohmaru.act(r)
-
-    
