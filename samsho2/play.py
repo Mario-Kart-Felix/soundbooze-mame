@@ -13,7 +13,7 @@ if __name__ == '__main__':
         while [ 1 ]:
 
             r = numpy.random.randint(0, 21)
-            print action[r]
+            print action[r], len(action)
             haohmaru.act(r)
 
     
