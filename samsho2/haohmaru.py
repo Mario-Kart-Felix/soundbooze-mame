@@ -72,27 +72,21 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up )
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.slash)
 
-    '''
-    def jumpforwardkick(self, pos):
-        key = self.r
-        if pos == 0:
-            key = self.r
-        elif pos == 1:
-            key = self.l
-
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+    def JumpLeftSlash(self):
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.l)
+        time.sleep(0.02)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
-        time.sleep(0.1)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.l)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.slash)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.slash)
+        os.system('xdotool key --window ' + self.winid + ' key ' + self.slash)
 
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-
-    '''
+    def JumpRightSlash(self):
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.r)
+        time.sleep(0.02)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.up)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.r)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.up)
+        os.system('xdotool key --window ' + self.winid + ' key ' + self.slash)
 
     def OugiSenpuuRetsuZan(self, pos):
         key = self.r

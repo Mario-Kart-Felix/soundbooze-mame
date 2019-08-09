@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
         while [ 1 ]:
 
-            r = numpy.random.randint(0,10)
+            r = numpy.random.randint(0,11)
 
             if r == 0:
                 haohmaru.Shift(0)
@@ -28,10 +28,10 @@ if __name__ == '__main__':
             elif r == 6:
                 haohmaru.OugiResshinZan(0)
             elif r == 7:
-                haohmaru.JumpSlash()
+                haohmaru.JumpLeftSlash()
             elif r == 8:
-                haohmaru.DownSlash()
+                haohmaru.JumpSlash()
             elif r == 9:
+                haohmaru.DownSlash()
+            elif r == 10:
                 haohmaru.Slash()
-
-            time.sleep(0.06)
