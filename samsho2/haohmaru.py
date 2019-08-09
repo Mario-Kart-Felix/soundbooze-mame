@@ -157,49 +157,49 @@ class HAOHMARU:
 
     def act(self, r):
         if r == 0:
-            haohmaru.Walk(0)
+            self.Walk(0)
         elif r == 1:
-            haohmaru.Shift(0)
+            self.Shift(0)
         elif r == 2:
-            haohmaru.DefendUp(0)
+            self.DefendUp(0)
         elif r == 3:
-            haohmaru.DefendDown(0)
+            self.DefendDown(0)
         elif r == 4:
-            haohmaru.StabSwingBack(0)
+            self.StabSwingBack(0)
         elif r == 5:
-            haohmaru.OugiSenpuuRetsuZan(0)
+            self.OugiSenpuuRetsuZan(0)
         elif r == 6:
-            haohmaru.OugiKogetsuZan(0)
+            self.OugiKogetsuZan(0)
         elif r == 7:
-            haohmaru.OugiResshinZan(0)
+            self.OugiResshinZan(0)
         elif r == 8:
-            haohmaru.JumpLeftSlash()
+            self.JumpLeftSlash()
 
         elif r == 9:
-            haohmaru.JumpSlash()
+            self.JumpSlash()
         elif r == 10:
-            haohmaru.DownSlash()
+            self.DownSlash()
         elif r == 11:
-            haohmaru.Slash()
+            self.Slash()
 
         elif r == 12:
-            haohmaru.Walk(1)
+            self.Walk(1)
         elif r == 13:
-            haohmaru.Shift(1)
+            self.Shift(1)
         elif r == 14:
-            haohmaru.DefendUp(1)
+            self.DefendUp(1)
         elif r == 15:
-            haohmaru.DefendDown(1)
+            self.DefendDown(1)
         elif r == 16:
-            haohmaru.StabSwingBack(1)
+            self.StabSwingBack(1)
         elif r == 17:
-            haohmaru.OugiSenpuuRetsuZan(1)
+            self.OugiSenpuuRetsuZan(1)
         elif r == 18:
-            haohmaru.OugiKogetsuZan(1)
+            self.OugiKogetsuZan(1)
         elif r == 19:
-            haohmaru.OugiResshinZan(1)
+            self.OugiResshinZan(1)
         elif r == 20:
-            haohmaru.JumpRightSlash()
+            self.JumpRightSlash()
 
     def cont(self):
         os.system('xdotool key --window ' + self.winid + ' keydown 5')
