@@ -12,8 +12,8 @@ if __name__ == '__main__':
 
         while [ 1 ]:
 
-            r = numpy.random.randint(0, 21)
-            print action[r], len(action)
+            r = numpy.random.randint(0, len(action))
+            print action[r]
             haohmaru.act(r)
 
     
