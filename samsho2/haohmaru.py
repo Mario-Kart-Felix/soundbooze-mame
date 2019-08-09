@@ -156,9 +156,51 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.kick)
 
     def act(self, r):
-        if r == 19:
-            self.hellsgate(1)
-         
+        if r == 0:
+            haohmaru.Walk(0)
+        elif r == 1:
+            haohmaru.Shift(0)
+        elif r == 2:
+            haohmaru.DefendUp(0)
+        elif r == 3:
+            haohmaru.DefendDown(0)
+        elif r == 4:
+            haohmaru.StabSwingBack(0)
+        elif r == 5:
+            haohmaru.OugiSenpuuRetsuZan(0)
+        elif r == 6:
+            haohmaru.OugiKogetsuZan(0)
+        elif r == 7:
+            haohmaru.OugiResshinZan(0)
+        elif r == 8:
+            haohmaru.JumpLeftSlash()
+
+        elif r == 9:
+            haohmaru.JumpSlash()
+        elif r == 10:
+            haohmaru.DownSlash()
+        elif r == 11:
+            haohmaru.Slash()
+
+        elif r == 12:
+            haohmaru.Walk(1)
+        elif r == 13:
+            haohmaru.Shift(1)
+        elif r == 14:
+            haohmaru.DefendUp(1)
+        elif r == 15:
+            haohmaru.DefendDown(1)
+        elif r == 16:
+            haohmaru.StabSwingBack(1)
+        elif r == 17:
+            haohmaru.OugiSenpuuRetsuZan(1)
+        elif r == 18:
+            haohmaru.OugiKogetsuZan(1)
+        elif r == 19:
+            haohmaru.OugiResshinZan(1)
+        elif r == 20:
+            haohmaru.JumpRightSlash()
+
     def cont(self):
         os.system('xdotool key --window ' + self.winid + ' keydown 5')
         time.sleep(0.1)
