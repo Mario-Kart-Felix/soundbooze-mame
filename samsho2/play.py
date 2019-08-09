@@ -1,3 +1,4 @@
+import cv2
 import mss
 import numpy
 
@@ -9,6 +10,7 @@ from haohmaru import *
 class SCENE:
 
     def __init__(self):
+        self.full = {"top": 124, "left": 100, "width": 800, "height": 600}
         self.head = {"top": 124, "left": 100, "width": 800, "height": 100}
         self.body = {"top": 264, "left": 100, "width": 800, "height": 400}
 
@@ -26,6 +28,18 @@ class PHASH:
         phash = str(imagehash.phash(PIL.Image.fromarray(frame)))
         return phash
 
+class HIST:
+
+    def compute(self, full):
+        full = numpy.array(sct.grab(full))
+        numPixels = numpy.prod(frame.shape[:2])
+        (b, g, r, a) = cv2.split(frame)
+        histogramR = cv2.calcHist([r], [0], None, [16], [0, 255]) / numPixels
+        histogramG = cv2.calcHist([g], [0], None, [16], [0, 255]) / numPixels
+        histogramB = cv2.calcHist([b], [0], None, [16], [0, 255]) / numPixels
+        H = numpy.array([histogramR, histogramG, histogramB])
+        return H.flatten()
+
 if __name__ == '__main__':
 
     with mss.mss() as sct:
@@ -34,10 +48,11 @@ if __name__ == '__main__':
         scene     = SCENE()
         act       = ACT()
         phash     = PHASH()
+        hist      = HIST()
 
         while [ 1 ]:
 
             frame = numpy.array(sct.grab(scene.body))
             r = act.next()
-            print phash.compute(frame), '-', act.action[r]
+            print phash.compute(frame), '-', act.action[r], numpy.sum(hist.compute(scene.full))
             haohmaru.act(r)
