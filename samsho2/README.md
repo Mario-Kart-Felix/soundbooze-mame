@@ -14,6 +14,8 @@ $ ../reposition.sh
 
 - Fully Random Agent 
 
+*compatible players: Haohmaru, Hanzo, Genjuro, Jubei ...
+
 ```
 $ sleep 2 && python play.py
 ```
