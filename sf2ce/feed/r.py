@@ -4,6 +4,7 @@ import cv2
 import numpy
 
 from ryu import *
+from ring import *
 
 BLOOD      = [2744512, 4089536, 745816 * 4]
 RESUME     = [1358640, 2617406, 2264400, 2623509]
@@ -18,6 +19,7 @@ def act(hi, mid, lo, r):
             mid.fire(numpy.random.randint(0,2))
         elif z == 2:
             hi.fire(numpy.random.randint(0,2))
+
     elif r == 1:
         z = numpy.random.randint(0,3)
         if z == 0:
@@ -26,6 +28,7 @@ def act(hi, mid, lo, r):
             mid.superpunch(numpy.random.randint(0,2))
         elif z == 2:
             hi.superpunch(numpy.random.randint(0,2))
+
     elif r == 2:
         z = numpy.random.randint(0,3)
         if z == 0:
@@ -34,6 +37,7 @@ def act(hi, mid, lo, r):
             mid.superkick(numpy.random.randint(0,2))
         elif z == 3:
             hi.superkick(numpy.random.randint(0,2))
+
     elif r == 3:
         z = numpy.random.randint(0,4)
         if z == 0:
@@ -48,6 +52,7 @@ def act(hi, mid, lo, r):
         elif z == 3:
             hi.jumpleft(numpy.random.uniform(low=0.3, high=0.5))
             hi.kick()
+
     elif r == 4:
         z = numpy.random.randint(0,2)
         if z == 0:
@@ -66,6 +71,8 @@ with mss.mss() as sct:
     mid = RYU('Left', 'Right', 'Up', 'Down', 'x', 's')
     lo  = RYU('Left', 'Right', 'Up', 'Down', 'z', 'a')
 
+    rb  = RINGBUFFER(4)
+
     while [ 1 ]:
 
         p1 = numpy.array(sct.grab(blood))
@@ -76,6 +83,7 @@ with mss.mss() as sct:
         ko = p1[60:80, 378:424]
 
         sumb1, sumb2, kosum = numpy.sum(b1), numpy.sum(b2), numpy.sum(ko)
+        rb.append(kosum)
 
         rbsum = 0
         try:
