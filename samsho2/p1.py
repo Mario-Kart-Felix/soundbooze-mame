@@ -24,4 +24,4 @@ if __name__ == '__main__':
             frame = numpy.array(sct.grab(scene.body))
             r = act.next()
             act.act(r)
-            print phash.compute(frame), '-', act.action[r], numpy.sum(hist.compute(full)), numpy.sum(dft.compute(full))/1000000.0
+            print phash.compute(frame), '-', act.action[r], numpy.sum(hist.compute(full)), numpy.sum(dft.compute(full))/1000000.0, numpy.sum(dft.threshold(full)/100.0)

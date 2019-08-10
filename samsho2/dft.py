@@ -50,3 +50,12 @@ class DFT:
         self.shift_dft(ls, ls)
         cv2.normalize(ls, ls, 0.0, 1.0, cv2.NORM_MINMAX)
         return ls
+
+    def threshold(self, frame):
+        threshold = 0.8
+        ls = self.logspectrum(frame)
+        self.shift_dft(ls, ls)
+        cv2.normalize(ls, ls, 0.0, 1.0, cv2.NORM_MINMAX)
+        ls[ls < threshold] = 0
+        return ls
+
