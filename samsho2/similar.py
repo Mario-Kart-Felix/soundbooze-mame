@@ -4,6 +4,9 @@ from skimage.measure import compare_ssim
 
 class SIMILAR:
 
+    def __init__(self):
+        self.threshold = 0.29
+
     def cont(self):
         return cv2.imread('template/continue.png')
 
