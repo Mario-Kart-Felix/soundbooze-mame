@@ -7,10 +7,10 @@ import os
 class HAOHMARU:
 
     def __init__(self, l, r, up, down, slash, kick, a):
-        cmd             = "xdotool search --pid `pgrep mame`"
-        srp             =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
-        v               = srp.read()
-        self.winid      = hex(int(v.decode()))
+        cmd         = "xdotool search --pid `pgrep mame`"
+        srp         =  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout
+        v           = srp.read()
+        self.winid  = hex(int(v.decode()))
         os.system('xdotool windowfocus --sync ' + self.winid)
         self.l      = l
         self.r      = r
@@ -45,6 +45,24 @@ class HAOHMARU:
             os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
             os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
                 
+    def Roll(self, pos):
+        key = self.l
+        if pos == 0:
+            key = self.l
+        elif pos == 1:
+            key = self.r
+
+        for i in range(2):
+            os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+            os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+            os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+            os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+            time.sleep(0.05)
+            os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+            os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+            os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+            os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+
     def DefendUp(self, pos): 
         key = self.l
         if pos == 0:
@@ -206,52 +224,56 @@ class HAOHMARU:
         elif r == 1:
             self.Shift(0)
         elif r == 2:
-            self.DefendUp(0)
+            self.Roll(0)
         elif r == 3:
-            self.DefendDown(0)
+            self.DefendUp(0)
         elif r == 4:
-            self.StabSwingBack(0)
+            self.DefendDown(0)
         elif r == 5:
-            self.OugiSenpuuRetsuZan(0)
+            self.StabSwingBack(0)
         elif r == 6:
-            self.OugiKogetsuZan(0)
+            self.OugiSenpuuRetsuZan(0)
         elif r == 7:
-            self.OugiResshinZan(0)
+            self.OugiKogetsuZan(0)
         elif r == 8:
-            self.TenhaSeiouZan(0)
+            self.OugiResshinZan(0)
         elif r == 9:
-            self.Hide(0)
+            self.TenhaSeiouZan(0)
         elif r == 10:
+            self.Hide(0)
+        elif r == 11:
             self.JumpLeftSlash()
 
-        elif r == 11:
-            self.JumpSlash()
         elif r == 12:
-            self.DownSlash()
+            self.JumpSlash()
         elif r == 13:
+            self.DownSlash()
+        elif r == 14:
             self.Slash()
 
-        elif r == 14:
-            self.Walk(1)
         elif r == 15:
-            self.Shift(1)
+            self.Walk(1)
         elif r == 16:
-            self.DefendUp(1)
+            self.Shift(1)
         elif r == 17:
-            self.DefendDown(1)
+            self.Roll(1)
         elif r == 18:
-            self.StabSwingBack(1)
+            self.DefendUp(1)
         elif r == 19:
-            self.OugiSenpuuRetsuZan(1)
+            self.DefendDown(1)
         elif r == 20:
-            self.OugiKogetsuZan(1)
+            self.StabSwingBack(1)
         elif r == 21:
-            self.OugiResshinZan(1)
+            self.OugiSenpuuRetsuZan(1)
         elif r == 22:
-            self.TenhaSeiouZan(1)
+            self.OugiKogetsuZan(1)
         elif r == 23:
-            self.Hide(1)
+            self.OugiResshinZan(1)
         elif r == 24:
+            self.TenhaSeiouZan(1)
+        elif r == 25:
+            self.Hide(1)
+        elif r == 26:
             self.JumpRightSlash()
 
     def cont(self):
@@ -262,9 +284,5 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' key 1')
 
     def select(self):
-        time.sleep(0.1)
-        os.system('xdotool key --window ' + self.winid + ' key a')
-
-    def intro(self):
         time.sleep(0.1)
         os.system('xdotool key --window ' + self.winid + ' key a')
