@@ -30,6 +30,8 @@ if __name__ == '__main__':
         select = similar.select()
         blood = template.blood()
         poww = template.pow()
+        p1s = template.p1s()
+        p1l = template.p1l()
 
         while [ 1 ]:
         
@@ -58,6 +60,9 @@ if __name__ == '__main__':
 
             elif template.match(full, poww):
                 print '[Pow]', time.time()
+
+            elif template.match(full, p1s) or template.match(full, p1l):
+                print '[Sword off]', time.time()
 
             '''
             cv2.imshow('frame', part)
