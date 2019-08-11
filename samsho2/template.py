@@ -6,6 +6,12 @@ class TEMPLATE:
     def __init__(self):
         self.threshold = 0.9
 
+    def p1s(self):
+        return cv2.imread('template/1ps.png', 0)
+
+    def p1l(self):
+        return cv2.imread('template/1pl.png', 0)
+
     def pow(self):
         return cv2.imread('template/pow.png', 0)
  
