@@ -197,6 +197,21 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + z2)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.slash)
      
+    def SakeKougeki(self, pos):
+        
+         key = self.l
+        if pos == 0:
+            key = self.l
+        elif pos == 1:
+            key = self.r
+
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + a)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + a)
+
     def TenhaSeiouZan(self, pos):
         z1 = self.r
         z2 = self.l
@@ -242,38 +257,42 @@ class HAOHMARU:
         elif r == 10:
             self.Hide(0)
         elif r == 11:
+            self.SakeKougeki(0)
+        elif r == 12:
             self.JumpLeftSlash()
 
-        elif r == 12:
-            self.JumpSlash()
         elif r == 13:
-            self.DownSlash()
+            self.JumpSlash()
         elif r == 14:
+            self.DownSlash()
+        elif r == 15:
             self.Slash()
 
-        elif r == 15:
-            self.Walk(1)
         elif r == 16:
-            self.Shift(1)
+            self.Walk(1)
         elif r == 17:
-            self.Roll(1)
+            self.Shift(1)
         elif r == 18:
-            self.DefendUp(1)
+            self.Roll(1)
         elif r == 19:
-            self.DefendDown(1)
+            self.DefendUp(1)
         elif r == 20:
-            self.StabSwingBack(1)
+            self.DefendDown(1)
         elif r == 21:
-            self.OugiSenpuuRetsuZan(1)
+            self.StabSwingBack(1)
         elif r == 22:
-            self.OugiKogetsuZan(1)
+            self.OugiSenpuuRetsuZan(1)
         elif r == 23:
-            self.OugiResshinZan(1)
+            self.OugiKogetsuZan(1)
         elif r == 24:
-            self.TenhaSeiouZan(1)
+            self.OugiResshinZan(1)
         elif r == 25:
-            self.Hide(1)
+            self.TenhaSeiouZan(1)
         elif r == 26:
+            self.Hide(1)
+        elif r == 27:
+            self.SakeKougeki(1)
+        elif r == 28:
             self.JumpRightSlash()
 
     def cont(self):
