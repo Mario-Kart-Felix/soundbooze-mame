@@ -198,8 +198,7 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.slash)
      
     def SakeKougeki(self, pos):
-        
-         key = self.l
+        key = self.l
         if pos == 0:
             key = self.l
         elif pos == 1:
