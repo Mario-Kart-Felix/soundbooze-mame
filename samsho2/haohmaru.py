@@ -207,9 +207,9 @@ class HAOHMARU:
         os.system('xdotool key --window ' + self.winid + ' keydown ' + self.down)
         os.system('xdotool key --window ' + self.winid + ' keydown ' + key)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + self.down)
-        os.system('xdotool key --window ' + self.winid + ' keydown ' + a)
+        os.system('xdotool key --window ' + self.winid + ' keydown ' + self.a)
         os.system('xdotool key --window ' + self.winid + ' keyup ' + key)
-        os.system('xdotool key --window ' + self.winid + ' keyup ' + a)
+        os.system('xdotool key --window ' + self.winid + ' keyup ' + self.a)
 
     def TenhaSeiouZan(self, pos):
         z1 = self.r
