@@ -38,6 +38,6 @@ with mss.mss() as sct:
         _, stDev = cv2.meanStdDev(mod)
 
         cv2.imshow('torcs', mod)
-
-        if cv2.waitKey(1) & 0xFF == 27:
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            cv2.destroyAllWindows()
             break
